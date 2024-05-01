@@ -8,12 +8,15 @@ import java.util.Hashtable;
 
 public class SettingsFrame extends JFrame {
     private JSlider volume;
-    private JButton difficulty;
+    private JSlider difficulty;
     private JSlider noteSpeed;
     private JLabel volumeLabel;
+    private JLabel difficultyLabel;
+    private JLabel speedLabel;
     private ImageIcon icon;
     private Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
     private Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
+    private Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
     private float volumeValue = -10;
 
 
@@ -24,22 +27,27 @@ public class SettingsFrame extends JFrame {
         // center the frame
         setLocationRelativeTo(null);
 
-        volumeLabel = new JLabel("quack");
+        // initialize layout
+        setLayout(new GridLayout(3, 1));
 
-        volume = new JSlider(-90, 7, -10);
+
+        add(volumeLabel = new JLabel("Volume", SwingConstants.CENTER));
+
+
+
+        volume = new JSlider(-30, 7, -11);
         volume.setPaintLabels(true);
         volume.setPaintTicks(true);
         volume.setMajorTickSpacing(1);
 
-        volumeHashtable.put(-90, new JLabel("-90dB"));
-        volumeHashtable.put(-60, new JLabel("-60dB"));
+        // add values to volume slider
         volumeHashtable.put(-30, new JLabel("-30dB"));
         volumeHashtable.put(-10, new JLabel("-10dB"));
         volumeHashtable.put(7, new JLabel("7dB"));
         volume.setLabelTable(volumeHashtable);
-        setLayout(new GridLayout(2, 3));
         add(volume);
-        volume.add(volumeLabel);
+
+        add(speedLabel = new JLabel("Note speed", SwingConstants.CENTER));
 
         noteSpeed = new JSlider(1, 3, 2);
         noteSpeed.setPaintLabels(true);
@@ -51,7 +59,16 @@ public class SettingsFrame extends JFrame {
         noteSpeed.setLabelTable(speedHashtable);
         add(noteSpeed);
 
-        difficulty = new JButton("Difficulty");
+        add(difficultyLabel = new JLabel("Difficulty", SwingConstants.CENTER));
+
+        difficulty = new JSlider(1, 3, 2);
+        difficulty.setPaintLabels(true);
+        difficulty.setPaintTicks(true);
+        difficulty.setMajorTickSpacing(1);
+        difficultyHashtable.put(1, new JLabel("easy"));
+        difficultyHashtable.put(2, new JLabel("normal"));
+        difficultyHashtable.put(3, new JLabel("hard"));
+        difficulty.setLabelTable(difficultyHashtable);
         add(difficulty);
 
         setSize(468, 488);

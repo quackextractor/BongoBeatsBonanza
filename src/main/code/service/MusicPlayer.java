@@ -26,14 +26,9 @@ public class MusicPlayer {
             clip = AudioSystem.getClip();
             clip.open(audioStream);
             clip.setMicrosecondPosition(pausedTime);
-
             clip.start();
-            do {
-                Thread.sleep(1);
-            } while (clip.isRunning());
 
-
-        } catch (UnsupportedAudioFileException | LineUnavailableException | InterruptedException | IOException e) {
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
     }

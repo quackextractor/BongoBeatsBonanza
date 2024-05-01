@@ -12,7 +12,7 @@ public class SettingsFrame extends JFrame {
     private JSlider noteSpeed;
     private JLabel volumeLabel;
     private JLabel difficultyLabel;
-    private JLabel speedLabel;
+    private JLabel noteSpeedLabel;
     private ImageIcon icon;
     private Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
     private Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
@@ -20,7 +20,7 @@ public class SettingsFrame extends JFrame {
     private float volumeValue = -10;
 
 
-    public SettingsFrame(MusicPlayer player) {
+    public SettingsFrame(String fontName) {
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 800);
@@ -30,10 +30,9 @@ public class SettingsFrame extends JFrame {
         // initialize layout
         setLayout(new GridLayout(3, 1));
 
-
+        Font font = new Font(fontName, Font.BOLD, 30);
         add(volumeLabel = new JLabel("Volume", SwingConstants.CENTER));
-
-
+        volumeLabel.setFont(font);
 
         volume = new JSlider(-30, 7, -11);
         volume.setPaintLabels(true);
@@ -47,7 +46,9 @@ public class SettingsFrame extends JFrame {
         volume.setLabelTable(volumeHashtable);
         add(volume);
 
-        add(speedLabel = new JLabel("Note speed", SwingConstants.CENTER));
+
+        add(noteSpeedLabel = new JLabel("Note speed", SwingConstants.CENTER));
+        noteSpeedLabel.setFont(font);
 
         noteSpeed = new JSlider(1, 3, 2);
         noteSpeed.setPaintLabels(true);
@@ -60,6 +61,7 @@ public class SettingsFrame extends JFrame {
         add(noteSpeed);
 
         add(difficultyLabel = new JLabel("Difficulty", SwingConstants.CENTER));
+        difficultyLabel.setFont(font);
 
         difficulty = new JSlider(1, 3, 2);
         difficulty.setPaintLabels(true);
@@ -73,11 +75,12 @@ public class SettingsFrame extends JFrame {
 
         setSize(468, 488);
         setLocationRelativeTo(null);
-        configVolume(player);
+        configVolume();
+
         setVisible(true);
     }
 
-    private void configVolume(MusicPlayer player) {
+    private void configVolume() {
     volume.addChangeListener(e ->{
         if (!volume.getValueIsAdjusting()){
             volumeValue = volume.getValue();

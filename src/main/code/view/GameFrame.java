@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
     private boolean isPlaying;
     private MusicPlayer musicPlayer;
 
-    public GameFrame() {
+    public GameFrame(String musicPath, String fontName) {
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
@@ -24,7 +24,7 @@ public class GameFrame extends JFrame {
         quit = new JButton("Quit");
         settings = new JButton("Settings");
 
-        Font font = new Font("Comic Sans MS", Font.BOLD, 120);
+        Font font = new Font(fontName, Font.BOLD, 120);
 
         play.setFont(font);
         settings.setFont(font);
@@ -45,7 +45,7 @@ public class GameFrame extends JFrame {
                 isPlaying = false;
                 play.setText("Play");
             } else {
-                musicPlayer.play();
+                musicPlayer.play(musicPath);
                 isPlaying = true;
                 play.setText("Pause");
             }
@@ -57,7 +57,7 @@ public class GameFrame extends JFrame {
             play.setText("Play");
             isPlaying = false;
             musicPlayer.pause();
-        SettingsFrame settingsFrame = new SettingsFrame(musicPlayer);
+        SettingsFrame settingsFrame = new SettingsFrame(fontName);
         });
 
         setVisible(true);

@@ -11,10 +11,9 @@ public class MusicPlayer {
     public boolean isClipRunning() {
         return clip.isRunning();
     }
-    private String filePath = "src/main/resources/music/650965__betabeats__beat-tune-abysses.wav";
 
     // Method for playing music from file
-    public void play() {
+    public void play(String filePath) {
 
         try {
             if (clip != null && clip.isRunning()) {

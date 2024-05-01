@@ -8,7 +8,6 @@ public class Main {
         // test out music player
         String musicPath = "src/main/resources/music/650965__betabeats__beat-tune-abysses.wav";
 
-
         MusicPlayer musicPlayer = new MusicPlayer();
 
         musicPlayer.play(musicPath);

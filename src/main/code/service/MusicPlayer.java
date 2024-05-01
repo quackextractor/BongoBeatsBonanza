@@ -45,4 +45,11 @@ public class MusicPlayer {
             clip.stop();
         }
     }
+
+    public void pause(){
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+           pausedTime = clip.getMicrosecondPosition();
+        }
+    }
 }

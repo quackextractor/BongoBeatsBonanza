@@ -10,10 +10,10 @@ public class GameFrame extends JFrame {
     private JButton play;
     private JButton quit;
     private JButton settings;
-    boolean isPlaying;
+    private boolean isPlaying;
     private MusicPlayer musicPlayer;
 
-    public GameFrame(String filepath) {
+    public GameFrame() {
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
@@ -45,7 +45,7 @@ public class GameFrame extends JFrame {
                 isPlaying = false;
                 play.setText("Play");
             } else {
-                musicPlayer.play(filepath);
+                musicPlayer.play();
                 isPlaying = true;
                 play.setText("Pause");
             }
@@ -54,7 +54,10 @@ public class GameFrame extends JFrame {
         quit.addActionListener(e -> System.exit(0));
 
         settings.addActionListener(e -> {
-
+            play.setText("Play");
+            isPlaying = false;
+            musicPlayer.pause();
+        SettingsFrame settingsFrame = new SettingsFrame(musicPlayer);
         });
 
         setVisible(true);

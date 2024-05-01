@@ -7,13 +7,14 @@ import java.io.IOException;
 public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
-
+    private static float volume = -10f;
     public boolean isClipRunning() {
         return clip.isRunning();
     }
+    private String filePath = "src/main/resources/music/650965__betabeats__beat-tune-abysses.wav";
 
     // Method for playing music from file
-    public void play(String filePath) {
+    public void play() {
 
         try {
             if (clip != null && clip.isRunning()) {
@@ -26,6 +27,11 @@ public class MusicPlayer {
             clip = AudioSystem.getClip();
             clip.open(audioStream);
             clip.setMicrosecondPosition(pausedTime);
+
+            // Volume control
+            FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            floatControl.setValue(volume);
+
             clip.start();
 
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
@@ -41,10 +47,16 @@ public class MusicPlayer {
         }
     }
 
+    // Method for pausing music
     public void pause(){
         if (clip != null && clip.isRunning()) {
             clip.stop();
            pausedTime = clip.getMicrosecondPosition();
         }
+    }
+
+    // Method for changing the volume
+    public static void changeVolume(float value){
+        volume = value;
     }
 }

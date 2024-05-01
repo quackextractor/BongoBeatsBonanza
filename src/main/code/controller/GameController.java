@@ -19,7 +19,7 @@ public class GameController {
     public void startGame(String backgroundMusicPath) {
         try {
             // Start playing background music
-            musicPlayer.play(backgroundMusicPath);
+            musicPlayer.play();
 
         } catch (Exception e) {
             e.printStackTrace();

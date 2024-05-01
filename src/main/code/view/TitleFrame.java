@@ -1,5 +1,6 @@
 package main.code.view;
 
+import main.code.controller.GameController;
 import main.code.service.MusicPlayer;
 
 import javax.swing.*;
@@ -51,13 +52,16 @@ public class TitleFrame extends JFrame {
             }
         });
 
-        quit.addActionListener(e -> System.exit(0));
+        quit.addActionListener(e -> {
+            musicPlayer.stop();
+            GameController.endGame();
+        });
 
         settings.addActionListener(e -> {
             play.setText("Play");
             isPlaying = false;
             musicPlayer.pause();
-        SettingsFrame settingsFrame = new SettingsFrame(fontName);
+            SettingsFrame settingsFrame = new SettingsFrame(fontName);
         });
 
         setVisible(true);

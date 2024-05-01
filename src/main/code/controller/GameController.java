@@ -2,34 +2,29 @@ package main.code.controller;
 
 import main.code.model.Song;
 import main.code.service.MusicPlayer;
+import main.code.view.TitleFrame;
+
+import javax.swing.*;
 
 public class GameController {
-    private Song song;
-    private MusicPlayer musicPlayer;
 
-    public GameController(String songPath) {
-        try {
-            this.song = new Song(songPath);
-            this.musicPlayer = new MusicPlayer();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private String musicPath;
+    private String fontName;
+
+    public GameController(String musicPath, String fontName) {
+        this.musicPath = musicPath;
+        this.fontName = fontName;
     }
 
-    public void startGame(String backgroundMusicPath) {
-        try {
-            // Start playing background music
-            musicPlayer.play(backgroundMusicPath);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void startGame() {
+        SwingUtilities.invokeLater(() -> {
+            TitleFrame titleFrame = new TitleFrame(musicPath, fontName);
+        });
     }
 
-    public void endGame() {
-        // Stop playing background music
-        musicPlayer.stop();
-
-        // Add future cleanup logic here
+    public static void endGame() {
+        MusicPlayer musicPlayer = new MusicPlayer();
+        musicPlayer.play("src/main/resources/sounds/exit.wav");
+        System.exit(0);
     }
 }

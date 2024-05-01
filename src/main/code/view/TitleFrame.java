@@ -5,7 +5,7 @@ import main.code.service.MusicPlayer;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameFrame extends JFrame {
+public class TitleFrame extends JFrame {
 
     private JButton play;
     private JButton quit;
@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
     private boolean isPlaying;
     private MusicPlayer musicPlayer;
 
-    public GameFrame(String musicPath, String fontName) {
+    public TitleFrame(String musicPath, String fontName) {
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);

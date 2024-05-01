@@ -10,18 +10,19 @@ Bongo_Beats_Bonanza/
 │   │   │   │   └── GameController.java
 │   │   │   │
 │   │   │   ├── view/
-│   │   │   │   └── GameFrame.java
+│   │   │   │   ├── TitleFrame.java
+│   │   │   │   └── SettingsFrame.java
 │   │   │   │
 │   │   │   └── Main.java
 │   │   │
 │   │   └── resources/
-│   │       ├── levels/
-│   │       │   ├── level1/
-│   │       │   │   ├── music.wav
-│   │       │   │   └── song.mid
-│   │       │   ├── level2/
-│   │       │   │   ├── music.wav
-│   │       │   │   └── song.mid
+│   │       ├── songs/
+│   │       │   ├── song1.mid
+│   │       │   ├── song2.mid
+│   │       │   └── ...
+│   │       ├── music/
+│   │       │   ├── song1.wav
+│   │       │   ├── song2.wav
 │   │       │   └── ...
 │   │       └── ...
 │   │

@@ -8,6 +8,8 @@ import java.awt.*;
 public class GameFrame extends JFrame {
 
     private JButton play;
+    private JButton quit;
+    private JButton settings;
     boolean isPlaying;
     private MusicPlayer musicPlayer;
 
@@ -19,12 +21,24 @@ public class GameFrame extends JFrame {
         setLocationRelativeTo(null);
 
         play = new JButton("Play");
-        play.setFont(new Font("Comic Sans MS", Font.BOLD, 120));
+        quit = new JButton("Quit");
+        settings = new JButton("Settings");
+
+        Font font = new Font("Comic Sans MS", Font.BOLD, 120);
+
+        play.setFont(font);
+        settings.setFont(font);
+        quit.setFont(font);
+
         musicPlayer = new MusicPlayer();
         isPlaying = false;
 
-        setLayout(new GridLayout(1, 1));
+        setLayout(new GridLayout(3, 1));
+
         add(play);
+        add(settings);
+        add(quit);
+
         play.addActionListener(e -> {
             if (isPlaying) {
                 musicPlayer.pause();
@@ -35,6 +49,12 @@ public class GameFrame extends JFrame {
                 isPlaying = true;
                 play.setText("Pause");
             }
+        });
+
+        quit.addActionListener(e -> System.exit(0));
+
+        settings.addActionListener(e -> {
+
         });
 
         setVisible(true);

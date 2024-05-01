@@ -8,7 +8,7 @@ import java.awt.*;
 public class GameFrame extends JFrame {
 
     private JButton play;
-    private JButton pause;
+    boolean isPlaying;
     private MusicPlayer musicPlayer;
 
     public GameFrame(String filepath) {
@@ -19,17 +19,22 @@ public class GameFrame extends JFrame {
         setLocationRelativeTo(null);
 
         play = new JButton("Play");
-        pause = new JButton("Pause");
+        play.setFont(new Font("Comic Sans MS", Font.BOLD, 120));
         musicPlayer = new MusicPlayer();
+        isPlaying = false;
 
-        setLayout(new GridLayout(1, 2));
+        setLayout(new GridLayout(1, 1));
         add(play);
-        add(pause);
         play.addActionListener(e -> {
-            musicPlayer.play(filepath);
-        });
-        pause.addActionListener(e -> {
-            musicPlayer.pause();
+            if (isPlaying) {
+                musicPlayer.pause();
+                isPlaying = false;
+                play.setText("Play");
+            } else {
+                musicPlayer.play(filepath);
+                isPlaying = true;
+                play.setText("Pause");
+            }
         });
 
         setVisible(true);

@@ -5,6 +5,10 @@ import main.code.service.MusicPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+// TODO: CODE CLEANUP, FOREACH LOOPS FOR SIMPLIFICATION
 
 public class TitleFrame extends JFrame {
 
@@ -13,12 +17,23 @@ public class TitleFrame extends JFrame {
     private JButton settings;
     private boolean isPlaying;
     private MusicPlayer musicPlayer;
+    private JLabel animationLabel;
+    private ImageIcon[] animationFrames;
+    private Timer animationTimer;
+    private int currentFrameIndex;
 
     public TitleFrame(String musicPath, String fontName) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException |
+                 IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Window size
         setSize(800, 800);
-        // center the frame
+        // Center the window
         setLocationRelativeTo(null);
 
         play = new JButton("Play");
@@ -34,7 +49,11 @@ public class TitleFrame extends JFrame {
         musicPlayer = new MusicPlayer();
         isPlaying = false;
 
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(4, 1));
+
+        initializeAnimationFrames();
+        createAnimationLabel();
+        startAnimation();
 
         add(play);
         add(settings);
@@ -63,7 +82,30 @@ public class TitleFrame extends JFrame {
             musicPlayer.pause();
             SettingsFrame settingsFrame = new SettingsFrame(fontName);
         });
-
         setVisible(true);
+    }
+
+    private void initializeAnimationFrames() {
+        animationFrames = new ImageIcon[4];
+        for (int i = 0; i < 4; i++) {
+            animationFrames[i] = new ImageIcon("src/main/resources/sprites/title" + i + ".png");
+        }
+    }
+
+    private void createAnimationLabel() {
+        animationLabel = new JLabel(animationFrames[0]);
+
+        animationLabel.setBounds(0, 0, 800, 600);
+        add(animationLabel);
+    }
+
+    private void startAnimation() {
+        animationTimer = new Timer(100, e -> animate());
+        animationTimer.start();
+    }
+
+    private void animate() {
+        currentFrameIndex = (currentFrameIndex + 1) % animationFrames.length;
+        animationLabel.setIcon(animationFrames[currentFrameIndex]);
     }
 }

@@ -25,11 +25,16 @@ Bongo_Beats_Bonanza/
 │   │       │   ├── song1.wav
 │   │       │   ├── song2.wav
 │   │       │   └── ...
-│   │       └── sounds/ (add later)
-│   │           ├── select.wav
-│   │           ├── noteHit.wav
-│   │           ├── start.wav
-│   │           └── exit.wav
+│   │       ├── sounds/ TODO add later
+│   │       │   ├── select.wav
+│   │       │   ├── noteHit.wav
+│   │       │   ├── start.wav
+│   │       │   └── exit.wav
+│   │       └── sprites/
+│   │           ├── tile0.png
+│   │           ├── tile1.png
+│   │           ├── tile2.png
+│   │           └── tile3.png
 │   │
 │   └── test/
 │       └── java/

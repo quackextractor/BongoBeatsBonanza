@@ -8,6 +8,8 @@ public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
     private static float volume = -10f;
+    private String lastPlayed;
+
     public boolean isClipRunning() {
         return clip.isRunning();
     }
@@ -31,10 +33,26 @@ public class MusicPlayer {
             FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             floatControl.setValue(volume);
 
+            lastPlayed = filePath;
+
             clip.start();
 
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public String getLastPlayed() {
+        return lastPlayed;
+    }
+
+    public void setLastPlayed(String lastPlayed) {
+        this.lastPlayed = lastPlayed;
+    }
+
+    public void resume() {
+        if (lastPlayed != null) {
+            play(lastPlayed);
         }
     }
 
@@ -47,15 +65,15 @@ public class MusicPlayer {
     }
 
     // Method for pausing music
-    public void pause(){
+    public void pause() {
         if (clip != null && clip.isRunning()) {
             clip.stop();
-           pausedTime = clip.getMicrosecondPosition();
+            pausedTime = clip.getMicrosecondPosition();
         }
     }
 
     // Method for changing the volume
-    public static void changeVolume(float value){
+    public static void changeVolume(float value) {
         volume = value;
     }
 }

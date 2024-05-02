@@ -5,15 +5,15 @@ import service.MusicPlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-// TODO: CODE CLEANUP, FOREACH LOOPS FOR SIMPLIFICATION
 
 public class TitleFrame extends JFrame {
 
     private JButton play;
     private JButton quit;
     private JButton settings;
-    private boolean isPlaying;
+  //  private boolean isPlaying;
     private MusicPlayer musicPlayer;
     private JLabel animationLabel;
     private ImageIcon[] animationFrames;
@@ -21,12 +21,6 @@ public class TitleFrame extends JFrame {
     private int currentFrameIndex;
 
     public TitleFrame(String musicPath, String fontName) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException |
-                 IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Window size
@@ -35,17 +29,16 @@ public class TitleFrame extends JFrame {
         setLocationRelativeTo(null);
 
         play = new JButton("Play");
-        quit = new JButton("Quit");
         settings = new JButton("Settings");
+        quit = new JButton("Quit");
+
+        JButton[] buttons = {play, settings, quit};
 
         Font font = new Font(fontName, Font.BOLD, 120);
 
-        play.setFont(font);
-        settings.setFont(font);
-        quit.setFont(font);
-
         musicPlayer = new MusicPlayer();
-        isPlaying = false;
+        //  isPlaying = false;
+        musicPlayer.play(musicPath);
 
         setLayout(new GridLayout(4, 1));
 
@@ -53,10 +46,13 @@ public class TitleFrame extends JFrame {
         createAnimationLabel();
         startAnimation();
 
-        add(play);
-        add(settings);
-        add(quit);
+        for (JButton jbutton:buttons
+        ) {
+            jbutton.setFont(font);
+            add(jbutton);
+        }
 
+        /*
         play.addActionListener(e -> {
             if (isPlaying) {
                 musicPlayer.pause();
@@ -68,6 +64,12 @@ public class TitleFrame extends JFrame {
                 play.setText("Pause");
             }
         });
+         */
+
+        play.addActionListener(e -> {
+            LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
+        });
+
 
         quit.addActionListener(e -> {
             musicPlayer.stop();
@@ -75,11 +77,9 @@ public class TitleFrame extends JFrame {
         });
 
         settings.addActionListener(e -> {
-            play.setText("Play");
-            isPlaying = false;
-            musicPlayer.pause();
-            SettingsFrame settingsFrame = new SettingsFrame(fontName);
+            SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
         });
+
         setVisible(true);
     }
 

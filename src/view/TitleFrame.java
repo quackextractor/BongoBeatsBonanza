@@ -1,12 +1,10 @@
-package main.code.view;
+package view;
 
-import main.code.controller.GameController;
-import main.code.service.MusicPlayer;
+import controller.GameController;
+import service.MusicPlayer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 // TODO: CODE CLEANUP, FOREACH LOOPS FOR SIMPLIFICATION
 
@@ -88,7 +86,7 @@ public class TitleFrame extends JFrame {
     private void initializeAnimationFrames() {
         animationFrames = new ImageIcon[4];
         for (int i = 0; i < 4; i++) {
-            animationFrames[i] = new ImageIcon("src/main/resources/sprites/title" + i + ".png");
+            animationFrames[i] = new ImageIcon("src/resources/sprites/title" + i + ".png");
         }
     }
 

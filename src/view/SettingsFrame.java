@@ -1,6 +1,6 @@
-package main.code.view;
+package view;
 
-import main.code.service.MusicPlayer;
+import service.MusicPlayer;
 
 import javax.swing.*;
 import java.awt.*;

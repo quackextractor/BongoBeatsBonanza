@@ -1,4 +1,4 @@
-package main.code.service;
+package service;
 
 import javax.sound.sampled.*;
 import java.io.File;

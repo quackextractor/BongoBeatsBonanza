@@ -1,8 +1,7 @@
-package main.code.controller;
+package controller;
 
-import main.code.model.Song;
-import main.code.service.MusicPlayer;
-import main.code.view.TitleFrame;
+import service.MusicPlayer;
+import view.TitleFrame;
 
 import javax.swing.*;
 
@@ -24,7 +23,7 @@ public class GameController {
 
     public static void endGame() {
         MusicPlayer musicPlayer = new MusicPlayer();
-        musicPlayer.play("src/main/resources/sounds/exit.wav");
+        musicPlayer.play("src/resources/sounds/exit.wav");
         System.exit(0);
     }
 }

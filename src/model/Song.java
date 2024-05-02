@@ -1,4 +1,4 @@
-package main.code.model;
+package model;
 
 import javax.sound.midi.*;
 import java.io.File;

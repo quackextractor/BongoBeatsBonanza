@@ -1,51 +1,32 @@
 Bongo_Beats_Bonanza/
 │
 ├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   ├── model/
-│   │   │   │   ├── Level.java
-│   │   │   │   ├── MusicPlayer.java
-│   │   │   │   ├── SongLoader.java
-│   │   │   │   └── GameController.java
-│   │   │   │
-│   │   │   ├── view/
-│   │   │   │   ├── TitleFrame.java
-│   │   │   │   ├── SettingsFrame.java
-│   │   │   │   └── LevelSelectionFrame.java
-│   │   │   │
-│   │   │   └── Main.java
-│   │   │
-│   │   └── resources/
-│   │       ├── songs/
-│   │       │   ├── song1.mid
-│   │       │   ├── song2.mid
-│   │       │   └── ...
-│   │       ├── music/
-│   │       │   ├── song1.wav
-│   │       │   ├── song2.wav
-│   │       │   └── ...
-│   │       ├── sounds/ TODO add later
-│   │       │   ├── select.wav
-│   │       │   ├── noteHit.wav
-│   │       │   ├── start.wav
-│   │       │   └── exit.wav
-│   │       └── sprites/
-│   │           ├── tile0.png
-│   │           ├── tile1.png
-│   │           ├── tile2.png
-│   │           └── tile3.png
+│   ├── model/
+│   │   ├── Level.java
+│   │   ├── MusicPlayer.java
+│   │   ├── SongLoader.java
+│   │   └── GameController.java
 │   │
-│   └── test/
-│       └── java/
-│           ├── model/
-│           │   ├── LevelTest.java
-│           │   └── ...
-│           │
-│           └── ...
+│   ├── view/
+│   │   ├── TitleFrame.java
+│   │   ├── SettingsFrame.java
+│   │   └── LevelSelectionFrame.java
+│   │
+│   └── Main.java
 │
-├── lib/ (external libraries, if any)
-│   └── ...
+│   resources/
+│   ├── sounds/ TODO add later
+│   │   ├── select.wav
+│   │   ├── noteHit.wav
+│   │   ├── start.wav
+│   │   └── exit.wav
+│   ├── sprites/
+│   │   ├── tile0.png
+│   │   ├── tile1.png
+│   │   ├── tile2.png
+│   │   └── tile3.png
+│   └── levels/
+│       ├── song1.mid
+│       └── song1.mid
 │
-├── build.gradle (or pom.xml for Maven)
-└── README.md
+└── README.md TODO add later

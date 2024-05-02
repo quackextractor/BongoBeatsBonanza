@@ -22,7 +22,7 @@ public class GameController {
     }
 
     public static boolean startLevel(String levelName){
-        return false;
+        return true;
     }
 
     public static void endGame() {

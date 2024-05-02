@@ -2,20 +2,17 @@ package view;
 
 import controller.GameController;
 import service.MusicPlayer;
+import service.MusicPlayerManager;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TitleFrame extends JFrame {
 
-    private JButton play;
-    private JButton quit;
-    private JButton settings;
-  //  private boolean isPlaying;
-    private MusicPlayer musicPlayer;
+    //  private boolean isPlaying;
+    private final MusicPlayer musicPlayer;
     private JLabel animationLabel;
     private ImageIcon[] animationFrames;
-    private Timer animationTimer;
     private int currentFrameIndex;
 
     public TitleFrame(String musicPath, String fontName) {
@@ -26,9 +23,9 @@ public class TitleFrame extends JFrame {
         // Center the window
         setLocationRelativeTo(null);
 
-        play = new JButton("Play");
-        settings = new JButton("Settings");
-        quit = new JButton("Quit");
+        JButton play = new JButton("Play");
+        JButton settings = new JButton("Settings");
+        JButton quit = new JButton("Quit");
 
         JButton[] buttons = {play, settings, quit};
 
@@ -37,6 +34,7 @@ public class TitleFrame extends JFrame {
         musicPlayer = new MusicPlayer();
         //  isPlaying = false;
         musicPlayer.play(musicPath);
+        MusicPlayerManager.addMusicPlayer(musicPlayer);
 
         setLayout(new GridLayout(4, 1));
 
@@ -98,7 +96,7 @@ public class TitleFrame extends JFrame {
     }
 
     private void startAnimation() {
-        animationTimer = new Timer(100, e -> animate());
+        Timer animationTimer = new Timer(100, e -> animate());
         animationTimer.start();
     }
 

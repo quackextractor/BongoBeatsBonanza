@@ -1,30 +1,30 @@
 package view;
 
+import controller.GameController;
+import service.MusicPlayer;
+import service.MusicPlayerManager;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.GameController;
-import service.MusicPlayer;
-
 public class LevelSelectionFrame extends JFrame {
     private static boolean isOpen = false; // Static boolean to track if the window is open
     private List<String> levelNames;
     private JComboBox<String> levelComboBox;
-    private JButton playButton;
     private MusicPlayer musicPlayer;
+    private static boolean hasLevelStarted = false;
 
     public LevelSelectionFrame() {
         if (isOpen) {
             requestFocus();
             return;
         }
+        hasLevelStarted = false;
         isOpen = true;
         musicPlayer = new MusicPlayer();
         setTitle("Level Selection");
@@ -43,15 +43,12 @@ public class LevelSelectionFrame extends JFrame {
         levelComboBox = new JComboBox<>(levelNames.toArray(new String[0]));
         panel.add(levelComboBox, BorderLayout.CENTER);
 
-        playButton = new JButton("Play");
-        playButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedLevel = (String) levelComboBox.getSelectedItem();
-                if (selectedLevel != null) {
-                    // Start the game with the selected level
-                    startGame(selectedLevel);
-                }
+        JButton playButton = new JButton("Play");
+        playButton.addActionListener(e -> {
+            String selectedLevel = (String) levelComboBox.getSelectedItem();
+            if (selectedLevel != null) {
+                // Start the game with the selected level
+                startGame(selectedLevel);
             }
         });
         panel.add(playButton, BorderLayout.SOUTH);
@@ -59,8 +56,10 @@ public class LevelSelectionFrame extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                musicPlayer.play("src/resources/sounds/exit.wav");
-                isOpen = false;
+                if (!hasLevelStarted) {
+                    musicPlayer.play("src/resources/sounds/exit.wav");
+                    isOpen = false;
+                }
             }
         });
 
@@ -93,8 +92,18 @@ public class LevelSelectionFrame extends JFrame {
             musicPlayer.play("src/resources/sounds/alert.wav");
             JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
+            hasLevelStarted = true;
+            MusicPlayerManager.stopAllMusicPlayers();
+            closeAllFrames();
             musicPlayer.play("src/resources/sounds/start.wav");
         }
 
+    }
+
+    private void closeAllFrames() {
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames) {
+            frame.dispose();
+        }
     }
 }

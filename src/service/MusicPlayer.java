@@ -7,7 +7,7 @@ import java.io.IOException;
 public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
-    private static float volume = -10f;
+    private static float volume = -30f;
     private String lastPlayed;
 
     public boolean isClipRunning() {

@@ -1,6 +1,7 @@
 package view;
 
 import service.MusicPlayer;
+import service.MusicPlayerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +14,6 @@ public class SettingsFrame extends JFrame {
     private static int difficulty = 2;
     private static int noteSpeed = 2;
     private JSlider noteSpeedSlider;
-    private JLabel volumeLabel;
-    private JLabel difficultyLabel;
-    private JLabel noteSpeedLabel;
-    private Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
-    private Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
-    private Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
     private float volumeValue = -10;
 
 
@@ -31,6 +26,8 @@ public class SettingsFrame extends JFrame {
         isOpen = true; // Mark the frame as open
 
         MusicPlayer musicPlayer1 = new MusicPlayer();
+        MusicPlayerManager.addMusicPlayer(musicPlayer);
+        MusicPlayerManager.addMusicPlayer(musicPlayer1);
 
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -42,6 +39,7 @@ public class SettingsFrame extends JFrame {
         setLayout(new GridLayout(3, 1));
 
         Font font = new Font(fontName, Font.BOLD, 30);
+        JLabel volumeLabel;
         add(volumeLabel = new JLabel("Volume", SwingConstants.CENTER));
         volumeLabel.setFont(font);
 
@@ -51,6 +49,7 @@ public class SettingsFrame extends JFrame {
         volumeSlider.setMajorTickSpacing(1);
 
         // add values to volume slider
+        Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
         volumeHashtable.put(-30, new JLabel("-30dB"));
         volumeHashtable.put(-10, new JLabel("-10dB"));
         volumeHashtable.put(7, new JLabel("7dB"));
@@ -58,6 +57,7 @@ public class SettingsFrame extends JFrame {
         add(volumeSlider);
 
 
+        JLabel noteSpeedLabel;
         add(noteSpeedLabel = new JLabel("Note speed", SwingConstants.CENTER));
         noteSpeedLabel.setFont(font);
 
@@ -65,6 +65,7 @@ public class SettingsFrame extends JFrame {
         noteSpeedSlider.setPaintLabels(true);
         noteSpeedSlider.setPaintTicks(true);
         noteSpeedSlider.setMajorTickSpacing(1);
+        Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
         speedHashtable.put(1, new JLabel("slow"));
         speedHashtable.put(2, new JLabel("medium"));
         Font font2 = new Font("Arial", Font.BOLD, 13);
@@ -75,6 +76,7 @@ public class SettingsFrame extends JFrame {
         noteSpeedSlider.setLabelTable(speedHashtable);
         add(noteSpeedSlider);
 
+        JLabel difficultyLabel;
         add(difficultyLabel = new JLabel("Difficulty", SwingConstants.CENTER));
         difficultyLabel.setFont(font);
 
@@ -82,6 +84,7 @@ public class SettingsFrame extends JFrame {
         difficultySlider.setPaintLabels(true);
         difficultySlider.setPaintTicks(true);
         difficultySlider.setMajorTickSpacing(1);
+        Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
         difficultyHashtable.put(1, new JLabel("easy"));
         difficultyHashtable.put(2, new JLabel("normal"));
         JLabel label2 = new JLabel("NIGHTMARE");

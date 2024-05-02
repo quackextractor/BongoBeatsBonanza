@@ -8,6 +8,7 @@ public class Main {
         String musicPath = "src/resources/music/menu.wav";
         String fontName = "Blade Runner Movie Font";
 
+        // Applies System look to all Frames
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException |

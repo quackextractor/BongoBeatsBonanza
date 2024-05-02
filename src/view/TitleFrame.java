@@ -37,8 +37,10 @@ public class TitleFrame extends JFrame {
         MusicPlayerManager.addMusicPlayer(musicPlayer);
 
         setLayout(new GridLayout(4, 1));
-
-        initializeAnimationFrames();
+        double scale = 1.9;
+        int width = 400;
+        int height = 100;
+        initializeAnimationFrames((int) (width*scale), (int) (height*scale));
         createAnimationLabel();
         startAnimation();
 
@@ -81,22 +83,25 @@ public class TitleFrame extends JFrame {
 
 
 
-    private void initializeAnimationFrames() {
-        animationFrames = new ImageIcon[4];
-        for (int i = 0; i < 4; i++) {
-            animationFrames[i] = new ImageIcon("src/resources/sprites/title" + i + ".png");
+    private void initializeAnimationFrames(int width, int height) {
+        animationFrames = new ImageIcon[5];
+        for (int i = 0; i < 5; i++) {
+            Image img = new ImageIcon("src/resources/sprites/TitleNew" + i + ".png").getImage();
+            Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+            animationFrames[i] = new ImageIcon(scaledImg);
         }
     }
 
     private void createAnimationLabel() {
         animationLabel = new JLabel(animationFrames[0]);
 
-        animationLabel.setBounds(0, 0, 800, 600);
+        animationLabel.setBounds(0, 0, 400, 100);
         add(animationLabel);
     }
 
+
     private void startAnimation() {
-        Timer animationTimer = new Timer(100, e -> animate());
+        Timer animationTimer = new Timer(300, e -> animate());
         animationTimer.start();
     }
 

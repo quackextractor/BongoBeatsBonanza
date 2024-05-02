@@ -1,4 +1,5 @@
 import controller.GameController;
+import service.MusicPlayer;
 
 import javax.swing.*;
 
@@ -17,6 +18,5 @@ public class Main {
         }
         GameController gameController = new GameController(musicPath, fontName);
         gameController.startGame();
-
     }
 }

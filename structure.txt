@@ -12,9 +12,16 @@ Bongo_Beats_Bonanza/
 │   │   ├── SettingsFrame.java
 │   │   └── LevelSelectionFrame.java
 │   │
+│   ├── service/
+│   │   ├── MusicPlayer.java
+│   │   ├── AudioVerification.java
+│   │   └── MusicPlayerManager.java
+│   │
+│   │
 │   └── Main.java
 │
-│   resources/
+│
+├── resources/
 │   ├── sounds/ TODO add later
 │   │   ├── select.wav
 │   │   ├── noteHit.wav

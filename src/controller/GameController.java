@@ -5,6 +5,8 @@ import view.TitleFrame;
 
 import javax.swing.*;
 
+import static service.AudioVerification.*;
+
 public class GameController {
 
     private String musicPath;
@@ -22,8 +24,13 @@ public class GameController {
     }
 
     public static boolean startLevel(String levelName){
-        return true;
+        boolean midiValid = isMidiValid(levelName);
+        boolean wavValid = isWavValid(levelName);
+
+        // Return true only if both midi and wav files are valid
+        return midiValid && wavValid;
     }
+
 
     public static void endGame() {
         MusicPlayer musicPlayer = new MusicPlayer();

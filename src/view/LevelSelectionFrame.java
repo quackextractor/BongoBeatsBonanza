@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controller.GameController;
+import service.MusicPlayer;
 
 public class LevelSelectionFrame extends JFrame {
     private List<String> levelNames;
     private JComboBox<String> levelComboBox;
     private JButton playButton;
+    private MusicPlayer musicPlayer;
 
     public LevelSelectionFrame() {
         setTitle("Level Selection");
@@ -73,6 +75,10 @@ public class LevelSelectionFrame extends JFrame {
         if (!GameController.startLevel(selectedLevel)) {
             // Display error message as a tooltip
             JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            musicPlayer = new MusicPlayer();
+            musicPlayer.play("src/resources/sounds/start.wav");
         }
+
     }
 }

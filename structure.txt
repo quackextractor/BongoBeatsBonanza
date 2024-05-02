@@ -19,6 +19,7 @@ Bongo_Beats_Bonanza/
 │   │   ├── select.wav
 │   │   ├── noteHit.wav
 │   │   ├── start.wav
+│   │   ├── alert.wav
 │   │   └── exit.wav
 │   ├── sprites/
 │   │   ├── tile0.png

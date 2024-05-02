@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +14,19 @@ import controller.GameController;
 import service.MusicPlayer;
 
 public class LevelSelectionFrame extends JFrame {
+    private static boolean isOpen = false; // Static boolean to track if the window is open
     private List<String> levelNames;
     private JComboBox<String> levelComboBox;
     private JButton playButton;
     private MusicPlayer musicPlayer;
 
     public LevelSelectionFrame() {
+        if (isOpen) {
+            requestFocus();
+            return;
+        }
+        isOpen = true;
+        musicPlayer = new MusicPlayer();
         setTitle("Level Selection");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 200);
@@ -47,6 +56,14 @@ public class LevelSelectionFrame extends JFrame {
         });
         panel.add(playButton, BorderLayout.SOUTH);
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                musicPlayer.play("src/resources/sounds/exit.wav");
+                isOpen = false;
+            }
+        });
+
         setVisible(true);
     }
 
@@ -70,13 +87,12 @@ public class LevelSelectionFrame extends JFrame {
         }
     }
 
-
     private void startGame(String selectedLevel) {
         if (!GameController.startLevel(selectedLevel)) {
             // Display error message as a tooltip
+            musicPlayer.play("src/resources/sounds/alert.wav");
             JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            musicPlayer = new MusicPlayer();
             musicPlayer.play("src/resources/sounds/start.wav");
         }
 

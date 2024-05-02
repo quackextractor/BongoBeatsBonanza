@@ -16,12 +16,10 @@ public class SettingsFrame extends JFrame {
     private JLabel volumeLabel;
     private JLabel difficultyLabel;
     private JLabel noteSpeedLabel;
-    private ImageIcon icon;
     private Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
     private Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
     private Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
     private float volumeValue = -10;
-    private Font font2;
 
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {

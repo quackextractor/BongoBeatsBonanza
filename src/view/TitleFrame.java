@@ -81,6 +81,8 @@ public class TitleFrame extends JFrame {
         setVisible(true);
     }
 
+
+
     private void initializeAnimationFrames() {
         animationFrames = new ImageIcon[4];
         for (int i = 0; i < 4; i++) {

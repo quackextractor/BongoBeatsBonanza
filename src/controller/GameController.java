@@ -21,6 +21,10 @@ public class GameController {
         });
     }
 
+    public static boolean startLevel(String levelName){
+        return false;
+    }
+
     public static void endGame() {
         MusicPlayer musicPlayer = new MusicPlayer();
         musicPlayer.play("src/resources/sounds/exit.wav");

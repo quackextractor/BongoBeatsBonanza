@@ -5,10 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+
+import controller.GameController;
 
 public class LevelSelectionFrame extends JFrame {
     private List<String> levelNames;
@@ -50,27 +50,29 @@ public class LevelSelectionFrame extends JFrame {
 
     private void loadLevels() {
         levelNames = new ArrayList<>();
-        File levelsDirectory = new File("Bongo_Beats_Bonanza/resources/levels/");
+        File levelsDirectory = new File("src/resources/levels");
         if (levelsDirectory.exists() && levelsDirectory.isDirectory()) {
             File[] levelFiles = levelsDirectory.listFiles();
             if (levelFiles != null) {
                 for (File file : levelFiles) {
                     if (file.isFile() && file.getName().endsWith(".mid")) {
-                        levelNames.add(file.getName());
+                        String fileName = file.getName().replace(".mid", "");
+                        // Check if there's a corresponding .wav file
+                        File wavFile = new File(levelsDirectory, fileName + ".wav");
+                        if (wavFile.exists()) {
+                            levelNames.add(fileName);
+                        }
                     }
                 }
             }
         }
     }
 
+
     private void startGame(String selectedLevel) {
-        // Start the game with the selected level
-        // You can implement this method according to your game logic
-        // For example:
-        // GameController.startGame(selectedLevel);
-        // Or you can open a new frame for the game
-        // For example:
-        // GameFrame gameFrame = new GameFrame(selectedLevel);
-        // gameFrame.setVisible(true);
+        if (!GameController.startLevel(selectedLevel)) {
+            // Display error message as a tooltip
+            JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

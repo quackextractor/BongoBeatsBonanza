@@ -64,6 +64,14 @@ public class MusicPlayer {
         }
     }
 
+    public static float getVolume() {
+        return volume;
+    }
+
+    public static void setVolume(float volume) {
+        MusicPlayer.volume = volume;
+    }
+
     // Method for pausing music
     public void pause() {
         if (clip != null && clip.isRunning()) {

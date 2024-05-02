@@ -104,4 +104,5 @@ public class TitleFrame extends JFrame {
         currentFrameIndex = (currentFrameIndex + 1) % animationFrames.length;
         animationLabel.setIcon(animationFrames[currentFrameIndex]);
     }
+
 }

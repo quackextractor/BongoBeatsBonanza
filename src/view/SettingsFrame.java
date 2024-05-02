@@ -7,10 +7,11 @@ import java.awt.*;
 import java.util.Hashtable;
 
 public class SettingsFrame extends JFrame {
+    private static boolean isOpen = false; // Track whether the frame is open
     private JSlider volumeSlider;
     private JSlider difficultySlider;
-    private int difficulty = 2;
-    private int noteSpeed = 2;
+    private static int difficulty = 2;
+    private static int noteSpeed = 2;
     private JSlider noteSpeedSlider;
     private JLabel volumeLabel;
     private JLabel difficultyLabel;
@@ -20,9 +21,19 @@ public class SettingsFrame extends JFrame {
     private Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
     private Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
     private float volumeValue = -10;
+    private Font font2;
 
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
+        if (isOpen) {
+            // If the frame is already open, bring it to the front and return
+            toFront();
+            return;
+        }
+        isOpen = true; // Mark the frame as open
+
+        MusicPlayer musicPlayer1 = new MusicPlayer();
+
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 800);
@@ -36,7 +47,7 @@ public class SettingsFrame extends JFrame {
         add(volumeLabel = new JLabel("Volume", SwingConstants.CENTER));
         volumeLabel.setFont(font);
 
-        volumeSlider = new JSlider(-30, 7, -11);
+        volumeSlider = new JSlider(-30, 7, (int) MusicPlayer.getVolume());
         volumeSlider.setPaintLabels(true);
         volumeSlider.setPaintTicks(true);
         volumeSlider.setMajorTickSpacing(1);
@@ -58,7 +69,11 @@ public class SettingsFrame extends JFrame {
         noteSpeedSlider.setMajorTickSpacing(1);
         speedHashtable.put(1, new JLabel("slow"));
         speedHashtable.put(2, new JLabel("medium"));
-        speedHashtable.put(3, new JLabel("fast"));
+        Font font2 = new Font("Arial", Font.BOLD, 13);
+        JLabel label = new JLabel("TURBO");
+        label.setForeground(Color.red);
+        label.setFont(font2);
+        speedHashtable.put(3, label);
         noteSpeedSlider.setLabelTable(speedHashtable);
         add(noteSpeedSlider);
 
@@ -71,7 +86,10 @@ public class SettingsFrame extends JFrame {
         difficultySlider.setMajorTickSpacing(1);
         difficultyHashtable.put(1, new JLabel("easy"));
         difficultyHashtable.put(2, new JLabel("normal"));
-        difficultyHashtable.put(3, new JLabel("hard"));
+        JLabel label2 = new JLabel("NIGHTMARE");
+        label2.setForeground(Color.BLUE);
+        label2.setFont(font2);
+        difficultyHashtable.put(3, label2);
         difficultySlider.setLabelTable(difficultyHashtable);
         add(difficultySlider);
 
@@ -81,18 +99,27 @@ public class SettingsFrame extends JFrame {
         configSpeed();
         configDifficulty();
 
+        // Add a window listener to mark the frame as closed when it is disposed
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                isOpen = false;
+                musicPlayer1.play("src/resources/sounds/exit.wav");
+            }
+        });
+
         setVisible(true);
     }
 
     private void configVolume(MusicPlayer musicPlayer) {
-    volumeSlider.addChangeListener(e ->{
-        if (!volumeSlider.getValueIsAdjusting()){
-            volumeValue = volumeSlider.getValue();
-            MusicPlayer.changeVolume(volumeValue);
-            musicPlayer.pause();
-            musicPlayer.resume();
-        }
-    });
+        volumeSlider.addChangeListener(e ->{
+            if (!volumeSlider.getValueIsAdjusting()){
+                volumeValue = volumeSlider.getValue();
+                MusicPlayer.changeVolume(volumeValue);
+                musicPlayer.pause();
+                musicPlayer.resume();
+            }
+        });
     }
 
     private void configDifficulty() {

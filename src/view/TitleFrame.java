@@ -17,7 +17,7 @@ public class TitleFrame extends JFrame {
 
     public TitleFrame(String musicPath, String fontName) {
         setTitle("Bongo Beats Bonanza");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // Window size
         setSize(800, 800);
         // Center the window
@@ -76,6 +76,14 @@ public class TitleFrame extends JFrame {
 
         settings.addActionListener(e -> {
             SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
+        });
+
+        // Ends game on close
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                GameController.endGame();
+            }
         });
 
         setVisible(true);

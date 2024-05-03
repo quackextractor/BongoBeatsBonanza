@@ -2,7 +2,6 @@ package view;
 
 import controller.GameController;
 import service.MusicPlayer;
-import service.MusicPlayerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +16,7 @@ public class LevelSelectionFrame extends JFrame {
     private List<String> levelNames;
     private JComboBox<String> levelComboBox;
     private MusicPlayer musicPlayer;
-    private static boolean hasLevelStarted = false;
+    public static boolean hasLevelStarted = false;
 
     public LevelSelectionFrame() {
         if (isOpen) {
@@ -91,19 +90,6 @@ public class LevelSelectionFrame extends JFrame {
             // Display error message as a tooltip
             musicPlayer.play("src/resources/sounds/alert.wav");
             JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            hasLevelStarted = true;
-            MusicPlayerManager.stopAllMusicPlayers();
-            closeAllFrames();
-            musicPlayer.play("src/resources/sounds/start.wav");
-        }
-
-    }
-
-    private void closeAllFrames() {
-        Frame[] frames = Frame.getFrames();
-        for (Frame frame : frames) {
-            frame.dispose();
         }
     }
 }

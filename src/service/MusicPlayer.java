@@ -9,13 +9,15 @@ public class MusicPlayer {
     private long pausedTime;
     private static float volume = -30f;
     private String lastPlayed;
+    private boolean isMusic;
+    private static float musicVolume = -30f;
 
     public boolean isClipRunning() {
         return clip.isRunning();
     }
 
     // Method for playing music from file
-    public void play(String filePath) {
+    public void play(String filePath, boolean isMusic) {
 
         try {
             if (clip != null && clip.isRunning()) {
@@ -31,8 +33,11 @@ public class MusicPlayer {
 
             // Volume control
             FloatControl floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            floatControl.setValue(volume);
-
+            if (isMusic) {
+                floatControl.setValue(musicVolume);
+            } else {
+                floatControl.setValue(volume);
+            }
             lastPlayed = filePath;
 
             clip.start();
@@ -50,9 +55,10 @@ public class MusicPlayer {
         this.lastPlayed = lastPlayed;
     }
 
+    // TODO improve this
     public void resume() {
         if (lastPlayed != null) {
-            play(lastPlayed);
+            play(lastPlayed, true);
         }
     }
 
@@ -81,7 +87,10 @@ public class MusicPlayer {
     }
 
     // Method for changing the volume
-    public static void changeVolume(float value) {
-        volume = value;
+    public static void changeVolume(float value, boolean isMusic) {
+        if (isMusic) {
+            musicVolume = value;
+        } else
+            volume = value;
     }
 }

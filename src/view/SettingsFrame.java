@@ -116,7 +116,7 @@ public class SettingsFrame extends JFrame {
         volumeSlider.addChangeListener(e ->{
             if (!volumeSlider.getValueIsAdjusting()){
                 volumeValue = volumeSlider.getValue();
-                MusicPlayer.changeVolume(volumeValue);
+                MusicPlayer.changeVolume(volumeValue, true);
                 musicPlayer.pause();
                 musicPlayer.resume();
             }

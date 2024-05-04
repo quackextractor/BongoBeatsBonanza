@@ -56,7 +56,7 @@ public class LevelSelectionFrame extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (!hasLevelStarted) {
-                    musicPlayer.play("src/resources/sounds/exit.wav");
+                    musicPlayer.playFX("src/resources/sounds/exit.wav");
                     isOpen = false;
                 }
             }
@@ -88,7 +88,7 @@ public class LevelSelectionFrame extends JFrame {
     private void startGame(String selectedLevel) {
         if (!GameController.startLevel(selectedLevel)) {
             // Display error message as a tooltip
-            musicPlayer.play("src/resources/sounds/alert.wav");
+            musicPlayer.playFX("src/resources/sounds/alert.wav");
             JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

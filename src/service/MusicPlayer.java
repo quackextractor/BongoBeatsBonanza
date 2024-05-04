@@ -7,17 +7,33 @@ import java.io.IOException;
 public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
-    private static float volume = -30f;
+    private static float fxVolume = -20f;
     private String lastPlayed;
     private boolean isMusic;
     private static float musicVolume = -30f;
+
+    public static float getMusicVolume() {
+        return musicVolume;
+    }
+
+    public static void setMusicVolume(float musicVolume) {
+        MusicPlayer.musicVolume = musicVolume;
+    }
+
+    public long getPausedTime() {
+        return pausedTime;
+    }
+
+    public void setPausedTime(long pausedTime) {
+        this.pausedTime = pausedTime;
+    }
 
     public boolean isClipRunning() {
         return clip.isRunning();
     }
 
     // Method for playing music from file
-    public void play(String filePath, boolean isMusic) {
+    private void play(String filePath, boolean isMusic) {
 
         try {
             if (clip != null && clip.isRunning()) {
@@ -36,7 +52,7 @@ public class MusicPlayer {
             if (isMusic) {
                 floatControl.setValue(musicVolume);
             } else {
-                floatControl.setValue(volume);
+                floatControl.setValue(fxVolume);
             }
             lastPlayed = filePath;
 
@@ -47,6 +63,14 @@ public class MusicPlayer {
         }
     }
 
+    public void playMusic(String filePath){
+        play(filePath, true);
+    }
+
+    public void playFX(String filePath){
+        play(filePath, false);
+    }
+
     public String getLastPlayed() {
         return lastPlayed;
     }
@@ -55,13 +79,24 @@ public class MusicPlayer {
         this.lastPlayed = lastPlayed;
     }
 
-    // TODO improve this
-    public void resume() {
+    public void resume(boolean isMusic) {
         if (lastPlayed != null) {
-            play(lastPlayed, true);
+            play(lastPlayed, isMusic);
         }
     }
 
+    public void playWithCustomVolume(String musicPath, float volume) {
+        float musicVolumeOriginal = getMusicVolume();
+        float fxVolumeOriginal = getFxVolume();
+
+        setMusicVolume(volume);
+        setFxVolume(volume);
+
+        playMusic(musicPath);
+
+        setMusicVolume(musicVolumeOriginal);
+        setFxVolume(fxVolumeOriginal);
+    }
 
     // Method for stopping music
     public void stop() {
@@ -69,13 +104,12 @@ public class MusicPlayer {
             clip.stop();
         }
     }
-
-    public static float getVolume() {
-        return volume;
+    public static float getFxVolume() {
+        return fxVolume;
     }
 
-    public static void setVolume(float volume) {
-        MusicPlayer.volume = volume;
+    public static void setFxVolume(float fxVolume) {
+        MusicPlayer.fxVolume = fxVolume;
     }
 
     // Method for pausing music
@@ -91,6 +125,7 @@ public class MusicPlayer {
         if (isMusic) {
             musicVolume = value;
         } else
-            volume = value;
+            fxVolume = value;
     }
+
 }

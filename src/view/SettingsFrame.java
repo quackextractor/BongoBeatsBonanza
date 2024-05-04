@@ -9,7 +9,8 @@ import java.util.Hashtable;
 
 public class SettingsFrame extends JFrame {
     private static boolean isOpen = false; // Track whether the frame is open
-    private JSlider volumeSlider;
+    private JSlider musicVolumeSlider;
+    private JSlider fxVolumeSlider;
     private JSlider difficultySlider;
     private static int difficulty = 2;
     private static int noteSpeed = 2;
@@ -25,9 +26,9 @@ public class SettingsFrame extends JFrame {
         }
         isOpen = true; // Mark the frame as open
 
-        MusicPlayer musicPlayer1 = new MusicPlayer();
+        MusicPlayer fxPlayer = new MusicPlayer();
         MusicPlayerManager.addMusicPlayer(musicPlayer);
-        MusicPlayerManager.addMusicPlayer(musicPlayer1);
+        MusicPlayerManager.addMusicPlayer(fxPlayer);
 
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -36,26 +37,37 @@ public class SettingsFrame extends JFrame {
         setLocationRelativeTo(null);
 
         // initialize layout
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(4, 1));
 
+        JLabel musicVolumeLabel = new JLabel("Music vol", SwingConstants.CENTER);
+        JLabel fxVolumeLabel = new JLabel("FX vol", SwingConstants.CENTER);
         Font font = new Font(fontName, Font.BOLD, 30);
-        JLabel volumeLabel;
-        add(volumeLabel = new JLabel("Volume", SwingConstants.CENTER));
-        volumeLabel.setFont(font);
+        musicVolumeLabel.setFont(font);
+        fxVolumeLabel.setFont(font);
+        add(musicVolumeLabel);
 
-        volumeSlider = new JSlider(-30, 7, (int) MusicPlayer.getVolume());
-        volumeSlider.setPaintLabels(true);
-        volumeSlider.setPaintTicks(true);
-        volumeSlider.setMajorTickSpacing(1);
 
-        // add values to volume slider
-        Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
-        volumeHashtable.put(-30, new JLabel("-30dB"));
-        volumeHashtable.put(-10, new JLabel("-10dB"));
-        volumeHashtable.put(7, new JLabel("7dB"));
-        volumeSlider.setLabelTable(volumeHashtable);
-        add(volumeSlider);
+        musicVolumeSlider = new JSlider(-30, 7, (int) MusicPlayer.getMusicVolume());
+        fxVolumeSlider = new JSlider(-30, 7, (int) MusicPlayer.getFxVolume());
 
+        JSlider[] volumeSliders = {musicVolumeSlider, fxVolumeSlider};
+
+        for (JSlider volumeSlider : volumeSliders) {
+            volumeSlider.setPaintLabels(true);
+            volumeSlider.setPaintTicks(true);
+            volumeSlider.setMajorTickSpacing(1);
+
+            // add values to volume slider
+            Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
+            volumeHashtable.put(-30, new JLabel("-30dB"));
+            volumeHashtable.put(-10, new JLabel("-10dB"));
+            volumeHashtable.put(7, new JLabel("7dB"));
+            volumeSlider.setLabelTable(volumeHashtable);
+        }
+
+        add(musicVolumeSlider);
+        add(fxVolumeLabel);
+        add(fxVolumeSlider);
 
         JLabel noteSpeedLabel;
         add(noteSpeedLabel = new JLabel("Note speed", SwingConstants.CENTER));
@@ -96,44 +108,59 @@ public class SettingsFrame extends JFrame {
 
         setSize(468, 488);
         setLocationRelativeTo(null);
-        configVolume(musicPlayer);
-        configSpeed();
-        configDifficulty();
+        configMusicVolume(musicPlayer, fxPlayer);
+        configFxVolume(fxPlayer);
+        configSpeed(fxPlayer);
+        configDifficulty(fxPlayer);
 
         // Add a window listener to mark the frame as closed when it is disposed
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
-                musicPlayer1.play("src/resources/sounds/exit.wav");
+                fxPlayer.playFX("src/resources/sounds/exit.wav");
             }
         });
 
         setVisible(true);
     }
 
-    private void configVolume(MusicPlayer musicPlayer) {
-        volumeSlider.addChangeListener(e ->{
-            if (!volumeSlider.getValueIsAdjusting()){
-                volumeValue = volumeSlider.getValue();
+    private void configMusicVolume(MusicPlayer musicPlayer, MusicPlayer fxPlayer) {
+        musicVolumeSlider.addChangeListener(e -> {
+            if (!musicVolumeSlider.getValueIsAdjusting()) {
+                volumeValue = musicVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, true);
                 musicPlayer.pause();
-                musicPlayer.resume();
+                fxPlayer.playWithCustomVolume("src/resources/sounds/click.wav", volumeValue);
+                musicPlayer.resume(true);
             }
         });
     }
 
-    private void configDifficulty() {
-        difficultySlider.addChangeListener(e ->{
-            if (!difficultySlider.getValueIsAdjusting()){
-                difficulty = difficultySlider.getValue();
+    private void configFxVolume(MusicPlayer fxPlayer) {
+        fxVolumeSlider.addChangeListener(e -> {
+            if (!fxVolumeSlider.getValueIsAdjusting()) {
+                volumeValue = fxVolumeSlider.getValue();
+                MusicPlayer.changeVolume(volumeValue, false);
+                fxPlayer.playFX("src/resources/sounds/click.wav");
             }
         });
     }
-    private void configSpeed() {
-        noteSpeedSlider.addChangeListener(e ->{
-            if (!noteSpeedSlider.getValueIsAdjusting()){
+
+    private void configDifficulty(MusicPlayer fxPlayer) {
+        difficultySlider.addChangeListener(e -> {
+            if (!difficultySlider.getValueIsAdjusting()) {
+                difficulty = difficultySlider.getValue();
+                fxPlayer.playFX("src/resources/sounds/click.wav");
+            }
+        });
+    }
+
+    private void configSpeed(MusicPlayer fxPlayer) {
+        noteSpeedSlider.addChangeListener(e -> {
+            if (!noteSpeedSlider.getValueIsAdjusting()) {
                 noteSpeed = noteSpeedSlider.getValue();
+                fxPlayer.playFX("src/resources/sounds/click.wav");
             }
         });
     }

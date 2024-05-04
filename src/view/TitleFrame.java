@@ -11,6 +11,7 @@ public class TitleFrame extends JFrame {
 
     //  private boolean isPlaying;
     private final MusicPlayer musicPlayer;
+    private final MusicPlayer fxPlayer;
     private JLabel animationLabel;
     private ImageIcon[] animationFrames;
     private int currentFrameIndex;
@@ -33,18 +34,19 @@ public class TitleFrame extends JFrame {
 
         musicPlayer = new MusicPlayer();
         //  isPlaying = false;
-        musicPlayer.play(musicPath);
+        musicPlayer.playMusic(musicPath);
         MusicPlayerManager.addMusicPlayer(musicPlayer);
+        fxPlayer = new MusicPlayer();
 
         setLayout(new GridLayout(4, 1));
         double scale = 1.9;
         int width = 400;
         int height = 100;
-        initializeAnimationFrames((int) (width*scale), (int) (height*scale));
+        initializeAnimationFrames((int) (width * scale), (int) (height * scale));
         createAnimationLabel();
         startAnimation();
 
-        for (JButton jbutton:buttons
+        for (JButton jbutton : buttons
         ) {
             jbutton.setFont(font);
             add(jbutton);
@@ -65,30 +67,34 @@ public class TitleFrame extends JFrame {
          */
 
         play.addActionListener(e -> {
+            fxPlayer.playMusic("src/resources/sounds/click.wav");
             LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
         });
 
-
         quit.addActionListener(e -> {
-            musicPlayer.stop();
-            GameController.endGame();
+            if (!LevelSelectionFrame.hasLevelStarted) {
+                musicPlayer.stop();
+                GameController.endGame();
+            }
         });
 
         settings.addActionListener(e -> {
+            fxPlayer.playMusic("src/resources/sounds/click.wav");
             SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
         });
 
-        // Ends game on close
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                GameController.endGame();
+                if (!LevelSelectionFrame.hasLevelStarted) {
+                    musicPlayer.stop();
+                    GameController.endGame();
+                }
             }
         });
 
         setVisible(true);
     }
-
 
 
     private void initializeAnimationFrames(int width, int height) {

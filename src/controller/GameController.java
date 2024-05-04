@@ -38,7 +38,7 @@ public class GameController {
             LevelSelectionFrame.hasLevelStarted = true;
             MusicPlayerManager.stopAllMusicPlayers();
             closeAllFrames();
-            musicPlayer.play("src/resources/sounds/start.wav");
+            musicPlayer.playFX("src/resources/sounds/start.wav");
             GameFrame gameFrame = new GameFrame(levelName);
             return true;
         } else return false;
@@ -54,7 +54,7 @@ public class GameController {
 
     public static void endGame() {
         MusicPlayer musicPlayer = new MusicPlayer();
-        musicPlayer.play("src/resources/sounds/exit.wav");
+        musicPlayer.playFX("src/resources/sounds/leave.wav");
         System.exit(0);
     }
 }

@@ -39,7 +39,7 @@ public class TitleFrame extends JFrame {
         fxPlayer = new MusicPlayer();
 
         setLayout(new GridLayout(4, 1));
-        double scale = 1.9;
+        double scale = 2;
         int width = 400;
         int height = 100;
         initializeAnimationFrames((int) (width * scale), (int) (height * scale));
@@ -100,7 +100,7 @@ public class TitleFrame extends JFrame {
     private void initializeAnimationFrames(int width, int height) {
         animationFrames = new ImageIcon[5];
         for (int i = 0; i < 5; i++) {
-            Image img = new ImageIcon("src/resources/sprites/TitleNew" + i + ".png").getImage();
+            Image img = new ImageIcon("src/resources/sprites/title" + i + ".png").getImage();
             Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_DEFAULT);
             animationFrames[i] = new ImageIcon(scaledImg);
         }
@@ -109,7 +109,7 @@ public class TitleFrame extends JFrame {
     private void createAnimationLabel() {
         animationLabel = new JLabel(animationFrames[0]);
 
-        animationLabel.setBounds(0, 0, 400, 100);
+        animationLabel.setBounds(0, 0, 400, 120);
         add(animationLabel);
     }
 

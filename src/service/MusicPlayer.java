@@ -9,7 +9,6 @@ public class MusicPlayer {
     private long pausedTime;
     private static float fxVolume = -20f;
     private String lastPlayed;
-    private boolean isMusic;
     private static float musicVolume = -30f;
 
     public static float getMusicVolume() {
@@ -18,18 +17,6 @@ public class MusicPlayer {
 
     public static void setMusicVolume(float musicVolume) {
         MusicPlayer.musicVolume = musicVolume;
-    }
-
-    public long getPausedTime() {
-        return pausedTime;
-    }
-
-    public void setPausedTime(long pausedTime) {
-        this.pausedTime = pausedTime;
-    }
-
-    public boolean isClipRunning() {
-        return clip.isRunning();
     }
 
     // Method for playing music from file
@@ -69,14 +56,6 @@ public class MusicPlayer {
 
     public void playFX(String filePath){
         play(filePath, false);
-    }
-
-    public String getLastPlayed() {
-        return lastPlayed;
-    }
-
-    public void setLastPlayed(String lastPlayed) {
-        this.lastPlayed = lastPlayed;
     }
 
     public void resume(boolean isMusic) {

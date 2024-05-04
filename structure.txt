@@ -10,6 +10,7 @@ Bongo_Beats_Bonanza/
 │   ├── view/
 │   │   ├── TitleFrame.java
 │   │   ├── SettingsFrame.java
+│   │   ├── GameFrame.java
 │   │   └── LevelSelectionFrame.java
 │   │
 │   ├── service/
@@ -22,19 +23,23 @@ Bongo_Beats_Bonanza/
 │
 │
 ├── resources/
-│   ├── sounds/ TODO add later
+│   ├── sounds/
 │   │   ├── select.wav
-│   │   ├── noteHit.wav
+│   │   ├── noteHit.wav TODO add later
 │   │   ├── start.wav
 │   │   ├── alert.wav
+│   │   ├── leave.wav
+│   │   ├── click.wav
 │   │   └── exit.wav
 │   ├── sprites/
 │   │   ├── tile0.png
 │   │   ├── tile1.png
 │   │   ├── tile2.png
-│   │   └── tile3.png
+│   │   ├── tile3.png
+│   │   ├── tile4.png
+│   │   └── tile5.png
 │   └── levels/
-│       ├── song1.mid
+│       ├── song1.wav
 │       └── song1.mid
 │
 └── README.md TODO add later

@@ -14,8 +14,8 @@ import static service.AudioVerification.*;
 
 public class GameController {
 
-    private String musicPath;
-    private String fontName;
+    private final String musicPath;
+    private final String fontName;
 
     public GameController(String musicPath, String fontName) {
         this.musicPath = musicPath;

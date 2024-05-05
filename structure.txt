@@ -31,13 +31,18 @@ Bongo_Beats_Bonanza/
 │   │   ├── leave.wav
 │   │   ├── click.wav
 │   │   └── exit.wav
+│   │
 │   ├── sprites/
-│   │   ├── tile0.png
-│   │   ├── tile1.png
-│   │   ├── tile2.png
-│   │   ├── tile3.png
-│   │   ├── tile4.png
-│   │   └── tile5.png
+│   │   ├── title0.png
+│   │   ├── title1.png
+│   │   ├── title2.png
+│   │   ├── title3.png
+│   │   ├── title4.png
+│   │   └── title5.png
+│   │
+│   ├── icons/
+│   │   └── gameLogo.ico
+│   │
 │   └── levels/
 │       ├── song1.wav
 │       └── song1.mid

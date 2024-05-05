@@ -1,4 +1,5 @@
 import controller.GameController;
+import view.GameFrame;
 
 import javax.swing.*;
 
@@ -15,7 +16,8 @@ public class Main {
                  IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        GameController gameController = new GameController(musicPath, fontName);
-        gameController.startGame();
+      //  GameController gameController = new GameController(musicPath, fontName);
+      //  gameController.startGame();
+        GameFrame gameFrame = new GameFrame("");
     }
 }

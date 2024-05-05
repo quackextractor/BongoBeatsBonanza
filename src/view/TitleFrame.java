@@ -32,11 +32,11 @@ public class TitleFrame extends JFrame {
 
         Font font = new Font(fontName, Font.BOLD, 120);
 
-        musicPlayer = new MusicPlayer();
+        musicPlayer = new MusicPlayer(true, musicPath);
         //  isPlaying = false;
-        musicPlayer.playMusic(musicPath);
+        musicPlayer.playDefault();
         MusicPlayerManager.addMusicPlayer(musicPlayer);
-        fxPlayer = new MusicPlayer();
+        fxPlayer = new MusicPlayer(false, "");
 
         setLayout(new GridLayout(4, 1));
         double scale = 2;
@@ -67,7 +67,7 @@ public class TitleFrame extends JFrame {
          */
 
         play.addActionListener(e -> {
-            fxPlayer.playMusic("src/resources/sounds/click.wav");
+            fxPlayer.play("src/resources/sounds/click.wav");
             LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
         });
 
@@ -79,7 +79,7 @@ public class TitleFrame extends JFrame {
         });
 
         settings.addActionListener(e -> {
-            fxPlayer.playMusic("src/resources/sounds/click.wav");
+            fxPlayer.play("src/resources/sounds/click.wav");
             SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
         });
 

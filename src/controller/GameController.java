@@ -16,6 +16,7 @@ public class GameController {
 
     private final String musicPath;
     private final String fontName;
+    private static final MusicPlayer fxPlayer = new MusicPlayer(false,"");
 
     public GameController(String musicPath, String fontName) {
         this.musicPath = musicPath;
@@ -34,11 +35,10 @@ public class GameController {
 
         // Return true only if both midi and wav files are valid
         if (midiValid && wavValid) {
-            MusicPlayer musicPlayer = new MusicPlayer();
             LevelSelectionFrame.hasLevelStarted = true;
             MusicPlayerManager.stopAllMusicPlayers();
             closeAllFrames();
-            musicPlayer.playFX("src/resources/sounds/start.wav");
+            fxPlayer.play("src/resources/sounds/start.wav");
             GameFrame gameFrame = new GameFrame(levelName);
             return true;
         } else return false;
@@ -53,8 +53,7 @@ public class GameController {
 
 
     public static void endGame() {
-        MusicPlayer musicPlayer = new MusicPlayer();
-        musicPlayer.playFX("src/resources/sounds/leave.wav");
+        fxPlayer.play("src/resources/sounds/leave.wav");
         System.exit(0);
     }
 }

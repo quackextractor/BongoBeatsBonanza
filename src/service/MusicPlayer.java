@@ -1,15 +1,25 @@
 package service;
 
+import view.TitleFrame;
+
 import javax.sound.sampled.*;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
 public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
-    private static float fxVolume = -20f;
     private String lastPlayed;
+    private boolean isMusic;
+    private String path;
+    private static float fxVolume = -20f;
     private static float musicVolume = -30f;
+
+    public MusicPlayer(boolean isMusic, String path) {
+        this.isMusic = isMusic;
+        this.path = path;
+    }
 
     public static float getMusicVolume() {
         return musicVolume;
@@ -20,7 +30,7 @@ public class MusicPlayer {
     }
 
     // Method for playing music from file
-    private void play(String filePath, boolean isMusic) {
+    private void playClip(String filePath) {
 
         try {
             if (clip != null && clip.isRunning()) {
@@ -50,28 +60,35 @@ public class MusicPlayer {
         }
     }
 
-    public void playMusic(String filePath){
-        play(filePath, true);
-    }
-
-    public void playFX(String filePath){
-        play(filePath, false);
-    }
-
-    public void resume(boolean isMusic) {
-        if (lastPlayed != null) {
-            play(lastPlayed, isMusic);
+    // Plays from a custom path
+    public void play(String filePath) {
+        if (!filePath.isBlank()) {
+            playClip(filePath);
         }
     }
 
-    public void playWithCustomVolume(String musicPath, float volume) {
+    // Plays from default path set when making musicPlayer, if available
+    public void playDefault() {
+        if (!path.isBlank()) {
+            play(path);
+        }
+    }
+
+    // resumes a clip from lastPlayed path
+    public void resume() {
+        if (lastPlayed != null && !clip.isRunning()) {
+            play(lastPlayed);
+        }
+    }
+
+    public void playWithCustomVolume(float volume, String musicPath) {
         float musicVolumeOriginal = getMusicVolume();
         float fxVolumeOriginal = getFxVolume();
 
         setMusicVolume(volume);
         setFxVolume(volume);
 
-        playMusic(musicPath);
+        play(musicPath);
 
         setMusicVolume(musicVolumeOriginal);
         setFxVolume(fxVolumeOriginal);
@@ -83,6 +100,7 @@ public class MusicPlayer {
             clip.stop();
         }
     }
+
     public static float getFxVolume() {
         return fxVolume;
     }
@@ -107,4 +125,35 @@ public class MusicPlayer {
             fxVolume = value;
     }
 
+    public long getPausedTime() {
+        return pausedTime;
+    }
+
+    public void setPausedTime(long pausedTime) {
+        this.pausedTime = pausedTime;
+    }
+
+    public String getLastPlayed() {
+        return lastPlayed;
+    }
+
+    public void setLastPlayed(String lastPlayed) {
+        this.lastPlayed = lastPlayed;
+    }
+
+    public boolean isMusic() {
+        return isMusic;
+    }
+
+    public void setMusic(boolean music) {
+        isMusic = music;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

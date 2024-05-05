@@ -26,7 +26,7 @@ public class SettingsFrame extends JFrame {
         }
         isOpen = true; // Mark the frame as open
 
-        MusicPlayer fxPlayer = new MusicPlayer();
+        MusicPlayer fxPlayer = new MusicPlayer(false, "");
         MusicPlayerManager.addMusicPlayer(musicPlayer);
         MusicPlayerManager.addMusicPlayer(fxPlayer);
 
@@ -118,7 +118,7 @@ public class SettingsFrame extends JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
-                fxPlayer.playFX("src/resources/sounds/exit.wav");
+                fxPlayer.play("src/resources/sounds/exit.wav");
             }
         });
 
@@ -131,8 +131,8 @@ public class SettingsFrame extends JFrame {
                 volumeValue = musicVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, true);
                 musicPlayer.pause();
-                fxPlayer.playWithCustomVolume("src/resources/sounds/click.wav", volumeValue);
-                musicPlayer.resume(true);
+                fxPlayer.playWithCustomVolume(volumeValue, "src/resources/sounds/click.wav");
+                musicPlayer.resume();
             }
         });
     }
@@ -142,7 +142,7 @@ public class SettingsFrame extends JFrame {
             if (!fxVolumeSlider.getValueIsAdjusting()) {
                 volumeValue = fxVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, false);
-                fxPlayer.playFX("src/resources/sounds/click.wav");
+                fxPlayer.play("src/resources/sounds/click.wav");
             }
         });
     }
@@ -151,7 +151,7 @@ public class SettingsFrame extends JFrame {
         difficultySlider.addChangeListener(e -> {
             if (!difficultySlider.getValueIsAdjusting()) {
                 difficulty = difficultySlider.getValue();
-                fxPlayer.playFX("src/resources/sounds/click.wav");
+                fxPlayer.play("src/resources/sounds/click.wav");
             }
         });
     }
@@ -160,7 +160,7 @@ public class SettingsFrame extends JFrame {
         noteSpeedSlider.addChangeListener(e -> {
             if (!noteSpeedSlider.getValueIsAdjusting()) {
                 noteSpeed = noteSpeedSlider.getValue();
-                fxPlayer.playFX("src/resources/sounds/click.wav");
+                fxPlayer.play("src/resources/sounds/click.wav");
             }
         });
     }

@@ -15,7 +15,7 @@ public class LevelSelectionFrame extends JFrame {
     private static boolean isOpen = false; // Static boolean to track if the window is open
     private List<String> levelNames;
     private JComboBox<String> levelComboBox;
-    private MusicPlayer musicPlayer;
+    private MusicPlayer fxPlayer;
     public static boolean hasLevelStarted = false;
 
     public LevelSelectionFrame() {
@@ -25,7 +25,7 @@ public class LevelSelectionFrame extends JFrame {
         }
         hasLevelStarted = false;
         isOpen = true;
-        musicPlayer = new MusicPlayer();
+        fxPlayer = new MusicPlayer(false, "");
         setTitle("Level Selection");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 200);
@@ -56,7 +56,7 @@ public class LevelSelectionFrame extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (!hasLevelStarted) {
-                    musicPlayer.playFX("src/resources/sounds/exit.wav");
+                    fxPlayer.play("src/resources/sounds/exit.wav");
                     isOpen = false;
                 }
             }
@@ -88,7 +88,7 @@ public class LevelSelectionFrame extends JFrame {
     private void startGame(String selectedLevel) {
         if (!GameController.startLevel(selectedLevel)) {
             // Display error message as a tooltip
-            musicPlayer.playFX("src/resources/sounds/alert.wav");
+            fxPlayer.play("src/resources/sounds/alert.wav");
             JOptionPane.showMessageDialog(this, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

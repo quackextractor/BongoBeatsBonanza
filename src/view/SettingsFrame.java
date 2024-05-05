@@ -17,7 +17,6 @@ public class SettingsFrame extends JFrame {
     private JSlider noteSpeedSlider;
     private float volumeValue = -10;
 
-
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         if (isOpen) {
             // If the frame is already open, bring it to the front and return
@@ -26,94 +25,64 @@ public class SettingsFrame extends JFrame {
         }
         isOpen = true; // Mark the frame as open
 
-        MusicPlayer fxPlayer = new MusicPlayer(false, "");
-        MusicPlayerManager.addMusicPlayer(musicPlayer);
-        MusicPlayerManager.addMusicPlayer(fxPlayer);
-
+        // Initialize frame properties
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 800);
-        // center the frame
         setLocationRelativeTo(null);
 
-        // initialize layout
+        // Initialize layout
         setLayout(new GridLayout(4, 1));
 
-        JLabel musicVolumeLabel = new JLabel("Music vol", SwingConstants.CENTER);
-        JLabel fxVolumeLabel = new JLabel("FX vol", SwingConstants.CENTER);
+        // Create labels and set font
         Font font = new Font(fontName, Font.BOLD, 30);
+        JLabel musicVolumeLabel = new JLabel("Music vol", SwingConstants.CENTER);
         musicVolumeLabel.setFont(font);
+        JLabel fxVolumeLabel = new JLabel("FX vol", SwingConstants.CENTER);
         fxVolumeLabel.setFont(font);
+
+        // Initialize volume sliders
+        musicVolumeSlider = initializeVolumeSlider(MusicPlayer.getMusicVolume());
+        fxVolumeSlider = initializeVolumeSlider(MusicPlayer.getFxVolume());
+
+        // Add components to the frame
         add(musicVolumeLabel);
-
-
-        musicVolumeSlider = new JSlider(-30, 7, (int) MusicPlayer.getMusicVolume());
-        fxVolumeSlider = new JSlider(-30, 7, (int) MusicPlayer.getFxVolume());
-
-        JSlider[] volumeSliders = {musicVolumeSlider, fxVolumeSlider};
-
-        for (JSlider volumeSlider : volumeSliders) {
-            volumeSlider.setPaintLabels(true);
-            volumeSlider.setPaintTicks(true);
-            volumeSlider.setMajorTickSpacing(1);
-
-            // add values to volume slider
-            Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
-            volumeHashtable.put(-30, new JLabel("-30dB"));
-            volumeHashtable.put(-10, new JLabel("-10dB"));
-            volumeHashtable.put(7, new JLabel("7dB"));
-            volumeSlider.setLabelTable(volumeHashtable);
-        }
-
         add(musicVolumeSlider);
         add(fxVolumeLabel);
         add(fxVolumeSlider);
 
-        JLabel noteSpeedLabel;
-        add(noteSpeedLabel = new JLabel("Note speed", SwingConstants.CENTER));
-        noteSpeedLabel.setFont(font);
+        // Initialize note speed slider
+        noteSpeedSlider = initializeSpeedSlider();
 
-        noteSpeedSlider = new JSlider(1, 3, noteSpeed);
-        noteSpeedSlider.setPaintLabels(true);
-        noteSpeedSlider.setPaintTicks(true);
-        noteSpeedSlider.setMajorTickSpacing(1);
-        Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
-        speedHashtable.put(1, new JLabel("slow"));
-        speedHashtable.put(2, new JLabel("medium"));
-        Font font2 = new Font("Arial", Font.BOLD, 13);
-        JLabel label = new JLabel("TURBO");
-        label.setForeground(Color.red);
-        label.setFont(font2);
-        speedHashtable.put(3, label);
-        noteSpeedSlider.setLabelTable(speedHashtable);
+        // Add note speed slider to the frame
+        JLabel noteSpeedLabel = new JLabel("Note speed", SwingConstants.CENTER);
+        noteSpeedLabel.setFont(font);
+        add(noteSpeedLabel);
         add(noteSpeedSlider);
 
-        JLabel difficultyLabel;
-        add(difficultyLabel = new JLabel("Difficulty", SwingConstants.CENTER));
-        difficultyLabel.setFont(font);
+        // Initialize difficulty slider
+        difficultySlider = initializeDifficultySlider();
 
-        difficultySlider = new JSlider(1, 3, difficulty);
-        difficultySlider.setPaintLabels(true);
-        difficultySlider.setPaintTicks(true);
-        difficultySlider.setMajorTickSpacing(1);
-        Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
-        difficultyHashtable.put(1, new JLabel("easy"));
-        difficultyHashtable.put(2, new JLabel("normal"));
-        JLabel label2 = new JLabel("NIGHTMARE");
-        label2.setForeground(Color.BLUE);
-        label2.setFont(font2);
-        difficultyHashtable.put(3, label2);
-        difficultySlider.setLabelTable(difficultyHashtable);
+        // Add difficulty slider to the frame
+        JLabel difficultyLabel = new JLabel("Difficulty", SwingConstants.CENTER);
+        difficultyLabel.setFont(font);
+        add(difficultyLabel);
         add(difficultySlider);
 
+        // Set frame size and location
         setSize(468, 488);
         setLocationRelativeTo(null);
+
+        // Configure volume, difficulty, and speed settings
+        MusicPlayer fxPlayer = new MusicPlayer(false, "");
+        MusicPlayerManager.addMusicPlayer(musicPlayer);
+        MusicPlayerManager.addMusicPlayer(fxPlayer);
         configMusicVolume(musicPlayer, fxPlayer);
         configFxVolume(fxPlayer);
         configSpeed(fxPlayer);
         configDifficulty(fxPlayer);
 
-        // Add a window listener to mark the frame as closed when it is disposed
+        // Add window listener to handle frame closing
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -123,6 +92,59 @@ public class SettingsFrame extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    private JSlider initializeVolumeSlider(float initialValue) {
+        JSlider slider = new JSlider(-30, 7, (int) initialValue);
+        slider.setPaintLabels(true);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(1);
+
+        Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
+        volumeHashtable.put(-30, new JLabel("-30dB"));
+        volumeHashtable.put(-10, new JLabel("-10dB"));
+        volumeHashtable.put(7, new JLabel("7dB"));
+        slider.setLabelTable(volumeHashtable);
+
+        return slider;
+    }
+
+    private JSlider initializeSpeedSlider() {
+        JSlider slider = new JSlider(1, 3, noteSpeed);
+        slider.setPaintLabels(true);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(1);
+
+        Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
+        speedHashtable.put(1, new JLabel("slow"));
+        speedHashtable.put(2, new JLabel("medium"));
+        Font font2 = new Font("Arial", Font.BOLD, 13);
+        JLabel label = new JLabel("TURBO");
+        label.setForeground(Color.red);
+        label.setFont(font2);
+        speedHashtable.put(3, label);
+
+        slider.setLabelTable(speedHashtable);
+        return slider;
+    }
+
+    private JSlider initializeDifficultySlider() {
+        JSlider slider = new JSlider(1, 3, difficulty);
+        slider.setPaintLabels(true);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(1);
+
+        Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
+        difficultyHashtable.put(1, new JLabel("easy"));
+        difficultyHashtable.put(2, new JLabel("normal"));
+        JLabel label2 = new JLabel("NIGHTMARE");
+        label2.setForeground(Color.BLUE);
+        Font font2 = new Font("Arial", Font.BOLD, 13);
+        label2.setFont(font2);
+        difficultyHashtable.put(3, label2);
+
+        slider.setLabelTable(difficultyHashtable);
+        return slider;
     }
 
     private void configMusicVolume(MusicPlayer musicPlayer, MusicPlayer fxPlayer) {

@@ -103,7 +103,7 @@ public class SettingsFrame extends JFrame {
         Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
         volumeHashtable.put(-30, new JLabel("-30dB"));
         volumeHashtable.put(-10, new JLabel("-10dB"));
-        volumeHashtable.put(7, new JLabel("7dB"));
+        volumeHashtable.put(6, new JLabel("6dB"));
         slider.setLabelTable(volumeHashtable);
 
         return slider;

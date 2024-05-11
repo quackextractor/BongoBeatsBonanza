@@ -48,4 +48,7 @@ Bongo_Beats_Bonanza/
 │       ├── song1.wav
 │       └── song1.mid
 │
+├── .gitignore
+├── error_log.txt
+├── structure.txt
 └── README.md TODO add later

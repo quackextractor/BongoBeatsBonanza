@@ -34,6 +34,7 @@ public class Track {
         notesOnTrack.add(notePool.getNote());
     }
 
+    // Catches Notes and gets accuracy
     public double catchNote() {
         // Checks if track is empty first to skip evaluation
         if (notesOnTrack.isEmpty()) {
@@ -49,6 +50,8 @@ public class Track {
             return 0;
         }
 
+        // remove caught note
+        removeNoteFromTrack(noteWithMinDistance);
         return AccuracyCalculator.determineAccuracy(minDistance, maxHitDistance);
     }
 

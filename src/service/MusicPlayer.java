@@ -56,7 +56,7 @@ public class MusicPlayer {
             clip.start();
 
         } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-            e.printStackTrace();
+            ErrorLogger.logStackTrace(e);
         }
     }
 

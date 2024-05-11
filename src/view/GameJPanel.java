@@ -1,5 +1,7 @@
 package view;
 
+import service.ErrorLogger;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ public class GameJPanel extends JPanel {
             // Load the background image
           backgroundImage = ImageIO.read(new File("src/resources/sprites/cat1.png"));
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrorLogger.logStackTrace(e);
             // Handle error if image loading fails
         }
     }

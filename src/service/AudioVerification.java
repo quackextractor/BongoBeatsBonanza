@@ -66,7 +66,7 @@ public class AudioVerification {
             // If sequence is successfully obtained, midi file is valid
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            ErrorLogger.logStackTrace(e);
             // Midi file is invalid
             return false;
         }

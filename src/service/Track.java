@@ -15,6 +15,7 @@ public class Track {
     public Track(NotePool notePool, int maxHitDistance) {
         this.notePool = notePool;
         this.maxHitDistance = maxHitDistance;
+        notesOnTrack = new ArrayList<>();
     }
 
     public void removeNoteFromTrack(Note note) {

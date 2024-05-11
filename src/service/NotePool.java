@@ -7,11 +7,11 @@ public class NotePool {
     private LinkedList<Note> noteLinkedList; // LinkedList for dynamic pool size
 
     // Note variables
-    private Image noteImage;
-    private int targetXPos;
-    private int targetYPos;
-    private int spawnDistance;
-    private Track track;
+    private final Image noteImage;
+    private final int targetXPos;
+    private final int targetYPos;
+    private final int spawnDistance;
+    private final Track track;
 
 
     public NotePool(int initialSize, Image noteImage, int targetXPos, int targetYPos, int spawnDistance, Track track) {
@@ -43,7 +43,7 @@ public class NotePool {
     // Method to return a note to the pool
     public void returnNoteToPool(Note note) {
         // Reset note properties
-        note.reset(spawnDistance, targetXPos, targetYPos);
+        note.reset(spawnDistance, targetYPos);
 
         // Add the note back to the LinkedList
         noteLinkedList.add(note);

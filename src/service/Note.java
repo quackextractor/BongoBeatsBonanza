@@ -6,10 +6,10 @@ public class Note {
     private int size;
     // distance from target
     private int distance;
-    private int xPos;
+    private final int xPos;
     private int yPos;
-    private Image noteImage;
-    private Track track;
+    private final Image noteImage;
+    private final Track track;
 
     public Note(int spawnDistance, Image noteImage, int targetXPos, int targetYPos, Track track) {
         this.distance = spawnDistance;
@@ -37,9 +37,8 @@ public class Note {
     }
 
     // Method to reset the note properties to their initial state
-    public void reset(int spawnDistance, int targetXPos, int targetYPos) {
+    public void reset(int spawnDistance, int targetYPos) {
         this.distance = spawnDistance;
-        this.xPos = targetXPos;
         this.yPos = targetYPos + spawnDistance;
     }
 }

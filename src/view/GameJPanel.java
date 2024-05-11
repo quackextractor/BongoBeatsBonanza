@@ -1,8 +1,6 @@
 package view;
 
-import service.ErrorLogger;
-import service.NotePool;
-import service.Track;
+import service.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,6 +22,8 @@ public class GameJPanel extends JPanel {
     private Track track1;
     private Track track2;
     private final int horizontalHeight;
+    private NoteMovingThread noteMovingThread1;
+    private NoteMovingThread noteMovingThread2;
 
     public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight) {
         this.firstLineX = firstLineX;
@@ -38,10 +38,15 @@ public class GameJPanel extends JPanel {
             ErrorLogger.logStackTrace(e);
             // Handle error if image loading fails
         }
-        notePool1 = new NotePool(10, noteImage1, firstLineX, horizontalHeight, 100, track1);
-        notePool2 = new NotePool(10, noteImage2, secondLineX, horizontalHeight, 100, track2);
+        notePool1 = new NotePool(10, noteImage1, 20, firstLineX, horizontalHeight, 100, track1);
+        notePool2 = new NotePool(10, noteImage2, 20, secondLineX, horizontalHeight, 100, track2);
         track1 = new Track(notePool1, 30);
         track2 = new Track(notePool2, 30);
+
+        noteMovingThread1 = new NoteMovingThread(track1, 1, 50);
+        noteMovingThread2 = new NoteMovingThread(track2, 1, 50);
+        noteMovingThread1.start();
+        noteMovingThread2.start();
 
         setFocusable(true); // Enable keyboard focus for the JPanel
         requestFocusInWindow(); // Request focus so that the JPanel can receive keyboard events
@@ -57,16 +62,21 @@ public class GameJPanel extends JPanel {
         int keyCode = evt.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
-                // Left arrow key pressed, call track1.catchNote()
                 double accuracy1 = track1.catchNote();
-                // Handle accuracy calculation if needed
+                System.out.println(accuracy1);
+                System.out.println(AccuracyCalculator.getAverageAccuracy());
                 break;
             case KeyEvent.VK_RIGHT:
-                // Right arrow key pressed, call track2.catchNote()
                 double accuracy2 = track2.catchNote();
-                // Handle accuracy calculation if needed
+                System.out.println(accuracy2);
+                System.out.println(AccuracyCalculator.getAverageAccuracy());
                 break;
-            // Add more cases for other keys if needed
+            case KeyEvent.VK_UP:
+                track1.addNoteToTrack();
+                break;
+            case KeyEvent.VK_DOWN:
+                track2.addNoteToTrack();
+                break;
         }
     }
 

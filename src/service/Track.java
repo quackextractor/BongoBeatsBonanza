@@ -39,7 +39,7 @@ public class Track {
     public double catchNote() {
         // Checks if track is empty first to skip evaluation
         if (notesOnTrack.isEmpty()) {
-            Score.Miss();
+            AccuracyCalculator.miss();
             return 0;
         }
 
@@ -47,7 +47,7 @@ public class Track {
         int minDistance = noteWithMinDistance.getDistance();
 
         if (minDistance > maxHitDistance) {
-            Score.Miss();
+            AccuracyCalculator.miss();
             return 0;
         }
 
@@ -68,8 +68,8 @@ public class Track {
 
             // UNTESTED
             // Draw guidelines below the note
-            g.setColor(Color.RED); // Set the color of the guidelines
-            g.drawLine(noteX - 10, noteY + noteSize, noteX + noteSize + 10, noteY + noteSize);
+          //  g.setColor(Color.RED); // Set the color of the guidelines
+          //  g.drawLine(noteX - 10, noteY + noteSize, noteX + noteSize + 10, noteY + noteSize);
         }
     }
 

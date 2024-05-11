@@ -11,7 +11,7 @@ public class Note {
     private final Image noteImage;
     private final Track track;
 
-    public Note(int spawnDistance, Image noteImage, int targetXPos, int targetYPos, Track track) {
+    public Note(int spawnDistance, Image noteImage, int targetXPos, int targetYPos, Track track, int size) {
         this.distance = spawnDistance;
         this.noteImage = noteImage;
         this.xPos = targetXPos;
@@ -32,6 +32,7 @@ public class Note {
 
     public void checkPos(){
         if(yPos<=0){
+            AccuracyCalculator.miss();
             track.removeNoteFromTrack(this);
         }
     }

@@ -17,7 +17,7 @@ public class Main {
             throw new RuntimeException(e);
         }
       GameController gameController = new GameController(musicPath, fontName);
-     gameController.startGame();
-      //  GameFrame gameFrame = new GameFrame("");
+   //  gameController.startGame();
+       GameFrame gameFrame = new GameFrame("");
     }
 }

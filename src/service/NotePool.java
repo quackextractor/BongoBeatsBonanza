@@ -6,25 +6,31 @@ import java.util.LinkedList;
 public class NotePool {
     private LinkedList<Note> noteLinkedList; // LinkedList for dynamic pool size
 
+    public void setNoteImage(Image noteImage) {
+        this.noteImage = noteImage;
+    }
+
     // Note variables
-    private final Image noteImage;
+    private Image noteImage;
     private final int targetXPos;
     private final int targetYPos;
     private final int spawnDistance;
     private final Track track;
+    private final int noteSize;
 
 
-    public NotePool(int initialSize, Image noteImage, int targetXPos, int targetYPos, int spawnDistance, Track track) {
+    public NotePool(int initialSize, Image noteImage, int noteSize, int targetXPos, int targetYPos, int spawnDistance, Track track) {
         this.noteImage = noteImage;
         this.targetXPos = targetXPos;
         this.targetYPos = targetYPos;
         this.spawnDistance = spawnDistance;
         this.track = track;
+        this.noteSize = noteSize;
         noteLinkedList = new LinkedList<>();
 
         // Pre-allocate note objects and add them to the LinkedList
         for (int i = 0; i < initialSize; i++) {
-            Note note = new Note(spawnDistance, noteImage, targetXPos, targetYPos, track);
+            Note note = new Note(spawnDistance, noteImage, targetXPos, targetYPos, track, noteSize);
             noteLinkedList.add(note);
         }
     }
@@ -33,7 +39,7 @@ public class NotePool {
     public Note getNote() {
         if (noteLinkedList.isEmpty()) {
             // If the LinkedList is empty, create a new note
-            return new Note(spawnDistance, noteImage, targetXPos, targetYPos, track);
+            return new Note(spawnDistance, noteImage, targetXPos, targetYPos, track, noteSize);
         } else {
             // Otherwise, retrieve a note from the LinkedList
             return noteLinkedList.removeFirst();

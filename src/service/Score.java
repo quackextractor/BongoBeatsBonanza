@@ -13,4 +13,8 @@ public class Score {
     public static void BadHit() {
         System.out.println("Bad hit!");
     }
+
+    public static void Miss() {
+        System.out.println("Missed hit!");
+    }
 }

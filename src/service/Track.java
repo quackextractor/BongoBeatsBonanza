@@ -56,4 +56,21 @@ public class Track {
         return AccuracyCalculator.determineAccuracy(minDistance, maxHitDistance);
     }
 
+    public void drawNotes(Graphics g) {
+        for (Note note : notesOnTrack) {
+            int noteX = note.getXPos();
+            int noteY = note.getYPos();
+            int noteSize = note.getSize();
+            Image noteImage = note.getNoteImage();
+
+            // Draw the note image at the specified position with size
+            g.drawImage(noteImage, noteX, noteY, noteSize, noteSize, null);
+
+            // UNTESTED
+            // Draw guidelines below the note
+            g.setColor(Color.RED); // Set the color of the guidelines
+            g.drawLine(noteX - 10, noteY + noteSize, noteX + noteSize + 10, noteY + noteSize);
+        }
+    }
+
 }

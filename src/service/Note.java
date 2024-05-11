@@ -41,4 +41,20 @@ public class Note {
         this.distance = spawnDistance;
         this.yPos = targetYPos + spawnDistance;
     }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getXPos() {
+        return xPos;
+    }
+
+    public int getYPos() {
+        return yPos;
+    }
+
+    public Image getNoteImage() {
+        return noteImage;
+    }
 }

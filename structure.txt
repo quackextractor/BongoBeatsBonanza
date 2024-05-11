@@ -1,22 +1,23 @@
 Bongo_Beats_Bonanza/
 │
 ├── src/
-│   ├── model/
-│   │   ├── Level.java
-│   │   ├── MusicPlayer.java
-│   │   ├── SongLoader.java
-│   │   └── GameController.java
-│   │
 │   ├── view/
 │   │   ├── TitleFrame.java
 │   │   ├── SettingsFrame.java
+│   │   ├── GameJPanel.java
 │   │   ├── GameFrame.java
 │   │   └── LevelSelectionFrame.java
 │   │
 │   ├── service/
-│   │   ├── MusicPlayer.java
+│   │   ├── AccuracyCalculator.java
 │   │   ├── AudioVerification.java
-│   │   └── MusicPlayerManager.java
+│   │   ├── ErrorLogger.java
+│   │   ├── MusicPlayer.java
+│   │   ├── MusicPlayerManager.java
+│   │   ├── Note.java
+│   │   ├── NotePool.java
+│   │   ├── Score.java
+│   │   └── Track.java
 │   │
 │   │
 │   └── Main.java
@@ -41,7 +42,7 @@ Bongo_Beats_Bonanza/
 │   │   └── title5.png
 │   │
 │   ├── icons/
-│   │   └── gameLogo.ico
+│   │   └── gameLogo.ico TODO add later
 │   │
 │   └── levels/
 │       ├── song1.wav

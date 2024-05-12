@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 
 public class Track {
 
@@ -37,9 +38,14 @@ public class Track {
         }
     }
 
-    public void moveNotes(int amount) {
+    public void moveNotes(int amount) { // TODO if possible, try to fix this Error
+        try {
         for (Note note : notesOnTrack) {
-            note.move(amount);
+            if (note != null) {
+                note.move(amount);
+            }
+        }
+        } catch (ConcurrentModificationException ignored){
         }
     }
 
@@ -76,7 +82,11 @@ public class Track {
             Image noteImage = note.getNoteImage();
 
             // Draw the note image at the specified position with size
-            g.drawImage(noteImage, noteX, noteY, noteSize, noteSize, null);
+          //  g.drawImage(noteImage, noteX, noteY, noteSize, noteSize, null);
+
+            // Draw a black filled circle
+            g.setColor(Color.BLACK);
+            g.fillOval(noteX, noteY, noteSize, noteSize);
 
             // UNTESTED
             // Draw guidelines below the note

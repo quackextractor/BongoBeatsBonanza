@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameJPanel extends JPanel {
+    private static final int TIMER_DELAY = 10;
+    private Timer repaintTimer;
+
     private final int firstLineX;
     private final int secondLineX;
     // Background image
@@ -50,6 +53,9 @@ public class GameJPanel extends JPanel {
         noteMovingThread1.start();
         noteMovingThread2.start();
 
+        repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
+        repaintTimer.start();
+
         setFocusable(true); // Enable keyboard focus for the JPanel
         requestFocusInWindow(); // Request focus so that the JPanel can receive keyboard events
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -84,25 +90,25 @@ public class GameJPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+            super.paintComponent(g);
 
-        // Draw the background image
-        if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
+            // Draw the background image
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
 
-        // Draw vertical lines
-        // First line
-        g.drawLine(firstLineX, 0, firstLineX, getHeight());
+            // Draw vertical lines
+            // First line
+            g.drawLine(firstLineX, 0, firstLineX, getHeight());
 
-        // Second line
-        g.drawLine(secondLineX, 0, secondLineX, getHeight());
+            // Second line
+            g.drawLine(secondLineX, 0, secondLineX, getHeight());
 
-        // Draw horizontal line in the top third of the screen
-        g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
+            // Draw horizontal line in the top third of the screen
+            g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
 
-        // Draw the notes
-        track1.drawNotes(g);
-        track2.drawNotes(g);
+            // Draw the notes
+            track1.drawNotes(g);
+            track2.drawNotes(g);
     }
 }

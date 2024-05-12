@@ -3,7 +3,7 @@ package service;
 import java.awt.*;
 
 public class Note {
-    private int size;
+    private final int size;
     // distance from target
     private int distance;
     private final int xPos;
@@ -17,6 +17,7 @@ public class Note {
         this.xPos = targetXPos;
         this.track = track;
         this.yPos = targetYPos + spawnDistance;
+        this.size = size;
     }
 
     public int getDistance() {

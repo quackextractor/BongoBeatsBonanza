@@ -12,16 +12,28 @@ public class Track {
     private int maxHitDistance;
     private Comparator<Note> noteDistanceComparator = Comparator.comparingDouble(Note::getDistance);
 
-    public Track(NotePool notePool, int maxHitDistance) {
+    private final int targetXPos;
+    private final int targetYPos;
+    private final int spawnDistance;
+    private final int noteSize;
+    private final Image noteImage;
+
+    public Track(NotePool notePool, int maxHitDistance, Image noteImage, int noteSize, int targetXPos, int targetYPos, int spawnDistance) {
         this.notePool = notePool;
         this.maxHitDistance = maxHitDistance;
         notesOnTrack = new ArrayList<>();
+
+        this.noteImage = noteImage;
+        this.targetXPos = targetXPos;
+        this.targetYPos = targetYPos;
+        this.spawnDistance = spawnDistance;
+        this.noteSize = noteSize;
     }
 
     public void removeNoteFromTrack(Note note) {
         if (notesOnTrack.contains(note)) {
             notesOnTrack.remove(note);
-            notePool.returnNoteToPool(note);
+            notePool.returnNoteToPool(note, spawnDistance, targetYPos);
         }
     }
 
@@ -32,7 +44,7 @@ public class Track {
     }
 
     public void addNoteToTrack(){
-        notesOnTrack.add(notePool.getNote());
+        notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, this, noteSize));
     }
 
     // Catches Notes and gets accuracy

@@ -38,10 +38,10 @@ public class GameJPanel extends JPanel {
             ErrorLogger.logStackTrace(e);
             // Handle error if image loading fails
         }
-        notePool1 = new NotePool(10, noteImage1, 20, firstLineX, horizontalHeight, 100, track1);
-        notePool2 = new NotePool(10, noteImage2, 20, secondLineX, horizontalHeight, 100, track2);
-        track1 = new Track(notePool1, 30);
-        track2 = new Track(notePool2, 30);
+        notePool1 = new NotePool(10);
+        notePool2 = new NotePool(10);
+        track1 = new Track(notePool1, 30, noteImage1, 20, firstLineX, horizontalHeight, 100);
+        track2 = new Track(notePool2, 30, noteImage2, 20, secondLineX, horizontalHeight, 100);
 
         noteMovingThread1 = new NoteMovingThread(track1, 1, 50);
         noteMovingThread2 = new NoteMovingThread(track2, 1, 50);

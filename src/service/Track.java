@@ -1,10 +1,7 @@
 package service;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.ConcurrentModificationException;
+import java.util.*;
 
 public class Track {
 
@@ -38,10 +35,17 @@ public class Track {
         }
     }
 
-    public void moveNotes(int amount) { // TODO if possible, try to fix this Error
-        for (Note note : notesOnTrack) {
+    public void moveNotes(int amount) {
+        Iterator<Note> iterator = notesOnTrack.iterator();
+        while (iterator.hasNext()) {
+            Note note = iterator.next();
             if (note != null) {
                 note.move(amount);
+                if (note.getYPos() <= note.getDeadZone()) {
+                    // Remove the note from the track if it reaches the dead zone
+                    iterator.remove();
+                    AccuracyCalculator.miss();
+                }
             }
         }
     }

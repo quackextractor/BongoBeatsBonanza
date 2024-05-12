@@ -10,6 +10,11 @@ public class Note {
     private int yPos;
     private final Image noteImage;
     private final Track track;
+
+    public int getDeadZone() {
+        return deadZone;
+    }
+
     private final int deadZone;
 
     public Note(int spawnDistance, Image noteImage, int targetXPos, int targetYPos, Track track, int size) {
@@ -30,15 +35,8 @@ public class Note {
     public void move(int amount){
         distance -= amount;
         yPos -= amount;
-        checkPos();
     }
 
-    public void checkPos(){
-        if(yPos<=deadZone){
-            AccuracyCalculator.miss();
-            track.removeNoteFromTrack(this);
-        }
-    }
 
     // Method to reset the note properties to their initial state
     public void reset(int spawnDistance, int targetYPos) {

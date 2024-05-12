@@ -15,6 +15,7 @@ public class GameJPanel extends JPanel {
 
     private final int firstLineX;
     private final int secondLineX;
+    private final int horizontalHeight;
     // Background image
     private Image backgroundImage;
     // Note images
@@ -24,7 +25,6 @@ public class GameJPanel extends JPanel {
     private NotePool notePool2;
     private Track track1;
     private Track track2;
-    private final int horizontalHeight;
     private NoteMovingThread noteMovingThread1;
     private NoteMovingThread noteMovingThread2;
 
@@ -32,29 +32,15 @@ public class GameJPanel extends JPanel {
         this.firstLineX = firstLineX;
         this.secondLineX = secondLineX;
         this.horizontalHeight = horizontalHeight;
-        try {
-            // Load the images
-            backgroundImage = ImageIO.read(new File("src/resources/sprites/cat1.png"));
-            noteImage1 = ImageIO.read(new File("src/resources/sprites/note1.png"));
-            noteImage2 = ImageIO.read(new File("src/resources/sprites/note2.png"));
-        } catch (IOException e) {
-            ErrorLogger.logStackTrace(e);
-            // Handle error if image loading fails
-        }
-        notePool1 = new NotePool(10);
-        notePool2 = new NotePool(10);
-        track1 = new Track(notePool1, 30, noteImage1, 20, firstLineX, horizontalHeight, 100);
-        notePool1.setUpNotePool(100, noteImage1, firstLineX, horizontalHeight, track1, 20);
-        track2 = new Track(notePool2, 30, noteImage2, 20, secondLineX, horizontalHeight, 100);
-        notePool2.setUpNotePool(100, noteImage2, secondLineX, horizontalHeight, track2, 20);
 
-        noteMovingThread1 = new NoteMovingThread(track1, 1, 50);
-        noteMovingThread2 = new NoteMovingThread(track2, 1, 50);
-        noteMovingThread1.start();
-        noteMovingThread2.start();
+        // Preload images
+        preloadImages();
 
-        repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
-        repaintTimer.start();
+        // Initialize note pools, tracks, and threads
+        initializeComponents();
+
+        // Start repaint timer
+        startRepaintTimer();
 
         setFocusable(true); // Enable keyboard focus for the JPanel
         requestFocusInWindow(); // Request focus so that the JPanel can receive keyboard events
@@ -64,6 +50,37 @@ public class GameJPanel extends JPanel {
                 handleKeyPress(evt);
             }
         });
+    }
+
+    private void preloadImages() {
+        try {
+            // Load the images
+            backgroundImage = ImageIO.read(new File("src/resources/sprites/cat1.png"));
+            noteImage1 = ImageIO.read(new File("src/resources/sprites/note1.png"));
+            noteImage2 = ImageIO.read(new File("src/resources/sprites/note2.png"));
+        } catch (IOException e) {
+            ErrorLogger.logStackTrace(e);
+            // Handle error if image loading fails
+        }
+    }
+
+    private void initializeComponents() {
+        notePool1 = new NotePool(10);
+        notePool2 = new NotePool(10);
+        track1 = new Track(notePool1, 50, noteImage1, 100, firstLineX, horizontalHeight, 200);
+        notePool1.setUpNotePool(200, noteImage1, firstLineX, horizontalHeight, track1, 100);
+        track2 = new Track(notePool2, 50, noteImage2, 100, secondLineX, horizontalHeight, 200);
+        notePool2.setUpNotePool(200, noteImage2, secondLineX, horizontalHeight, track2, 100);
+
+        noteMovingThread1 = new NoteMovingThread(track1, 1, 10);
+        noteMovingThread2 = new NoteMovingThread(track2, 1, 10);
+        noteMovingThread1.start();
+        noteMovingThread2.start();
+    }
+
+    private void startRepaintTimer() {
+        repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
+        repaintTimer.start();
     }
 
     private void handleKeyPress(KeyEvent evt) {
@@ -90,25 +107,25 @@ public class GameJPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-            super.paintComponent(g);
+        super.paintComponent(g);
 
-            // Draw the background image
-            if (backgroundImage != null) {
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
+        // Draw the background image
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
 
-            // Draw vertical lines
-            // First line
-            g.drawLine(firstLineX, 0, firstLineX, getHeight());
+        // Draw vertical lines
+        // First line
+        g.drawLine(firstLineX, 0, firstLineX, getHeight());
 
-            // Second line
-            g.drawLine(secondLineX, 0, secondLineX, getHeight());
+        // Second line
+        g.drawLine(secondLineX, 0, secondLineX, getHeight());
 
-            // Draw horizontal line in the top third of the screen
-            g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
+        // Draw horizontal line in the top third of the screen
+        g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
 
-            // Draw the notes
-            track1.drawNotes(g);
-            track2.drawNotes(g);
+        // Draw the notes
+        track1.drawNotes(g);
+        track2.drawNotes(g);
     }
 }

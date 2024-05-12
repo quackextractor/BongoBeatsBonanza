@@ -39,17 +39,14 @@ public class Track {
     }
 
     public void moveNotes(int amount) { // TODO if possible, try to fix this Error
-        try {
         for (Note note : notesOnTrack) {
             if (note != null) {
                 note.move(amount);
             }
         }
-        } catch (ConcurrentModificationException ignored){
-        }
     }
 
-    public void addNoteToTrack(){
+    public void addNoteToTrack() {
         notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, this, noteSize));
     }
 
@@ -79,19 +76,20 @@ public class Track {
             int noteX = note.getXPos();
             int noteY = note.getYPos();
             int noteSize = note.getSize();
+            int offset = noteSize / 2;
             Image noteImage = note.getNoteImage();
 
             // Draw the note image at the specified position with size
-          //  g.drawImage(noteImage, noteX, noteY, noteSize, noteSize, null);
+            g.drawImage(noteImage, noteX - offset, noteY - offset, noteSize, noteSize, null);
 
             // Draw a black filled circle
-            g.setColor(Color.BLACK);
-            g.fillOval(noteX, noteY, noteSize, noteSize);
+            // g.setColor(Color.BLACK);
+            // g.fillOval(noteX, noteY, noteSize, noteSize);
 
             // UNTESTED
             // Draw guidelines below the note
-          //  g.setColor(Color.RED); // Set the color of the guidelines
-          //  g.drawLine(noteX - 10, noteY + noteSize, noteX + noteSize + 10, noteY + noteSize);
+            //  g.setColor(Color.RED); // Set the color of the guidelines
+            //  g.drawLine(noteX - 10, noteY + noteSize, noteX + noteSize + 10, noteY + noteSize);
         }
     }
 

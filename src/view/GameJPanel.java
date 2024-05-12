@@ -41,7 +41,9 @@ public class GameJPanel extends JPanel {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
         track1 = new Track(notePool1, 30, noteImage1, 20, firstLineX, horizontalHeight, 100);
+        notePool1.setUpNotePool(100, noteImage1, firstLineX, horizontalHeight, track1, 20);
         track2 = new Track(notePool2, 30, noteImage2, 20, secondLineX, horizontalHeight, 100);
+        notePool2.setUpNotePool(100, noteImage2, secondLineX, horizontalHeight, track2, 20);
 
         noteMovingThread1 = new NoteMovingThread(track1, 1, 50);
         noteMovingThread2 = new NoteMovingThread(track2, 1, 50);

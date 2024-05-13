@@ -1,4 +1,5 @@
 import controller.GameController;
+import service.ErrorLogger;
 import view.GameFrame;
 
 import javax.swing.*;

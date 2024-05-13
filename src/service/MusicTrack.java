@@ -3,7 +3,7 @@ package service;
 import java.awt.*;
 import java.util.*;
 
-public class Track {
+public class MusicTrack {
 
     private ArrayList<Note> notesOnTrack;
     private NotePool notePool;
@@ -16,7 +16,7 @@ public class Track {
     private final int noteSize;
     private final Image noteImage;
 
-    public Track(NotePool notePool, int maxHitDistance, Image noteImage, int noteSize, int targetXPos, int targetYPos, int spawnDistance) {
+    public MusicTrack(NotePool notePool, int maxHitDistance, Image noteImage, int noteSize, int targetXPos, int targetYPos, int spawnDistance) {
         this.notePool = notePool;
         this.maxHitDistance = maxHitDistance;
         notesOnTrack = new ArrayList<>();

@@ -53,7 +53,7 @@ public class GameController {
 
 
     public static void endGame() {
-        fxPlayer.play("src/resources/sounds/leave.wav");
+        fxPlayer.play("src/resources/sounds/exit.wav");
         System.exit(0);
     }
 }

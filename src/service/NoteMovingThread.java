@@ -1,13 +1,13 @@
 package service;
 
 public class NoteMovingThread extends Thread {
-    private final Track track;
+    private final MusicTrack musicTrack;
     private boolean running;
     private final int moveAmount; // Amount to move notes by in each iteration
     private final long moveInterval; // Interval between each move in milliseconds
 
-    public NoteMovingThread(Track track, int moveAmount, long moveInterval) {
-        this.track = track;
+    public NoteMovingThread(MusicTrack musicTrack, int moveAmount, long moveInterval) {
+        this.musicTrack = musicTrack;
         this.moveAmount = moveAmount;
         this.moveInterval = moveInterval;
         this.running = true;
@@ -16,7 +16,7 @@ public class NoteMovingThread extends Thread {
     @Override
     public void run() {
         while (running) {
-            track.moveNotes(moveAmount);
+            musicTrack.moveNotes(moveAmount);
             try {
                 Thread.sleep(moveInterval);
             } catch (InterruptedException e) {

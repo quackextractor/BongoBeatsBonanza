@@ -24,8 +24,8 @@ public class GameJPanel extends JPanel {
     private Image noteImage2;
     private NotePool notePool1;
     private NotePool notePool2;
-    private Track track1;
-    private Track track2;
+    private MusicTrack musicTrack1;
+    private MusicTrack musicTrack2;
     private NoteMovingThread noteMovingThread1;
     private NoteMovingThread noteMovingThread2;
 
@@ -74,13 +74,13 @@ public class GameJPanel extends JPanel {
     private void initializeComponents() {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
-        track1 = new Track(notePool1, 50, noteImage1, 100, firstLineX, horizontalHeight, 200);
+        musicTrack1 = new MusicTrack(notePool1, 50, noteImage1, 100, firstLineX, horizontalHeight, 200);
         notePool1.setUpNotePool(200, noteImage1, firstLineX, horizontalHeight, 100);
-        track2 = new Track(notePool2, 50, noteImage2, 100, secondLineX, horizontalHeight, 200);
+        musicTrack2 = new MusicTrack(notePool2, 50, noteImage2, 100, secondLineX, horizontalHeight, 200);
         notePool2.setUpNotePool(200, noteImage2, secondLineX, horizontalHeight, 100);
 
-        noteMovingThread1 = new NoteMovingThread(track1, 1, 10);
-        noteMovingThread2 = new NoteMovingThread(track2, 1, 10);
+        noteMovingThread1 = new NoteMovingThread(musicTrack1, 1, 10);
+        noteMovingThread2 = new NoteMovingThread(musicTrack2, 1, 10);
         noteMovingThread1.start();
         noteMovingThread2.start();
     }
@@ -94,20 +94,20 @@ public class GameJPanel extends JPanel {
         int keyCode = evt.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
-                double accuracy1 = track1.catchNote();
+                double accuracy1 = musicTrack1.catchNote();
                 System.out.println(accuracy1);
                 System.out.println(AccuracyCalculator.getAverageAccuracy());
                 break;
             case KeyEvent.VK_RIGHT:
-                double accuracy2 = track2.catchNote();
+                double accuracy2 = musicTrack2.catchNote();
                 System.out.println(accuracy2);
                 System.out.println(AccuracyCalculator.getAverageAccuracy());
                 break;
             case KeyEvent.VK_UP:
-                track1.addNoteToTrack();
+                musicTrack1.addNoteToTrack();
                 break;
             case KeyEvent.VK_DOWN:
-                track2.addNoteToTrack();
+                musicTrack2.addNoteToTrack();
                 break;
         }
     }
@@ -132,7 +132,7 @@ public class GameJPanel extends JPanel {
         g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
 
         // Draw the notes
-        track1.drawNotes(g);
-        track2.drawNotes(g);
+        musicTrack1.drawNotes(g);
+        musicTrack2.drawNotes(g);
     }
 }

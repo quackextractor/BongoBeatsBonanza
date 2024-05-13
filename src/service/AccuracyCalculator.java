@@ -8,14 +8,18 @@ public class AccuracyCalculator {
 
     // Compares distance with the max distance before miss to determine accuracy
     public static double determineAccuracy(int distance, int maxDistance) {
+        MusicPlayer fxPlayer = new MusicPlayer(false, "src/resources/sounds/tamboHit.wav");
+
         double accuracyPercentage = 100.0 * (1.0 - (double) distance / maxDistance);
 
-        if (distance == 0) {
+       if (distance == 0) {
             Score.PerfectHit();
         } else if (accuracyPercentage >= 50) {
             Score.GoodHit();
+           fxPlayer.playDefault();
         } else {
             Score.BadHit();
+           fxPlayer.playDefault();
         }
 
         numberOfHits++;
@@ -27,7 +31,9 @@ public class AccuracyCalculator {
 
     // Method to handle a miss
     public static void miss() {
+        MusicPlayer fxPlayer = new MusicPlayer(false, "src/resources/sounds/leave.wav");
         Score.Miss();
+        fxPlayer.playDefault();
         totalNotes++;
     }
 

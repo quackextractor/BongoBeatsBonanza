@@ -26,7 +26,7 @@ Bongo_Beats_Bonanza/
 ├── resources/
 │   ├── sounds/
 │   │   ├── select.wav
-│   │   ├── noteHit.wav TODO add later
+│   │   ├── tamboHit.wav TODO add this to bookmarks:   https://freesound.org/people/NoiseCollector/sounds/125605/
 │   │   ├── start.wav
 │   │   ├── alert.wav
 │   │   ├── leave.wav

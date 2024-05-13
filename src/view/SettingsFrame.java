@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.Hashtable;
 
 public class SettingsFrame extends JFrame {
-    private static boolean isOpen = false; // Track whether the frame is open
+    private static boolean isOpen = false;
     private JSlider musicVolumeSlider;
     private JSlider fxVolumeSlider;
     private JSlider difficultySlider;
@@ -19,61 +19,37 @@ public class SettingsFrame extends JFrame {
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         if (isOpen) {
-            // If the frame is already open, bring it to the front and return
             toFront();
             return;
         }
-        isOpen = true; // Mark the frame as open
+        isOpen = true;
 
-        // Initialize frame properties
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 800);
-        setLocationRelativeTo(null);
-
-        // Initialize layout
-        setLayout(new GridLayout(4, 1));
-
-        // Create labels and set font
-        Font font = new Font(fontName, Font.BOLD, 30);
-        JLabel musicVolumeLabel = new JLabel("Music vol", SwingConstants.CENTER);
-        musicVolumeLabel.setFont(font);
-        JLabel fxVolumeLabel = new JLabel("FX vol", SwingConstants.CENTER);
-        fxVolumeLabel.setFont(font);
-
-        // Initialize volume sliders
-        musicVolumeSlider = initializeVolumeSlider(MusicPlayer.getMusicVolume());
-        fxVolumeSlider = initializeVolumeSlider(MusicPlayer.getFxVolume());
-
-        // Add components to the frame
-        add(musicVolumeLabel);
-        add(musicVolumeSlider);
-        add(fxVolumeLabel);
-        add(fxVolumeSlider);
-
-        // Initialize note speed slider
-        noteSpeedSlider = initializeSpeedSlider();
-
-        // Add note speed slider to the frame
-        JLabel noteSpeedLabel = new JLabel("Note speed", SwingConstants.CENTER);
-        noteSpeedLabel.setFont(font);
-        add(noteSpeedLabel);
-        add(noteSpeedSlider);
-
-        // Initialize difficulty slider
-        difficultySlider = initializeDifficultySlider();
-
-        // Add difficulty slider to the frame
-        JLabel difficultyLabel = new JLabel("Difficulty", SwingConstants.CENTER);
-        difficultyLabel.setFont(font);
-        add(difficultyLabel);
-        add(difficultySlider);
-
-        // Set frame size and location
         setSize(468, 488);
         setLocationRelativeTo(null);
+        setLayout(new GridLayout(4, 1));
 
-        // Configure volume, difficulty, and speed settings
+        Font font = new Font(fontName, Font.BOLD, 30);
+
+        // Volume Settings
+        JLabel musicVolumeLabel = createLabel("Music vol", font);
+        musicVolumeSlider = initializeVolumeSlider(MusicPlayer.getMusicVolume());
+        JLabel fxVolumeLabel = createLabel("FX vol", font);
+        fxVolumeSlider = initializeVolumeSlider(MusicPlayer.getFxVolume());
+        addComponents(musicVolumeLabel, musicVolumeSlider, fxVolumeLabel, fxVolumeSlider);
+
+        // Note Speed Settings
+        noteSpeedSlider = initializeSpeedSlider();
+        JLabel noteSpeedLabel = createLabel("Note speed", font);
+        addComponents(noteSpeedLabel, noteSpeedSlider);
+
+        // Difficulty Settings
+        difficultySlider = initializeDifficultySlider();
+        JLabel difficultyLabel = createLabel("Difficulty", font);
+        addComponents(difficultyLabel, difficultySlider);
+
+        // Configure settings
         MusicPlayer fxPlayer = new MusicPlayer(false, "");
         MusicPlayerManager.addMusicPlayer(musicPlayer);
         MusicPlayerManager.addMusicPlayer(fxPlayer);
@@ -82,7 +58,6 @@ public class SettingsFrame extends JFrame {
         configSpeed(fxPlayer);
         configDifficulty(fxPlayer);
 
-        // Add window listener to handle frame closing
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -92,6 +67,18 @@ public class SettingsFrame extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    private JLabel createLabel(String text, Font font) {
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setFont(font);
+        return label;
+    }
+
+    private void addComponents(JComponent... components) {
+        for (JComponent component : components) {
+            add(component);
+        }
     }
 
     private JSlider initializeVolumeSlider(float initialValue) {

@@ -16,8 +16,8 @@ public class Main {
                  IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-      GameController gameController = new GameController(musicPath, fontName);
-   //  gameController.startGame();
-       GameFrame gameFrame = new GameFrame("");
+        GameController gameController = new GameController(musicPath, fontName);
+        gameController.startGame();
+       // GameFrame gameFrame = new GameFrame("");
     }
 }

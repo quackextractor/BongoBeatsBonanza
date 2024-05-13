@@ -9,7 +9,6 @@ public class Note {
     private final int xPos;
     private int yPos;
     private final Image noteImage;
-    private final Track track;
 
     public int getDeadZone() {
         return deadZone;
@@ -17,11 +16,10 @@ public class Note {
 
     private final int deadZone;
 
-    public Note(int spawnDistance, Image noteImage, int targetXPos, int targetYPos, Track track, int size) {
+    public Note(int spawnDistance, Image noteImage, int targetXPos, int targetYPos, int size) {
         this.distance = spawnDistance;
         this.noteImage = noteImage;
         this.xPos = targetXPos;
-        this.track = track;
         this.yPos = targetYPos + spawnDistance;
         this.size = size;
         deadZone = 20;

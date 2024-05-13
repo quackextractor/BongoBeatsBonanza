@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -53,24 +54,30 @@ public class GameJPanel extends JPanel {
     }
 
     private void preloadImages() {
-        try {
             // Load the images
-            backgroundImage = ImageIO.read(new File("src/resources/sprites/cat1.png"));
-            noteImage1 = ImageIO.read(new File("src/resources/sprites/note1.png"));
-            noteImage2 = ImageIO.read(new File("src/resources/sprites/note2.png"));
+            backgroundImage = loadImage("src/resources/sprites/cat1.png");
+            noteImage1 = loadImage("src/resources/sprites/note1.png");
+            noteImage2 = loadImage("src/resources/sprites/note2.png");
+    }
+
+    private BufferedImage loadImage(String imagePath) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             ErrorLogger.logStackTrace(e);
             // Handle error if image loading fails
         }
+        return image;
     }
 
     private void initializeComponents() {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
         track1 = new Track(notePool1, 50, noteImage1, 100, firstLineX, horizontalHeight, 200);
-        notePool1.setUpNotePool(200, noteImage1, firstLineX, horizontalHeight, track1, 100);
+        notePool1.setUpNotePool(200, noteImage1, firstLineX, horizontalHeight, 100);
         track2 = new Track(notePool2, 50, noteImage2, 100, secondLineX, horizontalHeight, 200);
-        notePool2.setUpNotePool(200, noteImage2, secondLineX, horizontalHeight, track2, 100);
+        notePool2.setUpNotePool(200, noteImage2, secondLineX, horizontalHeight, 100);
 
         noteMovingThread1 = new NoteMovingThread(track1, 1, 10);
         noteMovingThread2 = new NoteMovingThread(track2, 1, 10);

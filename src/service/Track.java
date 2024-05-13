@@ -51,7 +51,7 @@ public class Track {
     }
 
     public void addNoteToTrack() {
-        notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, this, noteSize));
+        notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, noteSize));
     }
 
     // Catches Notes and gets accuracy

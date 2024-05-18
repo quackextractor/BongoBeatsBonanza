@@ -2,10 +2,11 @@ package service;
 
 import java.awt.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MusicTrack {
 
-    private ArrayList<Note> notesOnTrack;
+    private ConcurrentLinkedQueue<Note> notesOnTrack;
     private NotePool notePool;
     private int maxHitDistance;
     private Comparator<Note> noteDistanceComparator = Comparator.comparingDouble(Note::getDistance);
@@ -19,7 +20,7 @@ public class MusicTrack {
     public MusicTrack(NotePool notePool, int maxHitDistance, Image noteImage, int noteSize, int targetXPos, int targetYPos, int spawnDistance) {
         this.notePool = notePool;
         this.maxHitDistance = maxHitDistance;
-        notesOnTrack = new ArrayList<>();
+        notesOnTrack = new ConcurrentLinkedQueue<>();
 
         this.noteImage = noteImage;
         this.targetXPos = targetXPos;

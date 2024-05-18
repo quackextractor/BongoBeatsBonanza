@@ -70,7 +70,7 @@ public class GameJPanel extends JPanel {
         // Create a new thread
         Thread midiThread = new Thread(() -> {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

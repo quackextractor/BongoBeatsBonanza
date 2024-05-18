@@ -4,17 +4,26 @@ import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
 
-// TODO add musicPlayer logic
+// TODO add musicPlayer logic, Replace e.printStackTrace(); with ErrorLogger.logStackTrace(e);
 public class MidiPlayer {
     private Sequencer sequencer;
     private Track track1;
     private Track track2;
     private MusicTrack musicTrack1;
     private MusicTrack musicTrack2;
+    private String midiFilePath;
+    private String musicFilePath;
+    private int delayMs;
+    MusicPlayer songPlayer;
 
-    public MidiPlayer(MusicTrack musicTrack1, MusicTrack musicTrack2, String level) {
+    public MidiPlayer(MusicTrack musicTrack1, MusicTrack musicTrack2, String levelName, int delayMs) {
         this.musicTrack1 = musicTrack1;
         this.musicTrack2 = musicTrack2;
+        String levelPath = "src/resources/levels/"+levelName;
+        midiFilePath = levelPath+".mid";
+        musicFilePath = levelPath+".wav";
+        songPlayer = new MusicPlayer(true,musicFilePath);
+        this.delayMs = delayMs;
         initializeSequencer();
     }
 
@@ -23,11 +32,11 @@ public class MidiPlayer {
             sequencer = MidiSystem.getSequencer();
             sequencer.open();
         } catch (MidiUnavailableException e) {
-            e.printStackTrace();
+           ErrorLogger.logStackTrace(e);
         }
     }
 
-    public void loadAndPlayMidi(String midiFilePath) {
+    public void loadAndPlayMidi() {
         try {
             Sequence sequence = MidiSystem.getSequence(new File(midiFilePath));
             sequencer.setSequence(sequence);
@@ -46,14 +55,15 @@ public class MidiPlayer {
                 while (sequencer.isRunning()) {
                     addNotesFromMidiEvents(track1, musicTrack1);
                     addNotesFromMidiEvents(track2, musicTrack2);
-                    try {
-                        Thread.sleep(10); // Adjust sleep time as needed
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             });
             musicThread.start();
+            try {
+                Thread.sleep(delayMs);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            songPlayer.playDefault();
 
         } catch (InvalidMidiDataException | IOException e) {
             e.printStackTrace();

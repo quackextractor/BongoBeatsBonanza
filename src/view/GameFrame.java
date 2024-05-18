@@ -15,7 +15,7 @@ public class GameFrame extends JFrame {
     private final GameJPanel gameJPanel;
 
     public GameFrame(String levelName) {
-        gameJPanel = new GameJPanel(firstLineX, secondLineX, horizontalHeight);
+        gameJPanel = new GameJPanel(firstLineX, secondLineX, horizontalHeight, levelName);
         add(gameJPanel);
         setTitle(levelName);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

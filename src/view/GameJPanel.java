@@ -28,16 +28,19 @@ public class GameJPanel extends JPanel {
     private MusicTrack musicTrack2;
     private NoteMovingThread noteMovingThread1;
     private NoteMovingThread noteMovingThread2;
+    private String levelName;
+    private MidiPlayer midiPlayer;
 
-    public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight) {
+    public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
         this.firstLineX = firstLineX;
         this.secondLineX = secondLineX;
         this.horizontalHeight = horizontalHeight;
+        this.levelName = level;
 
         // Preload images
         preloadImages();
 
-        // Initialize note pools, tracks, and threads
+        // Initialize note pools, tracks, midiPlayer and threads
         initializeComponents();
 
         // Start repaint timer
@@ -51,6 +54,9 @@ public class GameJPanel extends JPanel {
                 handleKeyPress(evt);
             }
         });
+
+        // Start game
+        startGame();
     }
 
     private void preloadImages() {
@@ -58,6 +64,21 @@ public class GameJPanel extends JPanel {
             backgroundImage = loadImage("src/resources/sprites/cat1.png");
             noteImage1 = loadImage("src/resources/sprites/note1.png");
             noteImage2 = loadImage("src/resources/sprites/note2.png");
+    }
+
+    private void startGame() {
+        // Create a new thread
+        Thread midiThread = new Thread(() -> {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Call the method to load and play the MIDI
+            midiPlayer.loadAndPlayMidi();
+        });
+        // Start the thread
+        midiThread.start();
     }
 
     private BufferedImage loadImage(String imagePath) {
@@ -74,15 +95,32 @@ public class GameJPanel extends JPanel {
     private void initializeComponents() {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
-        musicTrack1 = new MusicTrack(notePool1, 50, noteImage1, 100, firstLineX, horizontalHeight, 200);
-        notePool1.setUpNotePool(200, noteImage1, firstLineX, horizontalHeight, 100);
-        musicTrack2 = new MusicTrack(notePool2, 50, noteImage2, 100, secondLineX, horizontalHeight, 200);
-        notePool2.setUpNotePool(200, noteImage2, secondLineX, horizontalHeight, 100);
+        int spawnDistance = 200;
+        int noteSize = 100;
+        int maxHitDistance = 50;
+        musicTrack1 = new MusicTrack(notePool1, maxHitDistance, noteImage1, noteSize, firstLineX, horizontalHeight, spawnDistance);
+        notePool1.setUpNotePool(spawnDistance, noteImage1, firstLineX, horizontalHeight, noteSize);
+        musicTrack2 = new MusicTrack(notePool2, maxHitDistance, noteImage2, noteSize, secondLineX, horizontalHeight, spawnDistance);
+        notePool2.setUpNotePool(spawnDistance, noteImage2, secondLineX, horizontalHeight, noteSize);
 
-        noteMovingThread1 = new NoteMovingThread(musicTrack1, 1, 10);
-        noteMovingThread2 = new NoteMovingThread(musicTrack2, 1, 10);
+        int moveAmount = 1;
+        int moveInterval = 10;
+        noteMovingThread1 = new NoteMovingThread(musicTrack1, moveAmount, moveInterval);
+        noteMovingThread2 = new NoteMovingThread(musicTrack2, moveAmount, moveInterval);
         noteMovingThread1.start();
         noteMovingThread2.start();
+
+        // TODO find out optimal sleep time depending on note speed (YOU PROBABLY ALREADY GOT A WORKING SCRIPT FOR THAT!)
+        int delay = calculateTime(spawnDistance, moveAmount, moveInterval);
+        midiPlayer = new MidiPlayer(musicTrack1, musicTrack2, levelName, delay);
+    }
+
+    // Method to calculate time in milliseconds
+    public static int calculateTime(int distance, int distancePerMove, int moveDelay) {
+        // Calculate total number of moves needed
+        int totalMoves = distance / distancePerMove;
+        // Calculate total time including move delays
+        return totalMoves * moveDelay;
     }
 
     private void startRepaintTimer() {

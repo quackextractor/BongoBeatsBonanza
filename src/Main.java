@@ -1,4 +1,5 @@
 import controller.GameController;
+import service.ErrorLogger;
 import view.GameFrame;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | UnsupportedLookAndFeelException | InstantiationException |
                  IllegalAccessException e) {
+            ErrorLogger.logStackTrace(e);
             throw new RuntimeException(e);
         }
         GameController gameController = new GameController(musicPath, fontName);

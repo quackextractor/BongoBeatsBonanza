@@ -82,7 +82,7 @@ public class SettingsFrame extends JFrame {
     }
 
     private JSlider initializeVolumeSlider(float initialValue) {
-        JSlider slider = new JSlider(-30, 7, (int) initialValue);
+        JSlider slider = new JSlider(-30, 6, (int) initialValue);
         slider.setPaintLabels(true);
         slider.setPaintTicks(true);
         slider.setMajorTickSpacing(1);

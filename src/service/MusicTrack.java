@@ -45,7 +45,7 @@ public class MusicTrack {
                 if (note.getYPos() <= note.getDeadZone()) {
                     // Remove the note from the track if it reaches the dead zone
                     iterator.remove();
-                    AccuracyCalculator.miss();
+                    Score.miss();
                 }
             }
         }
@@ -56,24 +56,24 @@ public class MusicTrack {
     }
 
     // Catches Notes and gets accuracy
-    public double catchNote() {
+    public void catchNote() {
         // Checks if track is empty first to skip evaluation
         if (notesOnTrack.isEmpty()) {
-            AccuracyCalculator.miss();
-            return 0;
+            Score.miss();
+            return;
         }
 
         Note noteWithMinDistance = Collections.min(notesOnTrack, noteDistanceComparator);
         int minDistance = noteWithMinDistance.getDistance();
 
         if (minDistance > maxHitDistance) {
-            AccuracyCalculator.miss();
-            return 0;
+            Score.miss();
+            return;
         }
 
         // remove caught note
         removeNoteFromTrack(noteWithMinDistance);
-        return AccuracyCalculator.determineAccuracy(minDistance, maxHitDistance);
+        Score.determineAccuracy(minDistance, maxHitDistance);
     }
 
     public void drawNotes(Graphics g) {

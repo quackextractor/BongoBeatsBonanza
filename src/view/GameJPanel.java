@@ -17,9 +17,8 @@ public class GameJPanel extends JPanel {
     private final int firstLineX;
     private final int secondLineX;
     private final int horizontalHeight;
-    // Background image
+
     private Image backgroundImage;
-    // Note images
     private Image noteImage1;
     private Image noteImage2;
     private NotePool notePool1;
@@ -30,6 +29,17 @@ public class GameJPanel extends JPanel {
     private NoteMovingThread noteMovingThread2;
     private String levelName;
     private MidiPlayer midiPlayer;
+    private int spawnDistance;
+    private int noteSize;
+    private int maxHitDistance;
+    private int moveAmount;
+    private int moveInterval;
+    private JProgressBar progressBar;
+    private JProgressBar healthBar;
+    private JLabel scoreLabel;
+    private JLabel streakLabel;
+    private JLabel accuracyLabel;
+    private JLabel multiplierLabel;
 
     public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
         this.firstLineX = firstLineX;
@@ -37,74 +47,66 @@ public class GameJPanel extends JPanel {
         this.horizontalHeight = horizontalHeight;
         this.levelName = level;
 
-        // Preload images
         preloadImages();
-
-        // Initialize note pools, tracks, midiPlayer and threads
         initializeComponents();
+        initializeUIComponents();
+        setFocusable(true);
+        requestFocusInWindow();
+        Score.reset();
 
-        // Start repaint timer
+        startGame();
         startRepaintTimer();
 
-        setFocusable(true); // Enable keyboard focus for the JPanel
-        requestFocusInWindow(); // Request focus so that the JPanel can receive keyboard events
         addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 handleKeyPress(evt);
             }
         });
-
-        // Start game
-        startGame();
     }
 
     private void preloadImages() {
-            // Load the images
-            backgroundImage = loadImage("src/resources/sprites/cat1.png");
-            noteImage1 = loadImage("src/resources/sprites/note1.png");
-            noteImage2 = loadImage("src/resources/sprites/note2.png");
+        // Load the images
+        backgroundImage = loadImage("src/resources/sprites/cat1.png");
+        noteImage1 = loadImage("src/resources/sprites/note1.png");
+        noteImage2 = loadImage("src/resources/sprites/note2.png");
     }
 
-    private void startGame() {
-        // Create a new thread
-        Thread midiThread = new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            // Call the method to load and play the MIDI
-            midiPlayer.loadAndPlayMidi();
-        });
-        // Start the thread
-        midiThread.start();
-    }
+    private void initializeUIComponents() {
+        // Initialize UI elements
+        progressBar = new JProgressBar();
+        healthBar = new JProgressBar();
+        scoreLabel = new JLabel("Score: 0");
+        streakLabel = new JLabel("Streak: 0");
+        accuracyLabel = new JLabel("Accuracy: 100%");
+        multiplierLabel = new JLabel("Multiplier: 1x");
 
-    private BufferedImage loadImage(String imagePath) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            ErrorLogger.logStackTrace(e);
-            // Handle error if image loading fails
-        }
-        return image;
+        // Add UI elements to panel
+        setLayout(new BorderLayout());
+        JPanel uiPanel = new JPanel();
+        uiPanel.setLayout(new GridLayout(5, 1));
+        uiPanel.add(scoreLabel);
+        uiPanel.add(streakLabel);
+        uiPanel.add(accuracyLabel);
+        uiPanel.add(multiplierLabel);
+        add(uiPanel, BorderLayout.EAST);
+        add(progressBar, BorderLayout.SOUTH);
+        add(healthBar, BorderLayout.WEST);
     }
 
     private void initializeComponents() {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
-        int spawnDistance = 200;
-        int noteSize = 100;
-        int maxHitDistance = 50;
+        spawnDistance = 200;
+        noteSize = 100;
+        maxHitDistance = noteSize;
+        moveAmount = 1;
+        moveInterval = 10;
+
         musicTrack1 = new MusicTrack(notePool1, maxHitDistance, noteImage1, noteSize, firstLineX, horizontalHeight, spawnDistance);
         notePool1.setUpNotePool(spawnDistance, noteImage1, firstLineX, horizontalHeight, noteSize);
         musicTrack2 = new MusicTrack(notePool2, maxHitDistance, noteImage2, noteSize, secondLineX, horizontalHeight, spawnDistance);
         notePool2.setUpNotePool(spawnDistance, noteImage2, secondLineX, horizontalHeight, noteSize);
-
-        int moveAmount = 1;
-        int moveInterval = 10;
         noteMovingThread1 = new NoteMovingThread(musicTrack1, moveAmount, moveInterval);
         noteMovingThread2 = new NoteMovingThread(musicTrack2, moveAmount, moveInterval);
         noteMovingThread1.start();
@@ -123,6 +125,28 @@ public class GameJPanel extends JPanel {
         return totalMoves * moveDelay;
     }
 
+    private void startGame() {
+        Thread midiThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            midiPlayer.loadAndPlayMidi();
+        });
+        midiThread.start();
+    }
+
+    private BufferedImage loadImage(String imagePath) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(new File(imagePath));
+        } catch (IOException e) {
+            ErrorLogger.logStackTrace(e);
+        }
+        return image;
+    }
+
     private void startRepaintTimer() {
         repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
         repaintTimer.start();
@@ -132,14 +156,10 @@ public class GameJPanel extends JPanel {
         int keyCode = evt.getKeyCode();
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
-                double accuracy1 = musicTrack1.catchNote();
-                System.out.println(accuracy1);
-                System.out.println(AccuracyCalculator.getAverageAccuracy());
+                musicTrack1.catchNote();
                 break;
             case KeyEvent.VK_RIGHT:
-                double accuracy2 = musicTrack2.catchNote();
-                System.out.println(accuracy2);
-                System.out.println(AccuracyCalculator.getAverageAccuracy());
+                musicTrack2.catchNote();
                 break;
             case KeyEvent.VK_UP:
                 musicTrack1.addNoteToTrack();
@@ -150,27 +170,35 @@ public class GameJPanel extends JPanel {
         }
     }
 
+    public void updateMyUI() {
+        scoreLabel.setText("Score: " + Score.getTotalScore());
+        streakLabel.setText("Streak: " + Score.getStreakCount());
+        multiplierLabel.setText("Multiplier: " + Score.getMultiplier() + "x");
+        double averageAccuracy = Score.getAverageAccuracy();
+        String formattedAccuracy = String.format("%.2f", averageAccuracy);
+        accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
+        accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Draw the background image
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
 
-        // Draw vertical lines
-        // First line
         g.drawLine(firstLineX, 0, firstLineX, getHeight());
-
-        // Second line
         g.drawLine(secondLineX, 0, secondLineX, getHeight());
-
-        // Draw horizontal line in the top third of the screen
         g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
 
-        // Draw the notes
+        int offset = noteSize/2;
+        g.drawRect(firstLineX-offset, horizontalHeight-offset,noteSize,noteSize);
+        g.drawRect(secondLineX-offset, horizontalHeight-offset,noteSize,noteSize);
+
         musicTrack1.drawNotes(g);
         musicTrack2.drawNotes(g);
+
+        updateMyUI();
     }
 }

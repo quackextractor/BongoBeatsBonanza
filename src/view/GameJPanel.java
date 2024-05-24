@@ -39,6 +39,11 @@ public class GameJPanel extends JPanel {
     private JLabel scoreLabel;
     private JLabel streakLabel;
     private JLabel accuracyLabel;
+    private static boolean isGameOver = false;
+
+    public static void setIsGameOver(boolean isGameOver) {
+        GameJPanel.isGameOver = isGameOver;
+    }
 
     public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
         this.firstLineX = firstLineX;
@@ -89,12 +94,12 @@ public class GameJPanel extends JPanel {
         noteMovingThread1.start();
         noteMovingThread2.start();
 
-        // TODO find out optimal sleep time depending on note speed (YOU PROBABLY ALREADY GOT A WORKING SCRIPT FOR THAT!)
         int delay = calculateTime(spawnDistance, moveAmount, moveInterval);
         midiPlayer = new MidiPlayer(musicTrack1, musicTrack2, levelName, delay);
     }
 
     // Method to calculate time in milliseconds
+    // TODO fix this later
     public static int calculateTime(int distance, int distancePerMove, int moveDelay) {
         // Calculate total number of moves needed
         int totalMoves = distance / distancePerMove;
@@ -154,12 +159,13 @@ public class GameJPanel extends JPanel {
         String formattedAccuracy = String.format("%.2f", averageAccuracy);
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
+        healthBar.setValue(Score.getHealth());
     }
 
     private void initializeUIComponents() {
         // Initialize UI elements
         progressBar = new JProgressBar();
-        healthBar = new JProgressBar();
+        healthBar = new JProgressBar(1, 0, 100);
         scoreLabel = new JLabel("Score: 0");
         streakLabel = new JLabel("Streak: 0");
         accuracyLabel = new JLabel("Accuracy: 100%");
@@ -188,9 +194,11 @@ public class GameJPanel extends JPanel {
         g.drawLine(secondLineX, 0, secondLineX, getHeight());
         g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
 
-        int offset = noteSize/2;
-        g.drawRect(firstLineX-offset, horizontalHeight-offset,noteSize,noteSize);
-        g.drawRect(secondLineX-offset, horizontalHeight-offset,noteSize,noteSize);
+        // drawing catching field
+        // TODO replace this with an image
+        int offset = noteSize / 2;
+        g.drawRect(firstLineX - offset, horizontalHeight - offset, noteSize, noteSize);
+        g.drawRect(secondLineX - offset, horizontalHeight - offset, noteSize, noteSize);
 
         musicTrack1.drawNotes(g);
         musicTrack2.drawNotes(g);

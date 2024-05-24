@@ -39,7 +39,6 @@ public class GameJPanel extends JPanel {
     private JLabel scoreLabel;
     private JLabel streakLabel;
     private JLabel accuracyLabel;
-    private JLabel multiplierLabel;
 
     public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
         this.firstLineX = firstLineX;
@@ -70,28 +69,6 @@ public class GameJPanel extends JPanel {
         backgroundImage = loadImage("src/resources/sprites/cat1.png");
         noteImage1 = loadImage("src/resources/sprites/note1.png");
         noteImage2 = loadImage("src/resources/sprites/note2.png");
-    }
-
-    private void initializeUIComponents() {
-        // Initialize UI elements
-        progressBar = new JProgressBar();
-        healthBar = new JProgressBar();
-        scoreLabel = new JLabel("Score: 0");
-        streakLabel = new JLabel("Streak: 0");
-        accuracyLabel = new JLabel("Accuracy: 100%");
-        multiplierLabel = new JLabel("Multiplier: 1x");
-
-        // Add UI elements to panel
-        setLayout(new BorderLayout());
-        JPanel uiPanel = new JPanel();
-        uiPanel.setLayout(new GridLayout(5, 1));
-        uiPanel.add(scoreLabel);
-        uiPanel.add(streakLabel);
-        uiPanel.add(accuracyLabel);
-        uiPanel.add(multiplierLabel);
-        add(uiPanel, BorderLayout.EAST);
-        add(progressBar, BorderLayout.SOUTH);
-        add(healthBar, BorderLayout.WEST);
     }
 
     private void initializeComponents() {
@@ -173,11 +150,30 @@ public class GameJPanel extends JPanel {
     public void updateMyUI() {
         scoreLabel.setText("Score: " + Score.getTotalScore());
         streakLabel.setText("Streak: " + Score.getStreakCount());
-        multiplierLabel.setText("Multiplier: " + Score.getMultiplier() + "x");
         double averageAccuracy = Score.getAverageAccuracy();
         String formattedAccuracy = String.format("%.2f", averageAccuracy);
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
+    }
+
+    private void initializeUIComponents() {
+        // Initialize UI elements
+        progressBar = new JProgressBar();
+        healthBar = new JProgressBar();
+        scoreLabel = new JLabel("Score: 0");
+        streakLabel = new JLabel("Streak: 0");
+        accuracyLabel = new JLabel("Accuracy: 100%");
+
+        // Add UI elements to panel
+        setLayout(new BorderLayout());
+        JPanel uiPanel = new JPanel();
+        uiPanel.setLayout(new GridLayout(5, 1));
+        uiPanel.add(scoreLabel);
+        uiPanel.add(streakLabel);
+        uiPanel.add(accuracyLabel);
+        add(uiPanel, BorderLayout.EAST);
+        add(progressBar, BorderLayout.SOUTH);
+        add(healthBar, BorderLayout.WEST);
     }
 
     @Override

@@ -1,13 +1,28 @@
 package service;
 
-// TODO add health
 public class Score {
     private static int totalScore = 0;
     private static int streakCount = 0;
-    private static int multiplier = 1;
     private static int numberOfHits = 0;
     private static double totalAccuracy = 0.0;
     private static int totalNotes = 0;
+
+    public enum HitType {
+        PERFECT(100),
+        GOOD(50),
+        BAD(25),
+        MISS(-100);
+
+        private final int scoreValue;
+
+        HitType(int scoreValue) {
+            this.scoreValue = scoreValue;
+        }
+
+        public int getScoreValue() {
+            return scoreValue;
+        }
+    }
 
     public static void setTotalScore(int totalScore) {
         Score.totalScore = totalScore;
@@ -21,63 +36,46 @@ public class Score {
         Score.streakCount++;
     }
 
-    public static void perfectHit() {
-        totalScore += 100 * multiplier;
-        streakCount++;
-        updateMultiplier();
-        System.out.println("Perfect hit! Score: " + totalScore);
-    }
+    public static void registerHit(HitType hitType) {
+        if (hitType == HitType.MISS) {
+            streakCount = 0;
+        } else {
+            streakCount++;
+        }
 
-    public static void goodHit() {
-        totalScore += 50 * multiplier;
-        streakCount++;
-        updateMultiplier();
-        System.out.println("Good hit! Score: " + totalScore);
-    }
+        totalScore += hitType.getScoreValue();
 
-    public static void badHit() {
-        totalScore += 25 * multiplier;
-        streakCount = 0;
-        updateMultiplier();
-        System.out.println("Bad hit! Score: " + totalScore);
-    }
+        if (hitType != HitType.MISS) {
+            numberOfHits++;
+        }
 
-    public static void miss() {
-        streakCount = 0;
-        updateMultiplier();
-        totalScore -= 100;
         totalNotes++;
-        System.out.println("Missed hit! Score: " + totalScore);
+        System.out.println(hitType + " hit! Score: " + totalScore);
     }
 
     // Compares distance with the max distance before miss to determine accuracy
     public static void determineAccuracy(int distance, int maxDistance) {
         MusicPlayer fxPlayer = new MusicPlayer(false, "src/resources/sounds/tamboHit.wav");
         double accuracyPercentage = 100.0 * (1.0 - (double) distance / maxDistance);
+
         if (distance == 0) {
-            perfectHit();
+            registerHit(HitType.PERFECT);
         } else if (accuracyPercentage >= 50) {
-            goodHit();
+            registerHit(HitType.GOOD);
             fxPlayer.playDefault();
         } else {
-            badHit();
+            registerHit(HitType.BAD);
             fxPlayer.playDefault();
         }
 
-        numberOfHits++;
         totalAccuracy += accuracyPercentage;
-        totalNotes++;
     }
 
     public static double getAverageAccuracy() {
-        if (numberOfHits == 0) {
+        if (totalNotes == 0) {
             return 0.0; // Avoid division by zero
         }
         return totalAccuracy / totalNotes;
-    }
-
-    public static void updateMultiplier() {
-        multiplier = Math.min(1 + streakCount / 4, 4); // Maximum multiplier is 4x
     }
 
     public static int getTotalScore() {
@@ -88,16 +86,15 @@ public class Score {
         return streakCount;
     }
 
-    public static int getMultiplier() {
-        return multiplier;
-    }
-
     public static void reset() {
         totalScore = 0;
         streakCount = 0;
-        multiplier = 1;
         numberOfHits = 0;
         totalAccuracy = 0.0;
         totalNotes = 0;
+    }
+
+    public static void miss() {
+        registerHit(HitType.MISS);
     }
 }

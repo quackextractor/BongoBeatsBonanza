@@ -79,11 +79,11 @@ public class GameJPanel extends JPanel {
     private void initializeComponents() {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
-        spawnDistance = 200;
+        spawnDistance = 2*horizontalHeight;
         noteSize = 100;
         maxHitDistance = noteSize;
         moveAmount = 1;
-        moveInterval = 10;
+        moveInterval = 1;
 
         musicTrack1 = new MusicTrack(notePool1, maxHitDistance, noteImage1, noteSize, firstLineX, horizontalHeight, spawnDistance);
         notePool1.setUpNotePool(spawnDistance, noteImage1, firstLineX, horizontalHeight, noteSize);

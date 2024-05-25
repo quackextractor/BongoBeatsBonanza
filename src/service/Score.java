@@ -8,7 +8,7 @@ public class Score {
     private static double totalAccuracy = 0.0;
     private static int totalNotes = 0;
     private static int health = 100;
-    private static double difficultyModifier = 0.5;
+    private static double difficultyModifier = 2;
     // TODO: implement this into settings frame: 1 * 0.5, 2 * 0.5, 3* 0.5
 
     public enum HitType {

@@ -5,6 +5,8 @@ import service.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicProgressBarUI;
+import javax.swing.plaf.metal.MetalProgressBarUI;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -14,6 +16,7 @@ import java.io.IOException;
 public class GameJPanel extends JPanel {
     private static final int TIMER_DELAY = 10;
     private Timer repaintTimer;
+    private Timer progressBarTimer; // Timer for updating the progress bar
 
     private final int firstLineX;
     private final int secondLineX;
@@ -85,7 +88,7 @@ public class GameJPanel extends JPanel {
     private void initializeComponents() {
         notePool1 = new NotePool(10);
         notePool2 = new NotePool(10);
-        spawnDistance = 2*horizontalHeight;
+        spawnDistance = 2 * horizontalHeight;
         noteSize = 100;
         maxHitDistance = noteSize;
         moveAmount = 1;
@@ -115,12 +118,8 @@ public class GameJPanel extends JPanel {
 
     private void startGame() {
         Thread midiThread = new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             midiPlayer.loadAndPlayMidi();
+            startProgressBarTimer(); // Start the progress bar timer after loading the MIDI
         });
         midiThread.start();
     }
@@ -138,6 +137,11 @@ public class GameJPanel extends JPanel {
     private void startRepaintTimer() {
         repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
         repaintTimer.start();
+    }
+
+    private void startProgressBarTimer() {
+        progressBarTimer = new Timer(100, e -> updateProgressBar()); // Update every 100ms
+        progressBarTimer.start();
     }
 
     private void handleKeyPress(KeyEvent evt) {
@@ -160,6 +164,24 @@ public class GameJPanel extends JPanel {
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
         healthBar.setValue(Score.getHealth());
+        updateHealthBarColor();
+    }
+
+    private void updateHealthBarColor() {
+        int value = healthBar.getValue();
+        Color color;
+        if (value > 80) {
+            color = Color.GREEN;
+        } else if (value > 60) {
+            color = new Color(255, 165, 0); // Orange
+        } else if (value > 40) {
+            color = new Color(255, 204, 51); // Yellow-Orange
+        } else if (value > 20) {
+            color = Color.RED;
+        } else {
+            color = new Color(165, 42, 42); // Brown
+        }
+        healthBar.setForeground(color);
     }
 
     private void initializeUIComponents() {
@@ -169,6 +191,12 @@ public class GameJPanel extends JPanel {
         scoreLabel = new JLabel("Score: 0");
         streakLabel = new JLabel("Streak: 0");
         accuracyLabel = new JLabel("Accuracy: 100%");
+
+        // Set the UIManager for the health bar
+        healthBar.setUI(new BasicProgressBarUI() {
+            protected Color getSelectionBackground() { return Color.RED; }
+            protected Color getSelectionForeground() { return Color.RED; }
+        });
 
         // Add UI elements to panel
         setLayout(new BorderLayout());
@@ -180,8 +208,21 @@ public class GameJPanel extends JPanel {
         add(uiPanel, BorderLayout.EAST);
         add(progressBar, BorderLayout.SOUTH);
         add(healthBar, BorderLayout.WEST);
+        // Update health bar color initially
+        updateHealthBarColor();
     }
 
+
+    private void updateProgressBar() {
+        if (midiPlayer != null) {
+            long currentTime = midiPlayer.getMicroSecondPos();
+            long totalTime = midiPlayer.getMicroSecondLength();
+            if (totalTime > 0) {
+                int progress = (int) ((double) currentTime / totalTime * 100);
+                progressBar.setValue(progress);
+            }
+        }
+    }
 
     // Define a boolean flag to track if the game is over
     private boolean gameOver;
@@ -201,17 +242,13 @@ public class GameJPanel extends JPanel {
         // drawing catching field
         // TODO replace this with an image
         int offset = noteSize / 2;
-        g.drawRect(firstLineX - offset, horizontalHeight - offset, noteSize, noteSize);
-        g.drawRect(secondLineX - offset, horizontalHeight - offset, noteSize, noteSize);
+        g.drawOval(firstLineX - offset, horizontalHeight - offset, noteSize, noteSize);
+        g.drawOval(secondLineX - offset, horizontalHeight - offset, noteSize, noteSize);
 
         musicTrack1.drawNotes(g);
         musicTrack2.drawNotes(g);
 
-        if (gameOver) {
-            return;
-        }
-
-        if (isGameOver) {
+        if (Score.getHealth() <= 0 && !gameOver) {
             gameOver = true; // Set the flag to true when game over is triggered
             noteMovingThread1.stopMoving();
             noteMovingThread2.stopMoving();

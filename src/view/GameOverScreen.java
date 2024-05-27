@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverScreen extends JFrame {
-    private String level;
     private int maxScore;
     private int achievedScore;
     private double accuracy;
@@ -23,7 +22,6 @@ public class GameOverScreen extends JFrame {
 
     public GameOverScreen(String level) {
         MusicPlayerManager.stopAllMusicPlayers();
-        this.level = level;
         this.maxScore = MidiPlayer.getTotalNotes() * 100;
         this.achievedScore = Score.getTotalScore();
         this.accuracy = Score.getAverageAccuracy();

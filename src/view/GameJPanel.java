@@ -184,7 +184,7 @@ public class GameJPanel extends JPanel {
 
 
     // Define a boolean flag to track if the game is over
-    private boolean gameOver = false;
+    private boolean gameOver;
 
     @Override
     public void paintComponent(Graphics g) {

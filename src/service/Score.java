@@ -67,7 +67,7 @@ public class Score {
 
     // Compares distance with the max distance before miss to determine accuracy
     public static void determineAccuracy(int distance, int maxDistance) {
-        MusicPlayer fxPlayer = new MusicPlayer(false, "src/resources/sounds/tamboHit.wav");
+        MusicPlayer fxPlayer = new MusicPlayer(false, "resources/sounds/tamboHit.wav");
         double accuracyPercentage = 100.0 * (1.0 - (double) distance / maxDistance);
 
         if (distance <= 5) {
@@ -91,7 +91,7 @@ public class Score {
     }
 
     public static void miss() {
-        MusicPlayer musicPlayer = new MusicPlayer(false, "src/resources/sounds/leave.wav");
+        MusicPlayer musicPlayer = new MusicPlayer(false, "resources/sounds/leave.wav");
         musicPlayer.playDefault();
         registerHit(HitType.MISS);
         changeHealth(-10);

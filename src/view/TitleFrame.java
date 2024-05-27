@@ -90,7 +90,7 @@ public class TitleFrame extends JFrame {
     private void initializeAnimationFrames(int width, int height) {
         animationFrames = new ImageIcon[5];
         for (int i = 0; i < 5; i++) {
-            Image img = new ImageIcon("src/resources/sprites/title" + i + ".png").getImage();
+            Image img = new ImageIcon("resources/sprites/title" + i + ".png").getImage();
             Image scaledImg = img.getScaledInstance(width, height, Image.SCALE_DEFAULT);
             animationFrames[i] = new ImageIcon(scaledImg);
         }
@@ -117,12 +117,12 @@ public class TitleFrame extends JFrame {
             JButton source = (JButton) e.getSource();
             switch (source.getText()) {
                 case "Play":
-                    fxPlayer.play("src/resources/sounds/click.wav");
+                    fxPlayer.play("resources/sounds/click.wav");
                     LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
                     levelSelectionFrame.setIconImage(GameController.getGameIcon());
                     break;
                 case "Settings":
-                    fxPlayer.play("src/resources/sounds/click.wav");
+                    fxPlayer.play("resources/sounds/click.wav");
                     SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
                     settingsFrame.setIconImage(GameController.getGameIcon());
                     break;

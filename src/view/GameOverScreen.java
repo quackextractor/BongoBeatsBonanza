@@ -101,7 +101,7 @@ public class GameOverScreen extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Right Panel
-        ImageIcon imageIcon = new ImageIcon("src/resources/sprites/cat0.png");
+        ImageIcon imageIcon = new ImageIcon("resources/sprites/cat0.png");
         JLabel imageLabel = new JLabel(imageIcon);
         mainPanel.add(imageLabel, BorderLayout.EAST);
 

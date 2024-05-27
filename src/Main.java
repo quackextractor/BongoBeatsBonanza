@@ -10,10 +10,10 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
 
-        String musicPath = "src/resources/music/menu.wav";
+        String musicPath = "resources/music/menu.wav";
         String fontName = "Arial";
         Image gameIcon;
-        gameIcon = GameJPanel.loadImage("src/resources/sprites/icon.png");
+        gameIcon = GameJPanel.loadImage("resources/sprites/icon.png");
 
         // Applies System look to all Frames
         try {

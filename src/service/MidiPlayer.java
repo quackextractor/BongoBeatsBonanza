@@ -22,7 +22,7 @@ public class MidiPlayer {
         totalNotes = 0;
         this.musicTrack1 = musicTrack1;
         this.musicTrack2 = musicTrack2;
-        String levelPath = "src/resources/levels/" + levelName;
+        String levelPath = "resources/levels/" + levelName;
         midiFilePath = levelPath + ".mid";
         musicFilePath = levelPath + ".wav";
         songPlayer = new MusicPlayer(true, musicFilePath);

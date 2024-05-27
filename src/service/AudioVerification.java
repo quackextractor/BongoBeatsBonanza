@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AudioVerification {
     public static boolean isWavValid(String levelName) {
         try {
-            File wavFile = new File("src/resources/levels/" + levelName + ".wav");
+            File wavFile = new File("resources/levels/" + levelName + ".wav");
 
             // Check if the file exists
             if (!wavFile.exists()) {
@@ -61,7 +61,7 @@ public class AudioVerification {
 
     public static boolean isMidiValid(String levelName) {
         try {
-            File midiFile = new File("src/resources/levels/" + levelName + ".mid");
+            File midiFile = new File("resources/levels/" + levelName + ".mid");
             Sequence sequence = MidiSystem.getSequence(midiFile);
             // If sequence is successfully obtained, midi file is valid
             return true;

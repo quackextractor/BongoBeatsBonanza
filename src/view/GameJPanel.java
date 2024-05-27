@@ -77,9 +77,9 @@ public class GameJPanel extends JPanel {
 
     private void preloadImages() {
         // Load the images
-        backgroundImage = loadImage("src/resources/sprites/cat1.png");
-        noteImage1 = loadImage("src/resources/sprites/redNote.png");
-        noteImage2 = loadImage("src/resources/sprites/bluNote.png");
+        backgroundImage = loadImage("resources/sprites/cat1.png");
+        noteImage1 = loadImage("resources/sprites/redNote.png");
+        noteImage2 = loadImage("resources/sprites/bluNote.png");
     }
 
     private void initializeComponents() {

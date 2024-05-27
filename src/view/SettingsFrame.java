@@ -76,7 +76,7 @@ public class SettingsFrame extends JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
-                fxPlayer.play("src/resources/sounds/exit.wav");
+                fxPlayer.play("resources/sounds/exit.wav");
             }
 
             @Override
@@ -160,7 +160,7 @@ public class SettingsFrame extends JFrame {
                 volumeValue = musicVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, true);
                 musicPlayer.pause();
-                fxPlayer.playWithCustomVolume(volumeValue, "src/resources/sounds/click.wav");
+                fxPlayer.playWithCustomVolume(volumeValue, "resources/sounds/click.wav");
                 musicPlayer.resume();
             }
         });
@@ -171,7 +171,7 @@ public class SettingsFrame extends JFrame {
             if (!fxVolumeSlider.getValueIsAdjusting()) {
                 volumeValue = fxVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, false);
-                fxPlayer.play("src/resources/sounds/click.wav");
+                fxPlayer.play("resources/sounds/click.wav");
             }
         });
     }
@@ -180,7 +180,7 @@ public class SettingsFrame extends JFrame {
         difficultySlider.addChangeListener(e -> {
             if (!difficultySlider.getValueIsAdjusting()) {
                 difficulty = difficultySlider.getValue();
-                fxPlayer.play("src/resources/sounds/click.wav");
+                fxPlayer.play("resources/sounds/click.wav");
             }
         });
     }
@@ -189,7 +189,7 @@ public class SettingsFrame extends JFrame {
         noteSpeedSlider.addChangeListener(e -> {
             if (!noteSpeedSlider.getValueIsAdjusting()) {
                 noteSpeed = noteSpeedSlider.getValue();
-                fxPlayer.play("src/resources/sounds/click.wav");
+                fxPlayer.play("resources/sounds/click.wav");
             }
         });
     }

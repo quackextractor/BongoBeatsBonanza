@@ -59,7 +59,7 @@ public class LevelSelectionFrame extends JFrame {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (!hasLevelStarted) {
-                    fxPlayer.play("src/resources/sounds/exit.wav");
+                    fxPlayer.play("resources/sounds/exit.wav");
                     isOpen = false;
                 }
             }
@@ -70,7 +70,7 @@ public class LevelSelectionFrame extends JFrame {
 
     private void loadLevels() {
         levelNames = new ArrayList<>();
-        File levelsDirectory = new File("src/resources/levels");
+        File levelsDirectory = new File("resources/levels");
         if (levelsDirectory.exists() && levelsDirectory.isDirectory()) {
             File[] levelFiles = levelsDirectory.listFiles();
             if (levelFiles != null) {
@@ -91,7 +91,7 @@ public class LevelSelectionFrame extends JFrame {
     public static void startGame(String selectedLevel, Component component) {
         if (!GameController.startLevel(selectedLevel)) {
             // Display error message as a tooltip
-            MusicPlayer fxPlayer = new MusicPlayer(false, "src/resources/sounds/alert.wav");
+            MusicPlayer fxPlayer = new MusicPlayer(false, "resources/sounds/alert.wav");
             fxPlayer.playDefault();
             JOptionPane.showMessageDialog(component, "Error starting the selected level", "Error", JOptionPane.ERROR_MESSAGE);
         }

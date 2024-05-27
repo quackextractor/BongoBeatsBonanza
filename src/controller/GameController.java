@@ -41,7 +41,7 @@ public class GameController {
             LevelSelectionFrame.hasLevelStarted = true;
             MusicPlayerManager.stopAllMusicPlayers();
             closeAllFrames();
-            fxPlayer.play("src/resources/sounds/start.wav");
+            fxPlayer.play("resources/sounds/start.wav");
             GameFrame gameFrame = new GameFrame(levelName);
             gameFrame.setIconImage(gameIcon);
             return true;
@@ -61,7 +61,7 @@ public class GameController {
 
     public static void endGame() {
         MusicPlayerManager.stopAllMusicPlayers();
-        fxPlayer.play("src/resources/sounds/boowomp.wav");
+        fxPlayer.play("resources/sounds/boowomp.wav");
         System.exit(0);
     }
 }

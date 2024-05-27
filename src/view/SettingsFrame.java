@@ -4,6 +4,7 @@ import service.MusicPlayer;
 import service.MusicPlayerManager;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Hashtable;
 
@@ -23,31 +24,45 @@ public class SettingsFrame extends JFrame {
             return;
         }
         isOpen = true;
-
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(468, 488);
+        setSize(500, 300);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10); // Add some padding
+        gbc.weightx = 1; // Make components stretch horizontally
 
         Font font = new Font(fontName, Font.BOLD, 30);
 
         // Volume Settings
-        JLabel musicVolumeLabel = createLabel("Music vol", font);
+        JLabel musicVolumeLabel = createFancyLabel("Music vol", font);
         musicVolumeSlider = initializeVolumeSlider(MusicPlayer.getMusicVolume());
-        JLabel fxVolumeLabel = createLabel("FX vol", font);
+        addComponent(musicVolumeLabel, gbc, 0, 0);
+        addComponent(musicVolumeSlider, gbc, 1, 0);
+
+        // FX Volume Settings
+        JLabel fxVolumeLabel = createFancyLabel("FX vol", font);
         fxVolumeSlider = initializeVolumeSlider(MusicPlayer.getFxVolume());
-        addComponents(musicVolumeLabel, musicVolumeSlider, fxVolumeLabel, fxVolumeSlider);
+        addComponent(fxVolumeLabel, gbc, 0, 1);
+        addComponent(fxVolumeSlider, gbc, 1, 1);
 
         // Note Speed Settings
+        JLabel noteSpeedLabel = createFancyLabel("Note speed", font);
         noteSpeedSlider = initializeSpeedSlider();
-        JLabel noteSpeedLabel = createLabel("Note speed", font);
-        addComponents(noteSpeedLabel, noteSpeedSlider);
+        addComponent(noteSpeedLabel, gbc, 0, 2);
+        addComponent(noteSpeedSlider, gbc, 1, 2);
 
         // Difficulty Settings
+        JLabel difficultyLabel = createFancyLabel("Difficulty", font);
         difficultySlider = initializeDifficultySlider();
-        JLabel difficultyLabel = createLabel("Difficulty", font);
-        addComponents(difficultyLabel, difficultySlider);
+        addComponent(difficultyLabel, gbc, 0, 3);
+        addComponent(difficultySlider, gbc, 1, 3);
+
+        // Adjust vertical positioning
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 1;
 
         // Configure settings
         MusicPlayer fxPlayer = new MusicPlayer(false, "");
@@ -69,23 +84,22 @@ public class SettingsFrame extends JFrame {
         setVisible(true);
     }
 
-    private JLabel createLabel(String text, Font font) {
-        JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(font);
-        return label;
+    private void addComponent(Component component, GridBagConstraints gbc, int x, int y) {
+        gbc.gridx = x;
+        gbc.gridy = y;
+        add(component, gbc);
     }
 
-    private void addComponents(JComponent... components) {
-        for (JComponent component : components) {
-            add(component);
-        }
+    private FancyJLabel createFancyLabel(String text, Font font) {
+        FancyJLabel label = new FancyJLabel(text, JLabel.LEFT);
+        label.setFont(font);
+        label.setShadowOffset(2); // Set shadow offset to 2
+        return label;
     }
 
     private JSlider initializeVolumeSlider(float initialValue) {
         JSlider slider = new JSlider(-30, 6, (int) initialValue);
-        slider.setPaintLabels(true);
-        slider.setPaintTicks(true);
-        slider.setMajorTickSpacing(1);
+        customizeSlider(slider);
 
         Hashtable<Integer, JLabel> volumeHashtable = new Hashtable<>();
         volumeHashtable.put(-30, new JLabel("-30dB"));
@@ -98,9 +112,7 @@ public class SettingsFrame extends JFrame {
 
     private JSlider initializeSpeedSlider() {
         JSlider slider = new JSlider(1, 3, noteSpeed);
-        slider.setPaintLabels(true);
-        slider.setPaintTicks(true);
-        slider.setMajorTickSpacing(1);
+        customizeSlider(slider);
 
         Hashtable<Integer, JLabel> speedHashtable = new Hashtable<>();
         speedHashtable.put(1, new JLabel("slow"));
@@ -117,9 +129,7 @@ public class SettingsFrame extends JFrame {
 
     private JSlider initializeDifficultySlider() {
         JSlider slider = new JSlider(1, 3, difficulty);
-        slider.setPaintLabels(true);
-        slider.setPaintTicks(true);
-        slider.setMajorTickSpacing(1);
+        customizeSlider(slider);
 
         Hashtable<Integer, JLabel> difficultyHashtable = new Hashtable<>();
         difficultyHashtable.put(1, new JLabel("easy"));
@@ -132,6 +142,12 @@ public class SettingsFrame extends JFrame {
 
         slider.setLabelTable(difficultyHashtable);
         return slider;
+    }
+
+    private void customizeSlider(JSlider slider) {
+        slider.setPaintLabels(true);
+        slider.setPaintTicks(true);
+        slider.setMajorTickSpacing(1);
     }
 
     private void configMusicVolume(MusicPlayer musicPlayer, MusicPlayer fxPlayer) {

@@ -14,7 +14,7 @@ public class MusicPlayer {
     private boolean isMusic;
     private String path;
     private static float fxVolume = -20f;
-    private static float musicVolume = -30f;
+    private static float musicVolume = -10f;
 
     public MusicPlayer(boolean isMusic, String path) {
         this.isMusic = isMusic;

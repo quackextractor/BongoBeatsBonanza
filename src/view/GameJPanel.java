@@ -191,10 +191,12 @@ public class GameJPanel extends JPanel {
         }
 
         // TODO add proper game over
-        if (isGameOver){
+     /*   if (isGameOver){
             noteMovingThread1.stopMoving();
             noteMovingThread2.stopMoving();
         }
+
+      */
 
         g.drawLine(firstLineX, 0, firstLineX, getHeight());
         g.drawLine(secondLineX, 0, secondLineX, getHeight());

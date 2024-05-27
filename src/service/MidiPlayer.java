@@ -7,13 +7,13 @@ import java.util.*;
 
 public class MidiPlayer {
     private Sequencer sequencer;
-    private Track track1;
     private MusicTrack musicTrack1;
     private MusicTrack musicTrack2;
     private String midiFilePath;
     private String musicFilePath;
     private int delayMs;
-    MusicPlayer songPlayer;
+    private MusicPlayer songPlayer;
+    private float bpm;
 
     public MidiPlayer(MusicTrack musicTrack1, MusicTrack musicTrack2, String levelName, int delayMs) {
         this.musicTrack1 = musicTrack1;
@@ -38,20 +38,46 @@ public class MidiPlayer {
     public void loadAndPlayMidi() {
         try {
             Sequence sequence = MidiSystem.getSequence(new File(midiFilePath));
-            sequencer.setSequence(sequence);  // Ensure sequence is set to the sequencer
+            sequencer.setSequence(sequence);
 
-            // Get the track from the sequence
             Track[] tracks = sequence.getTracks();
             System.out.println("Number of tracks: " + tracks.length);
 
             if (tracks.length > 0) {
-                track1 = tracks[0];  // Assuming we are working with the first track
+                List<MidiEvent> allNoteEvents = new ArrayList<>();
 
-                // Create a thread to process the MIDI events in real-time
-                Thread midiProcessingThread = new Thread(() -> {
-                    processMidiEvents(track1);
-                });
-                midiProcessingThread.start();
+                // Collect all NOTE_ON events and find the tempo
+                for (Track track : tracks) {
+                    for (int i = 0; i < track.size(); i++) {
+                        MidiEvent event = track.get(i);
+                        MidiMessage message = event.getMessage();
+                        if (message instanceof ShortMessage) {
+                            ShortMessage shortMessage = (ShortMessage) message;
+                            if (shortMessage.getCommand() == ShortMessage.NOTE_ON) {
+                                allNoteEvents.add(event);
+                            }
+                        } else if (message instanceof MetaMessage) {
+                            MetaMessage metaMessage = (MetaMessage) message;
+                            if (metaMessage.getType() == 0x51) {
+                                bpm = getBpmFromMetaMessage(metaMessage);
+                                System.out.println("BPM: " + bpm);
+                            }
+                        }
+                    }
+                }
+
+                System.out.println("Total NOTE_ON events: " + allNoteEvents.size());
+
+                if (!allNoteEvents.isEmpty()) {
+                    // Calculate the pause before the first note
+                    long firstNoteTick = allNoteEvents.get(0).getTick();
+                    long pauseDurationMs = tickToMs(firstNoteTick, bpm);
+                    System.out.println("Pause before the first note: " + pauseDurationMs + " ms");
+                }
+                System.out.println("added note speed delay: " + delayMs + " ms");
+
+                // Process events and divide them into two tracks
+                processMidiEvents(allNoteEvents);
 
                 // Wait for the specified delay before playing the music file
                 try {
@@ -71,14 +97,12 @@ public class MidiPlayer {
         }
     }
 
-    private void processMidiEvents(Track track) {
+    private void processMidiEvents(List<MidiEvent> allNoteEvents) {
         Map<Integer, List<MidiEvent>> pitchToEventsMap = new HashMap<>();
 
         // Group events by pitch
-        for (int i = 0; i < track.size(); i++) {
-            MidiEvent event = track.get(i);
+        for (MidiEvent event : allNoteEvents) {
             MidiMessage message = event.getMessage();
-
             if (message instanceof ShortMessage) {
                 ShortMessage shortMessage = (ShortMessage) message;
                 if (shortMessage.getCommand() == ShortMessage.NOTE_ON) {
@@ -117,7 +141,7 @@ public class MidiPlayer {
             long tickDifference = currentTick - lastTick;
 
             // Calculate the delay in milliseconds based on the tempo
-            long delayInMs = tickToMs(tickDifference, sequencer.getTempoInBPM());
+            long delayInMs = tickToMs(tickDifference, bpm);
 
             try {
                 Thread.sleep(delayInMs);
@@ -142,6 +166,12 @@ public class MidiPlayer {
         float msPerBeat = 60000 / tempoInBPM;
         float msPerTick = msPerBeat / ticksPerBeat;
         return (long) (ticks * msPerTick);
+    }
+
+    private float getBpmFromMetaMessage(MetaMessage metaMessage) {
+        byte[] data = metaMessage.getData();
+        int tempo = ((data[0] & 0xff) << 16) | ((data[1] & 0xff) << 8) | (data[2] & 0xff);
+        return 60000000f / tempo;
     }
 
     public void stopMusic() {

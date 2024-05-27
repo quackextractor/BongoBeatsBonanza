@@ -125,6 +125,19 @@ public class MusicPlayer {
             fxVolume = value;
     }
 
+    public long getMicroSecondPos(){
+        if (clip != null){
+            return clip.getMicrosecondPosition();
+        }
+        else return 0;
+    }
+    public long getMicroSecondLength(){
+        if (clip != null){
+            return clip.getMicrosecondLength();
+        }
+        else return 0;
+    }
+
     public long getPausedTime() {
         return pausedTime;
     }

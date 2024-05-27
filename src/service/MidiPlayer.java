@@ -40,7 +40,7 @@ public class MidiPlayer {
     }
 
     public void loadAndPlayMidi() {
-        if (GameJPanel.isIsGameOver()){
+        if (GameJPanel.isIsGameOver()) {
             return;
         }
         try {
@@ -97,7 +97,7 @@ public class MidiPlayer {
                     e.printStackTrace();
                 }
 
-                if (GameJPanel.isIsGameOver()){
+                if (GameJPanel.isIsGameOver()) {
                     sequencer.stop();
                     return;
                 }
@@ -193,6 +193,14 @@ public class MidiPlayer {
     public void stopMusic() {
         sequencer.stop();
         songPlayer.stop();
+    }
+
+    public long getMicroSecondPos() {
+        return songPlayer.getMicroSecondPos();
+    }
+
+    public long getMicroSecondLength() {
+        return songPlayer.getMicroSecondLength();
     }
 
     public static int getTotalNotes() {

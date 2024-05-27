@@ -1,7 +1,6 @@
 import controller.GameController;
 import service.ErrorLogger;
-import view.FancyJLabel;
-import view.GameFrame;
+import view.GameJPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +10,8 @@ public class Main {
 
         String musicPath = "src/resources/music/menu.wav";
         String fontName = "Arial";
+        Image gameIcon;
+        gameIcon = GameJPanel.loadImage("src/resources/sprites/icon.png");
 
         // Applies System look to all Frames
         try {
@@ -20,20 +21,8 @@ public class Main {
             ErrorLogger.logStackTrace(e);
             throw new RuntimeException(e);
         }
-        GameController gameController = new GameController(musicPath, fontName);
+        GameController gameController = new GameController(musicPath, fontName, gameIcon);
         gameController.startGame();
     //   GameFrame gameFrame = new GameFrame("oddLoop");
-     /*   SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Fancy JLabel Example");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(400, 300);
-            frame.setLayout(new FlowLayout());
-
-            FancyJLabel fancyLabel = new FancyJLabel("Yippie");
-            fancyLabel.setDefaultSize(30);
-            frame.add(fancyLabel);
-            frame.setVisible(true);
-        });
-      */
     }
 }

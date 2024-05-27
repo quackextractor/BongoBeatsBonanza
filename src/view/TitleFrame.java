@@ -70,7 +70,8 @@ public class TitleFrame extends JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 fxPlayer.play("src/resources/sounds/click.wav");
-                new LevelSelectionFrame();
+                LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
+                levelSelectionFrame.setIconImage(GameController.getGameIcon());
             }
         });
 
@@ -88,7 +89,8 @@ public class TitleFrame extends JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 fxPlayer.play("src/resources/sounds/click.wav");
-                new SettingsFrame(fontName, musicPlayer);
+                SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
+                settingsFrame.setIconImage(GameController.getGameIcon());
             }
         });
 

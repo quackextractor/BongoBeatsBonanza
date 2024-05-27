@@ -16,9 +16,11 @@ public class GameController {
 
     private final String musicPath;
     private final String fontName;
+    public static Image gameIcon;
     private static final MusicPlayer fxPlayer = new MusicPlayer(false,"");
 
-    public GameController(String musicPath, String fontName) {
+    public GameController(String musicPath, String fontName, Image icon) {
+        GameController.gameIcon = icon;
         this.musicPath = musicPath;
         this.fontName = fontName;
     }
@@ -26,6 +28,7 @@ public class GameController {
     public void startGame() {
         SwingUtilities.invokeLater(() -> {
             TitleFrame titleFrame = new TitleFrame(musicPath, fontName);
+            titleFrame.setIconImage(gameIcon);
         });
     }
 
@@ -40,6 +43,7 @@ public class GameController {
             closeAllFrames();
             fxPlayer.play("src/resources/sounds/start.wav");
             GameFrame gameFrame = new GameFrame(levelName);
+            gameFrame.setIconImage(gameIcon);
             return true;
         } else return false;
     }
@@ -51,6 +55,9 @@ public class GameController {
         }
     }
 
+    public static Image getGameIcon() {
+        return gameIcon;
+    }
 
     public static void endGame() {
         fxPlayer.play("src/resources/sounds/exit.wav");

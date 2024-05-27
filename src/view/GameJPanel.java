@@ -72,8 +72,8 @@ public class GameJPanel extends JPanel {
     private void preloadImages() {
         // Load the images
         backgroundImage = loadImage("src/resources/sprites/cat1.png");
-        noteImage1 = loadImage("src/resources/sprites/note1.png");
-        noteImage2 = loadImage("src/resources/sprites/note2.png");
+        noteImage1 = loadImage("src/resources/sprites/redNote.png");
+        noteImage2 = loadImage("src/resources/sprites/bluNote.png");
     }
 
     private void initializeComponents() {
@@ -119,7 +119,7 @@ public class GameJPanel extends JPanel {
         midiThread.start();
     }
 
-    private BufferedImage loadImage(String imagePath) {
+    public static BufferedImage loadImage(String imagePath) {
         BufferedImage image = null;
         try {
             image = ImageIO.read(new File(imagePath));
@@ -188,6 +188,12 @@ public class GameJPanel extends JPanel {
 
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+
+        // TODO add proper game over
+        if (isGameOver){
+            noteMovingThread1.stopMoving();
+            noteMovingThread2.stopMoving();
         }
 
         g.drawLine(firstLineX, 0, firstLineX, getHeight());

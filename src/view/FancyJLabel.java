@@ -6,7 +6,7 @@ import java.awt.*;
 public class FancyJLabel extends JLabel {
 
     private Color shadowColor = Color.GRAY;
-    private int shadowOffset = 2;
+    private int shadowOffset = 3;
     private float shadowOpacity = 0.6f;
     private int defaultSize = 24;
     private String defaultFontName = "Arial";

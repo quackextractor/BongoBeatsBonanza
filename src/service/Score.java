@@ -9,8 +9,7 @@ public class Score {
     private static int highestStreak = 0;
     private static int totalNotes = 0;
     private static int health = 100;
-    private static double difficultyModifier = 2;
-    // TODO: implement this into settings frame: 1 * 0.5, 2 * 0.5, 3* 0.5
+    private static double difficultyModifier = 1;
 
     // Counters for each hit type
     private static int greatCount = 0;
@@ -142,10 +141,6 @@ public class Score {
         // Ensure health does not fall below 0
         if (health < 0) {
             health = 0;
-        }
-
-        if (health == 0){
-            GameJPanel.setIsGameOver(true);
         }
     }
 

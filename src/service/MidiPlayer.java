@@ -40,7 +40,7 @@ public class MidiPlayer {
     }
 
     public void loadAndPlayMidi() {
-        if (GameJPanel.isIsGameOver()) {
+        if (GameJPanel.isGameOver()) {
             return;
         }
         try {
@@ -97,7 +97,7 @@ public class MidiPlayer {
                     e.printStackTrace();
                 }
 
-                if (GameJPanel.isIsGameOver()) {
+                if (GameJPanel.isGameOver()) {
                     sequencer.stop();
                     return;
                 }

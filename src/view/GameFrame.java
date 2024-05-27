@@ -1,9 +1,7 @@
 package view;
 
-import controller.GameController;
-import service.MidiPlayer;
-
 import javax.swing.*;
+import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame {
     private final int screenWidth = 700;
@@ -22,15 +20,14 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Setting to DO_NOTHING_ON_CLOSE
         setSize(screenWidth, screenHeight);
         setLocationRelativeTo(null);
-
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                requestFocus();
-                GameJPanel.setIsGameOver(true);
-            }
-        });
-
         setVisible(true);
+    }
+
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        super.processWindowEvent(e);
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            GameJPanel.setGameOver(true);
+        }
     }
 }

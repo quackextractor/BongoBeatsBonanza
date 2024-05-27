@@ -36,8 +36,8 @@ public class GameJPanel extends JPanel {
     private int spawnDistance;
     private int noteSize;
     private int maxHitDistance;
-    private int moveAmount;
-    private int moveInterval;
+    private static int moveAmount;
+    private static int moveInterval;
     private JProgressBar progressBar;
     private JProgressBar healthBar;
     private JLabel scoreLabel;
@@ -45,12 +45,31 @@ public class GameJPanel extends JPanel {
     private JLabel accuracyLabel;
     private static boolean isGameOver = false;
 
-    public static void setIsGameOver(boolean isGameOver) {
-        GameJPanel.isGameOver = isGameOver;
+    public static void modifyMoveParams(int x) {
+        switch (x) {
+            case 1:
+                moveAmount = 1;
+                moveInterval = 2;
+                break;
+            case 2:
+                moveAmount = 1;
+                moveInterval = 1;
+                break;
+            case 3:
+                moveAmount = 2;
+                moveInterval = 1;
+                break;
+            default:
+                throw new IllegalArgumentException("input ranging from 1-3");
+        }
     }
 
-    public static boolean isIsGameOver() {
-        return isGameOver;
+    public static void setGameOver(boolean isGameOver) {
+        Score.changeHealth(-100);
+    }
+
+    public static boolean isGameOver() {
+        return Score.getHealth() == 0;
     }
 
     public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
@@ -91,8 +110,11 @@ public class GameJPanel extends JPanel {
         spawnDistance = 2 * horizontalHeight;
         noteSize = 100;
         maxHitDistance = noteSize;
-        moveAmount = 1;
-        moveInterval = 1;
+
+        if (moveAmount == 0) {
+            moveAmount = 1;
+            moveInterval = 1;
+        }
 
         musicTrack1 = new MusicTrack(notePool1, maxHitDistance, noteImage1, noteSize, firstLineX, horizontalHeight, spawnDistance);
         notePool1.setUpNotePool(spawnDistance, noteImage1, firstLineX, horizontalHeight, noteSize);
@@ -194,8 +216,13 @@ public class GameJPanel extends JPanel {
 
         // Set the UIManager for the health bar
         healthBar.setUI(new BasicProgressBarUI() {
-            protected Color getSelectionBackground() { return Color.RED; }
-            protected Color getSelectionForeground() { return Color.RED; }
+            protected Color getSelectionBackground() {
+                return Color.RED;
+            }
+
+            protected Color getSelectionForeground() {
+                return Color.RED;
+            }
         });
 
         // Add UI elements to panel

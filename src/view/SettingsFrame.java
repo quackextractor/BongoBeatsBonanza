@@ -2,6 +2,7 @@ package view;
 
 import service.MusicPlayer;
 import service.MusicPlayerManager;
+import service.Score;
 
 import javax.swing.*;
 import java.awt.*;
@@ -126,7 +127,6 @@ public class SettingsFrame extends JFrame {
         label.setForeground(Color.red);
         label.setFont(font2);
         speedHashtable.put(3, label);
-
         slider.setLabelTable(speedHashtable);
         return slider;
     }
@@ -181,6 +181,7 @@ public class SettingsFrame extends JFrame {
             if (!difficultySlider.getValueIsAdjusting()) {
                 difficulty = difficultySlider.getValue();
                 fxPlayer.play("resources/sounds/click.wav");
+                Score.setDifficultyModifier(difficulty*0.5);
             }
         });
     }
@@ -190,6 +191,7 @@ public class SettingsFrame extends JFrame {
             if (!noteSpeedSlider.getValueIsAdjusting()) {
                 noteSpeed = noteSpeedSlider.getValue();
                 fxPlayer.play("resources/sounds/click.wav");
+                GameJPanel.modifyMoveParams(noteSpeed);
             }
         });
     }

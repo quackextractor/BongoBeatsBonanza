@@ -79,6 +79,11 @@ public class SettingsFrame extends JFrame {
                 isOpen = false;
                 fxPlayer.play("src/resources/sounds/exit.wav");
             }
+
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                isOpen = false;
+            }
         });
 
         setVisible(true);

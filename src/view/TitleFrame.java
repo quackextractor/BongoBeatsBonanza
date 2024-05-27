@@ -5,11 +5,11 @@ import service.MusicPlayer;
 import service.MusicPlayerManager;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class TitleFrame extends JFrame {
 
-    //  private boolean isPlaying;
     private final MusicPlayer musicPlayer;
     private final MusicPlayer fxPlayer;
     private JLabel animationLabel;
@@ -24,63 +24,72 @@ public class TitleFrame extends JFrame {
         // Center the window
         setLocationRelativeTo(null);
 
-        JButton play = new JButton("Play");
-        JButton settings = new JButton("Settings");
-        JButton quit = new JButton("Quit");
+        FancyJLabel play = new FancyJLabel("Play", JLabel.LEFT);
+        FancyJLabel settings = new FancyJLabel("Settings", JLabel.LEFT);
+        FancyJLabel quit = new FancyJLabel("Quit", JLabel.LEFT);
 
-        JButton[] buttons = {play, settings, quit};
+        FancyJLabel[] buttons = {play, settings, quit};
 
-        Font font = new Font(fontName, Font.BOLD, 120);
+        Font font = new Font(fontName, Font.BOLD, 80);
 
         musicPlayer = new MusicPlayer(true, musicPath);
-        //  isPlaying = false;
         musicPlayer.playDefault();
         MusicPlayerManager.addMusicPlayer(musicPlayer);
         fxPlayer = new MusicPlayer(false, "");
 
-        setLayout(new GridLayout(4, 1));
-        double scale = 2;
+        int spacing = 10;  // Define the spacing from the left side of the screen
+
+        setLayout(new BorderLayout());
+        double logoScale = 2;
         int width = 400;
         int height = 100;
-        initializeAnimationFrames((int) (width * scale), (int) (height * scale));
+        initializeAnimationFrames((int) (width * logoScale), (int) (height * logoScale));
         createAnimationLabel();
         startAnimation();
 
-        for (JButton jbutton : buttons
-        ) {
-            jbutton.setFont(font);
-            add(jbutton);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(3, 1));
+        for (FancyJLabel label : buttons) {
+            label.setFont(font);
+            label.setOpaque(true);  // To make the label's background visible
+            label.setBackground(Color.LIGHT_GRAY);  // Set background color
+            label.setForeground(Color.BLACK);  // Set text color
+
+            // Wrap each label in a panel to apply padding
+            JPanel labelPanel = new JPanel(new BorderLayout());
+            labelPanel.setBorder(new EmptyBorder(0, spacing, 0, 0));  // Add left padding
+            labelPanel.add(label, BorderLayout.CENTER);
+
+            buttonPanel.add(labelPanel);
         }
 
-        /*
-        play.addActionListener(e -> {
-            if (isPlaying) {
-                musicPlayer.pause();
-                isPlaying = false;
-                play.setText("Play");
-            } else {
-                musicPlayer.play(musicPath);
-                isPlaying = true;
-                play.setText("Pause");
-            }
-        });
-         */
+        add(animationLabel, BorderLayout.PAGE_START);
+        add(buttonPanel, BorderLayout.CENTER);
 
-        play.addActionListener(e -> {
-            fxPlayer.play("src/resources/sounds/click.wav");
-            LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
-        });
-
-        quit.addActionListener(e -> {
-            if (!LevelSelectionFrame.hasLevelStarted) {
-                musicPlayer.stop();
-                GameController.endGame();
+        play.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                fxPlayer.play("src/resources/sounds/click.wav");
+                new LevelSelectionFrame();
             }
         });
 
-        settings.addActionListener(e -> {
-            fxPlayer.play("src/resources/sounds/click.wav");
-            SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
+        quit.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (!LevelSelectionFrame.hasLevelStarted) {
+                    musicPlayer.stop();
+                    GameController.endGame();
+                }
+            }
+        });
+
+        settings.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                fxPlayer.play("src/resources/sounds/click.wav");
+                new SettingsFrame(fontName, musicPlayer);
+            }
         });
 
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -96,7 +105,6 @@ public class TitleFrame extends JFrame {
         setVisible(true);
     }
 
-
     private void initializeAnimationFrames(int width, int height) {
         animationFrames = new ImageIcon[5];
         for (int i = 0; i < 5; i++) {
@@ -108,11 +116,8 @@ public class TitleFrame extends JFrame {
 
     private void createAnimationLabel() {
         animationLabel = new JLabel(animationFrames[0]);
-
-        animationLabel.setBounds(0, 0, 400, 120);
-        add(animationLabel);
+        animationLabel.setHorizontalAlignment(JLabel.CENTER);
     }
-
 
     private void startAnimation() {
         Timer animationTimer = new Timer(300, e -> animate());
@@ -123,5 +128,4 @@ public class TitleFrame extends JFrame {
         currentFrameIndex = (currentFrameIndex + 1) % animationFrames.length;
         animationLabel.setIcon(animationFrames[currentFrameIndex]);
     }
-
 }

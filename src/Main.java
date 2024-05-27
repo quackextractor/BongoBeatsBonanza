@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
 
         String musicPath = "src/resources/music/menu.wav";
-        String fontName = "Blade Runner Movie Font";
+        String fontName = "Arial";
 
         // Applies System look to all Frames
         try {
@@ -21,9 +21,9 @@ public class Main {
             throw new RuntimeException(e);
         }
         GameController gameController = new GameController(musicPath, fontName);
-      //  gameController.startGame();
+        gameController.startGame();
     //   GameFrame gameFrame = new GameFrame("oddLoop");
-        SwingUtilities.invokeLater(() -> {
+     /*   SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Fancy JLabel Example");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(400, 300);
@@ -34,5 +34,6 @@ public class Main {
             frame.add(fancyLabel);
             frame.setVisible(true);
         });
+      */
     }
 }

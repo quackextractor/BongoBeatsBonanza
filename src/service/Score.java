@@ -6,17 +6,23 @@ public class Score {
     private static int totalScore = 0;
     private static int streakCount = 0;
     private static double totalAccuracy = 0.0;
+    private static int highestStreak = 0;
     private static int totalNotes = 0;
     private static int health = 100;
     private static double difficultyModifier = 2;
     // TODO: implement this into settings frame: 1 * 0.5, 2 * 0.5, 3* 0.5
+
+    // Counters for each hit type
+    private static int greatCount = 0;
+    private static int goodCount = 0;
+    private static int badCount = 0;
+    private static int missCount = 0;
 
     public enum HitType {
         GREAT(100),
         GOOD(50),
         BAD(25),
         MISS(-100);
-
         private final int scoreValue;
 
         HitType(int scoreValue) {
@@ -37,14 +43,21 @@ public class Score {
     }
 
     public static void increaseStreak() {
-        Score.streakCount++;
+        streakCount++;
+        if (streakCount > highestStreak) {
+            highestStreak = streakCount;
+        }
+    }
+
+    public static int getHighestStreak() {
+        return highestStreak;
     }
 
     public static void registerHit(HitType hitType) {
         if (hitType == HitType.MISS || hitType==HitType.BAD) {
             streakCount = 0;
         } else {
-            streakCount++;
+            increaseStreak();
         }
 
         totalScore += hitType.getScoreValue();
@@ -59,13 +72,17 @@ public class Score {
 
         if (distance <= 5) {
             registerHit(HitType.GREAT);
+            greatCount++;
+            fxPlayer.playDefault();
             changeHealth(20);
         } else if (accuracyPercentage >= 50) {
             registerHit(HitType.GOOD);
+            goodCount++;
             fxPlayer.playDefault();
             changeHealth(10);
         } else {
             registerHit(HitType.BAD);
+            badCount++;
             fxPlayer.playDefault();
             changeHealth(-5);
         }
@@ -74,8 +91,11 @@ public class Score {
     }
 
     public static void miss() {
+        MusicPlayer musicPlayer = new MusicPlayer(false, "src/resources/sounds/leave.wav");
+        musicPlayer.playDefault();
         registerHit(HitType.MISS);
         changeHealth(-10);
+        missCount++;
     }
 
     public static double getAverageAccuracy() {
@@ -129,6 +149,21 @@ public class Score {
         }
     }
 
+    public static int getGreatCount() {
+        return greatCount;
+    }
+
+    public static int getGoodCount() {
+        return goodCount;
+    }
+
+    public static int getBadCount() {
+        return badCount;
+    }
+
+    public static int getMissCount() {
+        return missCount;
+    }
 
     public static void reset() {
         totalScore = 0;

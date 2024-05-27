@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameController;
 import service.*;
 
 import javax.imageio.ImageIO;
@@ -45,11 +46,17 @@ public class GameJPanel extends JPanel {
         GameJPanel.isGameOver = isGameOver;
     }
 
+    public static boolean isIsGameOver() {
+        return isGameOver;
+    }
+
     public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
         this.firstLineX = firstLineX;
         this.secondLineX = secondLineX;
         this.horizontalHeight = horizontalHeight;
         this.levelName = level;
+        isGameOver = false;
+        gameOver = false;
 
         preloadImages();
         initializeComponents();
@@ -57,7 +64,6 @@ public class GameJPanel extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
         Score.reset();
-
         startGame();
         startRepaintTimer();
 
@@ -143,12 +149,6 @@ public class GameJPanel extends JPanel {
             case KeyEvent.VK_RIGHT:
                 musicTrack2.catchNote();
                 break;
-            case KeyEvent.VK_UP:
-                musicTrack1.addNoteToTrack();
-                break;
-            case KeyEvent.VK_DOWN:
-                musicTrack2.addNoteToTrack();
-                break;
         }
     }
 
@@ -182,6 +182,10 @@ public class GameJPanel extends JPanel {
         add(healthBar, BorderLayout.WEST);
     }
 
+
+    // Define a boolean flag to track if the game is over
+    private boolean gameOver = false;
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -189,14 +193,6 @@ public class GameJPanel extends JPanel {
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
-
-        // TODO add proper game over
-     /*   if (isGameOver){
-            noteMovingThread1.stopMoving();
-            noteMovingThread2.stopMoving();
-        }
-
-      */
 
         g.drawLine(firstLineX, 0, firstLineX, getHeight());
         g.drawLine(secondLineX, 0, secondLineX, getHeight());
@@ -210,6 +206,20 @@ public class GameJPanel extends JPanel {
 
         musicTrack1.drawNotes(g);
         musicTrack2.drawNotes(g);
+
+        if (gameOver) {
+            return;
+        }
+
+        if (isGameOver) {
+            gameOver = true; // Set the flag to true when game over is triggered
+            noteMovingThread1.stopMoving();
+            noteMovingThread2.stopMoving();
+            midiPlayer.stopMusic();
+            LevelSelectionFrame.setIsOpen(false);
+            GameOverScreen gameOverScreen = new GameOverScreen(levelName);
+            gameOverScreen.setIconImage(GameController.getGameIcon());
+        }
 
         updateMyUI();
     }

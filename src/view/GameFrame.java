@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameController;
+import service.MidiPlayer;
 
 import javax.swing.*;
 
@@ -18,14 +19,15 @@ public class GameFrame extends JFrame {
         gameJPanel = new GameJPanel(firstLineX, secondLineX, horizontalHeight, levelName);
         add(gameJPanel);
         setTitle(levelName);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // Setting to DO_NOTHING_ON_CLOSE
         setSize(screenWidth, screenHeight);
         setLocationRelativeTo(null);
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
-            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                GameController.endGame();
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                requestFocus();
+                GameJPanel.setIsGameOver(true);
             }
         });
 

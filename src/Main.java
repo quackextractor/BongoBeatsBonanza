@@ -1,6 +1,7 @@
 import controller.GameController;
 import service.ErrorLogger;
 import view.GameJPanel;
+import view.GameOverScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +22,9 @@ public class Main {
             ErrorLogger.logStackTrace(e);
             throw new RuntimeException(e);
         }
-        GameController gameController = new GameController(musicPath, fontName, gameIcon);
-        gameController.startGame();
+       GameController gameController = new GameController(musicPath, fontName, gameIcon);
+    //   gameController.startGame();
     //   GameFrame gameFrame = new GameFrame("oddLoop");
+        GameOverScreen gameOverScreen = new GameOverScreen("Memory Merge");
     }
 }

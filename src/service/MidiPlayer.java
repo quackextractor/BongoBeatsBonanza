@@ -1,5 +1,7 @@
 package service;
 
+import view.GameJPanel;
+
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
@@ -14,8 +16,10 @@ public class MidiPlayer {
     private int delayMs;
     private MusicPlayer songPlayer;
     private float bpm;
+    public static int totalNotes;
 
     public MidiPlayer(MusicTrack musicTrack1, MusicTrack musicTrack2, String levelName, int delayMs) {
+        totalNotes = 0;
         this.musicTrack1 = musicTrack1;
         this.musicTrack2 = musicTrack2;
         String levelPath = "src/resources/levels/" + levelName;
@@ -36,6 +40,9 @@ public class MidiPlayer {
     }
 
     public void loadAndPlayMidi() {
+        if (GameJPanel.isIsGameOver()){
+            return;
+        }
         try {
             Sequence sequence = MidiSystem.getSequence(new File(midiFilePath));
             sequencer.setSequence(sequence);
@@ -66,15 +73,19 @@ public class MidiPlayer {
                     }
                 }
 
-                System.out.println("Total NOTE_ON events: " + allNoteEvents.size());
+                totalNotes = allNoteEvents.size();
+                System.out.println("Total NOTE_ON events: " + totalNotes);
 
+                long pauseDurationMs = 0;
                 if (!allNoteEvents.isEmpty()) {
                     // Calculate the pause before the first note
                     long firstNoteTick = allNoteEvents.get(0).getTick();
-                    long pauseDurationMs = tickToMs(firstNoteTick, bpm);
+                    pauseDurationMs = tickToMs(firstNoteTick, bpm);
                     System.out.println("Pause before the first note: " + pauseDurationMs + " ms");
                 }
-                System.out.println("added note speed delay: " + delayMs + " ms");
+                System.out.println("Added note speed delay: " + delayMs + " ms");
+                int totalPauseDuration = (int) (delayMs + pauseDurationMs);
+                System.out.println("Total duration: " + totalPauseDuration + " ms");
 
                 // Process events and divide them into two tracks
                 processMidiEvents(allNoteEvents);
@@ -84,6 +95,11 @@ public class MidiPlayer {
                     Thread.sleep(delayMs);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+
+                if (GameJPanel.isIsGameOver()){
+                    sequencer.stop();
+                    return;
                 }
 
                 // Play the music file
@@ -176,5 +192,10 @@ public class MidiPlayer {
 
     public void stopMusic() {
         sequencer.stop();
+        songPlayer.stop();
+    }
+
+    public static int getTotalNotes() {
+        return totalNotes;
     }
 }

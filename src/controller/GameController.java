@@ -14,18 +14,18 @@ import static service.AudioVerification.*;
 
 public class GameController {
 
-    private final String musicPath;
-    private final String fontName;
+    public static String musicPath;
+    public static String fontName;
     public static Image gameIcon;
     private static final MusicPlayer fxPlayer = new MusicPlayer(false,"");
 
     public GameController(String musicPath, String fontName, Image icon) {
         GameController.gameIcon = icon;
-        this.musicPath = musicPath;
-        this.fontName = fontName;
+        GameController.musicPath = musicPath;
+        GameController.fontName = fontName;
     }
 
-    public void startGame() {
+    public static void startGame() {
         SwingUtilities.invokeLater(() -> {
             TitleFrame titleFrame = new TitleFrame(musicPath, fontName);
             titleFrame.setIconImage(gameIcon);
@@ -48,7 +48,7 @@ public class GameController {
         } else return false;
     }
 
-    private static void closeAllFrames() {
+    public static void closeAllFrames() {
         Frame[] frames = Frame.getFrames();
         for (Frame frame : frames) {
             frame.dispose();
@@ -60,7 +60,8 @@ public class GameController {
     }
 
     public static void endGame() {
-        fxPlayer.play("src/resources/sounds/exit.wav");
+        MusicPlayerManager.stopAllMusicPlayers();
+        fxPlayer.play("src/resources/sounds/boowomp.wav");
         System.exit(0);
     }
 }

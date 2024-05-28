@@ -18,7 +18,7 @@ public class Score {
     private static int missCount = 0;
 
     public enum HitType {
-        GREAT(100),
+        GREAT(80),
         GOOD(50),
         BAD(25),
         MISS(-100);
@@ -39,6 +39,10 @@ public class Score {
 
     public static void setStreakCount(int streakCount) {
         Score.streakCount = streakCount;
+    }
+
+    public static boolean isComplete(){
+        return MidiPlayer.totalNotes == totalNotes;
     }
 
     public static void increaseStreak() {

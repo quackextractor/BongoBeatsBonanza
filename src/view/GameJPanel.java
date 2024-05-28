@@ -6,7 +6,6 @@ import service.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicProgressBarUI;
-import javax.swing.plaf.metal.MetalProgressBarUI;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -64,7 +63,7 @@ public class GameJPanel extends JPanel {
         }
     }
 
-    public static void setGameOver(boolean isGameOver) {
+    public static void setGameOver() {
         Score.changeHealth(-100);
     }
 
@@ -275,7 +274,7 @@ public class GameJPanel extends JPanel {
         musicTrack1.drawNotes(g);
         musicTrack2.drawNotes(g);
 
-        if (Score.getHealth() <= 0 && !gameOver) {
+        if ((Score.getHealth() <= 0 || Score.isComplete()) && !gameOver) {
             gameOver = true; // Set the flag to true when game over is triggered
             noteMovingThread1.stopMoving();
             noteMovingThread2.stopMoving();

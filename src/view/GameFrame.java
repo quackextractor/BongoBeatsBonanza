@@ -27,7 +27,7 @@ public class GameFrame extends JFrame {
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-            GameJPanel.setGameOver(true);
+            GameJPanel.setGameOver();
         }
     }
 }

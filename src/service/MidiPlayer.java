@@ -17,6 +17,7 @@ public class MidiPlayer {
     private MusicPlayer songPlayer;
     private float bpm;
     public static int totalNotes;
+    private volatile boolean stopRequested;
 
     public MidiPlayer(MusicTrack musicTrack1, MusicTrack musicTrack2, String levelName, int delayMs) {
         totalNotes = 0;
@@ -28,6 +29,7 @@ public class MidiPlayer {
         songPlayer = new MusicPlayer(true, musicFilePath);
         this.delayMs = delayMs;
         initializeSequencer();
+        stopRequested = false;  // Initialize the stop flag
     }
 
     private void initializeSequencer() {
@@ -152,12 +154,27 @@ public class MidiPlayer {
     private void processEventsForMusicTrack(List<MidiEvent> events, MusicTrack musicTrack) {
         long lastTick = 0;
 
+        // Ensure events are sorted by tick
+        events.sort(Comparator.comparingLong(MidiEvent::getTick));
+
         for (MidiEvent event : events) {
+            if (stopRequested) {  // Check if stop is requested
+                break;
+            }
+
             long currentTick = event.getTick();
             long tickDifference = currentTick - lastTick;
 
+            // Log tick values and differences for debugging
+            System.out.println("Current Tick: " + currentTick + ", Last Tick: " + lastTick + ", Tick Difference: " + tickDifference);
+
             // Calculate the delay in milliseconds based on the tempo
             long delayInMs = tickToMs(tickDifference, bpm);
+
+            if (delayInMs < 0) {
+                System.err.println("Warning: Negative delay detected. Setting delay to 0.");
+                delayInMs = 0;  // Ensure that delayInMs is non-negative
+            }
 
             try {
                 Thread.sleep(delayInMs);
@@ -191,6 +208,7 @@ public class MidiPlayer {
     }
 
     public void stopMusic() {
+        stopRequested = true;  // Signal the threads to stop
         sequencer.stop();
         songPlayer.stop();
     }

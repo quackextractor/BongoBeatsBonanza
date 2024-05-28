@@ -7,7 +7,6 @@ import service.Score;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameOverScreen extends JFrame {
@@ -21,8 +20,21 @@ public class GameOverScreen extends JFrame {
     private int highestStreak;
 
     public GameOverScreen(String level) {
+        initScores();
+        setupFrame();
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        mainPanel.add(createCenterPanel(), BorderLayout.CENTER);
+        mainPanel.add(createImagePanel(), BorderLayout.EAST);
+        mainPanel.add(createBottomPanel(level), BorderLayout.SOUTH);
+
+        add(mainPanel);
+        setVisible(true);
+    }
+
+    private void initScores() {
         MusicPlayerManager.stopAllMusicPlayers();
-        this.maxScore = MidiPlayer.getTotalNotes() * 100;
+        this.maxScore = MidiPlayer.getTotalNotes() * 80;
         this.achievedScore = Score.getTotalScore();
         this.accuracy = Score.getAverageAccuracy();
         this.greatCount = Score.getGreatCount();
@@ -30,139 +42,84 @@ public class GameOverScreen extends JFrame {
         this.badCount = Score.getBadCount();
         this.missCount = Score.getMissCount();
         this.highestStreak = Score.getHighestStreak();
+    }
 
+    private void setupFrame() {
         setTitle("Game Over");
         setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+    }
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-
-        // Center Panel
+    private JPanel createCenterPanel() {
         JPanel centerPanel = new JPanel(new GridLayout(8, 1));
         centerPanel.setBackground(Color.BLACK);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        FancyJLabel titleLabel = new FancyJLabel("Game Over");
-        titleLabel.setForeground(Color.RED);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
-        titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(titleLabel);
+        centerPanel.add(createLabel("Game Over", Color.RED, 40));
+        centerPanel.add(createLabel(getGrade(), Color.WHITE, 30));
+        centerPanel.add(createLabel("Accuracy: " + String.format("%.2f", accuracy) + "%", Color.WHITE, 20));
+        centerPanel.add(createLabel(highestStreak == MidiPlayer.getTotalNotes() ? "Highest Streak: Full Streak!" : "Highest Streak: " + highestStreak, Color.WHITE, 20));
+        centerPanel.add(createLabel("Great Count: " + greatCount, Color.WHITE, 20));
+        centerPanel.add(createLabel("Good Count: " + goodCount, Color.WHITE, 20));
+        centerPanel.add(createLabel("Bad Count: " + badCount, Color.WHITE, 20));
+        centerPanel.add(createLabel("Miss Count: " + missCount, Color.WHITE, 20));
 
-        FancyJLabel gradeLabel = new FancyJLabel(getGrade());
-        gradeLabel.setForeground(Color.WHITE);
-        gradeLabel.setFont(new Font("Arial", Font.BOLD, 30));
-        gradeLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(gradeLabel);
+        return centerPanel;
+    }
 
-        FancyJLabel accuracyLabel = new FancyJLabel("Accuracy: " + String.format("%.2f", accuracy) + "%");
-        accuracyLabel.setForeground(Color.WHITE);
-        accuracyLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        accuracyLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(accuracyLabel);
+    private JLabel createLabel(String text, Color color, int fontSize) {
+        FancyJLabel label = new FancyJLabel(text);
+        label.setForeground(color);
+        label.setFont(new Font("Arial", Font.BOLD, fontSize));
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
+    }
 
-        FancyJLabel streakLabel;
-        if (highestStreak == MidiPlayer.getTotalNotes()) {
-            streakLabel = new FancyJLabel("Highest Streak: Full Streak!");
-        } else {
-            streakLabel = new FancyJLabel("Highest Streak: " + highestStreak);
-        }
-        streakLabel.setForeground(Color.WHITE);
-        streakLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        streakLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(streakLabel);
-
-        FancyJLabel greatCountLabel = new FancyJLabel("Great Count: " + greatCount);
-        greatCountLabel.setForeground(Color.WHITE);
-        greatCountLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        greatCountLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(greatCountLabel);
-
-        FancyJLabel goodCountLabel = new FancyJLabel("Good Count: " + goodCount);
-        goodCountLabel.setForeground(Color.WHITE);
-        goodCountLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        goodCountLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(goodCountLabel);
-
-        FancyJLabel badCountLabel = new FancyJLabel("Bad Count: " + badCount);
-        badCountLabel.setForeground(Color.WHITE);
-        badCountLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        badCountLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(badCountLabel);
-
-        FancyJLabel missCountLabel = new FancyJLabel("Miss Count: " + missCount);
-        missCountLabel.setForeground(Color.WHITE);
-        missCountLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        missCountLabel.setHorizontalAlignment(JLabel.CENTER);
-        centerPanel.add(missCountLabel);
-
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-
-        // Right Panel
+    private JPanel createImagePanel() {
         ImageIcon imageIcon = new ImageIcon("resources/sprites/cat0.png");
         JLabel imageLabel = new JLabel(imageIcon);
-        mainPanel.add(imageLabel, BorderLayout.EAST);
+        JPanel imagePanel = new JPanel();
+        imagePanel.add(imageLabel);
+        return imagePanel;
+    }
 
-        // Bottom Panel
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 20)); // Adjust horizontal and vertical gaps as needed
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0)); // Add padding
+    private JPanel createBottomPanel(String level) {
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 20));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-        // Retry Button
-        JButton retryButton = new JButton("Retry");
-        retryButton.setPreferredSize(new Dimension(200, 60)); // Set preferred size
-        retryButton.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size
-        retryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameController.startLevel(level);
-            }
-        });
-        bottomPanel.add(retryButton);
+        bottomPanel.add(createButton("Retry", e -> GameController.startLevel(level)));
+        bottomPanel.add(createButton("Quit to Menu", e -> {
+            MusicPlayerManager.stopAllMusicPlayers();
+            GameController.startGame();
+            GameController.closeAllFrames();
+        }));
+        bottomPanel.add(createButton("Quit to Desktop", e -> GameController.endGame()));
 
-        // Quit to Menu Button
-        JButton quitToMenuButton = new JButton("Quit to Menu");
-        quitToMenuButton.setPreferredSize(new Dimension(200, 60)); // Set preferred size
-        quitToMenuButton.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size
-        quitToMenuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MusicPlayerManager.stopAllMusicPlayers();
-                GameController.startGame();
-                GameController.closeAllFrames();
-            }
-        });
-        bottomPanel.add(quitToMenuButton);
+        return bottomPanel;
+    }
 
-        // Quit to Desktop Button
-        JButton quitToDesktopButton = new JButton("Quit to Desktop");
-        quitToDesktopButton.setPreferredSize(new Dimension(200, 60)); // Set preferred size
-        quitToDesktopButton.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size
-        quitToDesktopButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GameController.endGame();
-            }
-        });
-        bottomPanel.add(quitToDesktopButton);
-
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-        add(mainPanel);
-        setVisible(true);
+    private JButton createButton(String text, ActionListener actionListener) {
+        JButton button = new JButton(text);
+        button.setPreferredSize(new Dimension(200, 60));
+        button.setFont(new Font("Arial", Font.BOLD, 20));
+        button.addActionListener(actionListener);
+        return button;
     }
 
     private String getGrade() {
         double percentage = (double) achievedScore / maxScore * 100;
-
-        if (percentage >= 95) {
+      //  double percentage = (double) (MidiPlayer.totalNotes * 50) / maxScore * 100;
+      //  System.out.println(percentage);
+        if (percentage >= 90) {
             return "S";
-        } else if (percentage >= 80) {
+        } else if (percentage >= 70) {
             return "A";
-        } else if (percentage >= 60) {
+        } else if (percentage >= 50) {
             return "B";
-        } else if (percentage >= 40) {
+        } else if (percentage >= 30) {
             return "C";
-        } else if (percentage >= 20) {
+        } else if (percentage >= 10) {
             return "D";
         } else {
             return "F";

@@ -7,8 +7,10 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame {
-    private final int screenWidth = 800;
-    private final int screenHeight = 800;
+
+    private final int windowSize = 1200;
+    private final int screenWidth = windowSize;
+    private final int screenHeight = windowSize;
     private final int lineSpacing = screenWidth / 4;
     private final int lineWidth = screenWidth / 20;
     private final int firstLineX = (screenWidth - lineSpacing) / 2 - lineWidth / 2;
@@ -25,7 +27,7 @@ public class GameFrame extends JFrame {
     public GameFrame(String levelName) {
         setTitle(levelName);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(screenWidth, screenHeight);
+        setSize(screenWidth, screenHeight+41);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

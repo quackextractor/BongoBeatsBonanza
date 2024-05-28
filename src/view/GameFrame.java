@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame {
-    private final int screenWidth = 700;
+    private final int screenWidth = 800;
     private final int screenHeight = 800;
     private final int lineSpacing = screenWidth / 4;
     private final int lineWidth = screenWidth / 20;

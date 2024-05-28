@@ -6,6 +6,7 @@ import service.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicProgressBarUI;
+import javax.swing.plaf.metal.MetalProgressBarUI;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -103,7 +104,7 @@ public class GameJPanel extends JPanel {
     }
 
     private void preloadImages() {
-        backgroundImage = loadImage("resources/sprites/cat1.png");
+        backgroundImage = loadImage("resources/sprites/cat2.png");
         noteImage1 = loadImage("resources/sprites/redNote.png");
         noteImage2 = loadImage("resources/sprites/bluNote.png");
     }
@@ -228,12 +229,17 @@ public class GameJPanel extends JPanel {
             }
         });
 
+        // Set foreground color of progressBar to blue
+        progressBar.setUI(new MetalProgressBarUI());
+        progressBar.setForeground(Color.BLUE);
+
         setLayout(new BorderLayout());
         JPanel uiPanel = new JPanel();
         uiPanel.setLayout(new GridLayout(2, 1));
         add(uiPanel, BorderLayout.EAST);
         add(progressBar, BorderLayout.SOUTH);
         add(healthBar, BorderLayout.WEST);
+
         updateHealthBarColor();
     }
 
@@ -245,6 +251,7 @@ public class GameJPanel extends JPanel {
                 int progress = (int) ((double) currentTime / totalTime * 100);
                 progressBar.setValue(progress);
             }
+            repaint();
         }
     }
 

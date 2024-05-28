@@ -14,12 +14,15 @@ import java.io.IOException;
 
 public class GameJPanel extends JPanel {
     private static final int TIMER_DELAY = 10;
-    private Timer repaintTimer;
-    private Timer progressBarTimer; // Timer for updating the progress bar
+    private static final int PROGRESS_BAR_UPDATE_INTERVAL = 100;
+    private static final int INITIAL_NOTE_POOL_SIZE = 10;
 
+    private Timer repaintTimer;
+    private Timer progressBarTimer;
     private final int firstLineX;
     private final int secondLineX;
     private final int horizontalHeight;
+    private final String levelName;
 
     private Image backgroundImage;
     private Image noteImage1;
@@ -30,7 +33,6 @@ public class GameJPanel extends JPanel {
     private MusicTrack musicTrack2;
     private NoteMovingThread noteMovingThread1;
     private NoteMovingThread noteMovingThread2;
-    private String levelName;
     private MidiPlayer midiPlayer;
     private int spawnDistance;
     private int noteSize;
@@ -43,6 +45,7 @@ public class GameJPanel extends JPanel {
     private JLabel streakLabel;
     private JLabel accuracyLabel;
     private static boolean isGameOver = false;
+    private boolean gameOver = false;
 
     public static void modifyMoveParams(int x) {
         switch (x) {
@@ -90,22 +93,21 @@ public class GameJPanel extends JPanel {
 
         addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public void keyPressed(KeyEvent evt) {
                 handleKeyPress(evt);
             }
         });
     }
 
     private void preloadImages() {
-        // Load the images
         backgroundImage = loadImage("resources/sprites/cat1.png");
         noteImage1 = loadImage("resources/sprites/redNote.png");
         noteImage2 = loadImage("resources/sprites/bluNote.png");
     }
 
     private void initializeComponents() {
-        notePool1 = new NotePool(10);
-        notePool2 = new NotePool(10);
+        notePool1 = new NotePool(INITIAL_NOTE_POOL_SIZE);
+        notePool2 = new NotePool(INITIAL_NOTE_POOL_SIZE);
         spawnDistance = 2 * horizontalHeight;
         noteSize = 100;
         maxHitDistance = noteSize;
@@ -119,6 +121,7 @@ public class GameJPanel extends JPanel {
         notePool1.setUpNotePool(spawnDistance, noteImage1, firstLineX, horizontalHeight, noteSize);
         musicTrack2 = new MusicTrack(notePool2, maxHitDistance, noteImage2, noteSize, secondLineX, horizontalHeight, spawnDistance);
         notePool2.setUpNotePool(spawnDistance, noteImage2, secondLineX, horizontalHeight, noteSize);
+
         noteMovingThread1 = new NoteMovingThread(musicTrack1, moveAmount, moveInterval);
         noteMovingThread2 = new NoteMovingThread(musicTrack2, moveAmount, moveInterval);
         noteMovingThread1.start();
@@ -128,31 +131,25 @@ public class GameJPanel extends JPanel {
         midiPlayer = new MidiPlayer(musicTrack1, musicTrack2, levelName, delay);
     }
 
-    // Method to calculate time in milliseconds
-    // TODO fix this later
     public static int calculateTime(int distance, int distancePerMove, int moveDelay) {
-        // Calculate total number of moves needed
-        int totalMoves = distance / distancePerMove;
-        // Calculate total time including move delays
-        return totalMoves * moveDelay;
+        return (distance / distancePerMove) * moveDelay;
     }
 
     private void startGame() {
         Thread midiThread = new Thread(() -> {
             midiPlayer.loadAndPlayMidi();
-            startProgressBarTimer(); // Start the progress bar timer after loading the MIDI
+            startProgressBarTimer();
         });
         midiThread.start();
     }
 
     public static BufferedImage loadImage(String imagePath) {
-        BufferedImage image = null;
         try {
-            image = ImageIO.read(new File(imagePath));
+            return ImageIO.read(new File(imagePath));
         } catch (IOException e) {
             ErrorLogger.logStackTrace(e);
+            return null;
         }
-        return image;
     }
 
     private void startRepaintTimer() {
@@ -161,13 +158,12 @@ public class GameJPanel extends JPanel {
     }
 
     private void startProgressBarTimer() {
-        progressBarTimer = new Timer(100, e -> updateProgressBar()); // Update every 100ms
+        progressBarTimer = new Timer(PROGRESS_BAR_UPDATE_INTERVAL, e -> updateProgressBar());
         progressBarTimer.start();
     }
 
     private void handleKeyPress(KeyEvent evt) {
-        int keyCode = evt.getKeyCode();
-        switch (keyCode) {
+        switch (evt.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 musicTrack1.catchNote();
                 break;
@@ -183,7 +179,6 @@ public class GameJPanel extends JPanel {
         double averageAccuracy = Score.getAverageAccuracy();
         String formattedAccuracy = String.format("%.2f", averageAccuracy);
         accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
-        accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
         healthBar.setValue(Score.getHealth());
         updateHealthBarColor();
     }
@@ -194,26 +189,24 @@ public class GameJPanel extends JPanel {
         if (value > 80) {
             color = Color.GREEN;
         } else if (value > 60) {
-            color = new Color(255, 165, 0); // Orange
+            color = new Color(255, 165, 0);
         } else if (value > 40) {
-            color = new Color(255, 204, 51); // Yellow-Orange
+            color = new Color(255, 204, 51);
         } else if (value > 20) {
             color = Color.RED;
         } else {
-            color = new Color(165, 42, 42); // Brown
+            color = new Color(165, 42, 42);
         }
         healthBar.setForeground(color);
     }
 
     private void initializeUIComponents() {
-        // Initialize UI elements
         progressBar = new JProgressBar();
         healthBar = new JProgressBar(1, 0, 100);
         scoreLabel = new JLabel("Score: 0");
         streakLabel = new JLabel("Streak: 0");
         accuracyLabel = new JLabel("Accuracy: 100%");
 
-        // Set the UIManager for the health bar
         healthBar.setUI(new BasicProgressBarUI() {
             protected Color getSelectionBackground() {
                 return Color.RED;
@@ -224,7 +217,6 @@ public class GameJPanel extends JPanel {
             }
         });
 
-        // Add UI elements to panel
         setLayout(new BorderLayout());
         JPanel uiPanel = new JPanel();
         uiPanel.setLayout(new GridLayout(5, 1));
@@ -234,10 +226,9 @@ public class GameJPanel extends JPanel {
         add(uiPanel, BorderLayout.EAST);
         add(progressBar, BorderLayout.SOUTH);
         add(healthBar, BorderLayout.WEST);
-        // Update health bar color initially
+
         updateHealthBarColor();
     }
-
 
     private void updateProgressBar() {
         if (midiPlayer != null) {
@@ -249,9 +240,6 @@ public class GameJPanel extends JPanel {
             }
         }
     }
-
-    // Define a boolean flag to track if the game is over
-    private boolean gameOver;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -265,8 +253,6 @@ public class GameJPanel extends JPanel {
         g.drawLine(secondLineX, 0, secondLineX, getHeight());
         g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
 
-        // drawing catching field
-        // TODO replace this with an image
         int offset = noteSize / 2;
         g.drawOval(firstLineX - offset, horizontalHeight - offset, noteSize, noteSize);
         g.drawOval(secondLineX - offset, horizontalHeight - offset, noteSize, noteSize);
@@ -275,7 +261,7 @@ public class GameJPanel extends JPanel {
         musicTrack2.drawNotes(g);
 
         if ((Score.getHealth() <= 0 || Score.isComplete()) && !gameOver) {
-            gameOver = true; // Set the flag to true when game over is triggered
+            gameOver = true;
             noteMovingThread1.stopMoving();
             noteMovingThread2.stopMoving();
             midiPlayer.stopMusic();

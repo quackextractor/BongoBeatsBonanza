@@ -161,6 +161,11 @@ public class Score {
     }
 
     public static void reset() {
+        highestStreak = 0;
+        missCount = 0;
+        badCount = 0;
+        goodCount = 0;
+        greatCount = 0;
         totalScore = 0;
         streakCount = 0;
         totalAccuracy = 0.0;

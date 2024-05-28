@@ -1,5 +1,8 @@
 package service;
 
+import view.GameJPanel;
+import view.Ring;
+
 import java.awt.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -55,12 +58,11 @@ public class MusicTrack {
         notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, noteSize));
     }
 
-    // Catches Notes and gets accuracy
-    public void catchNote() {
+    public String catchNote() {
         // Checks if track is empty first to skip evaluation
         if (notesOnTrack.isEmpty()) {
             Score.miss();
-            return;
+            return "MISS";
         }
 
         Note noteWithMinDistance = Collections.min(notesOnTrack, noteDistanceComparator);
@@ -68,13 +70,37 @@ public class MusicTrack {
 
         if (minDistance > maxHitDistance) {
             Score.miss();
-            return;
+            return "MISS";
         }
 
         // remove caught note
         removeNoteFromTrack(noteWithMinDistance);
-        Score.determineAccuracy(minDistance, maxHitDistance);
+        String accuracy = Score.determineAccuracy(minDistance, maxHitDistance);
+
+        // Determine ring color based on accuracy
+        Color ringColor;
+        switch (accuracy) {
+            case "GREAT":
+                ringColor = Color.CYAN;
+                break;
+            case "GOOD":
+                ringColor = Color.GREEN;
+                break;
+            case "BAD":
+                ringColor = Color.RED;
+                break;
+            default:
+                ringColor = Color.GRAY;
+        }
+
+        // Create and add a ring
+        Point notePosition = new Point(targetXPos, targetYPos);
+        Ring ring = new Ring(notePosition, 10, 100, ringColor, 10, 2);
+        GameJPanel.addRing(ring);
+
+        return accuracy;
     }
+
 
     public void drawNotes(Graphics g) {
         for (Note note : notesOnTrack) {
@@ -86,15 +112,6 @@ public class MusicTrack {
 
             // Draw the note image at the specified position with size
             g.drawImage(noteImage, noteX - offset, noteY - offset, noteSize, noteSize, null);
-
-            // Draw a black filled circle
-            // g.setColor(Color.BLACK);
-            // g.fillOval(noteX, noteY, noteSize, noteSize);
-
-            // UNTESTED
-            // Draw guidelines below the note
-            //  g.setColor(Color.RED); // Set the color of the guidelines
-            //  g.drawLine(noteX - 10, noteY + noteSize, noteX + noteSize + 10, noteY + noteSize);
         }
     }
 

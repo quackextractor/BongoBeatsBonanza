@@ -11,11 +11,15 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.BasicStroke;
 
 public class GameJPanel extends JPanel {
     private static final int TIMER_DELAY = 10;
     private static final int PROGRESS_BAR_UPDATE_INTERVAL = 100;
     private static final int INITIAL_NOTE_POOL_SIZE = 10;
+    private static List<Ring> rings;
 
     private Timer repaintTimer;
     private Timer progressBarTimer;
@@ -81,6 +85,7 @@ public class GameJPanel extends JPanel {
         this.levelName = level;
         isGameOver = false;
         gameOver = false;
+        rings = new ArrayList<>();
 
         preloadImages();
         initializeComponents();
@@ -183,6 +188,21 @@ public class GameJPanel extends JPanel {
         updateHealthBarColor();
     }
 
+    public static void addRing(Ring ring) {
+        rings.add(ring);
+    }
+
+    private void updateRings() {
+        List<Ring> expiredRings = new ArrayList<>();
+        for (Ring ring : rings) {
+            ring.update();
+            if (ring.isExpired()) {
+                expiredRings.add(ring);
+            }
+        }
+        rings.removeAll(expiredRings);
+    }
+
     private void updateHealthBarColor() {
         int value = healthBar.getValue();
         Color color;
@@ -249,6 +269,12 @@ public class GameJPanel extends JPanel {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
 
+        // Draw rings first
+        for (Ring ring : rings) {
+            ring.draw(g);
+        }
+
+        // Draw lines and other game elements
         g.drawLine(firstLineX, 0, firstLineX, getHeight());
         g.drawLine(secondLineX, 0, secondLineX, getHeight());
         g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
@@ -271,5 +297,6 @@ public class GameJPanel extends JPanel {
         }
 
         updateMyUI();
+        updateRings();
     }
 }

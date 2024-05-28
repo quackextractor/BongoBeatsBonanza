@@ -69,28 +69,30 @@ public class Score {
     }
 
     // Compares distance with the max distance before miss to determine accuracy
-    public static void determineAccuracy(int distance, int maxDistance) {
+    public static String determineAccuracy(int distance, int maxDistance) {
         MusicPlayer fxPlayer = new MusicPlayer(false, "resources/sounds/tamboHit.wav");
         double accuracyPercentage = 100.0 * (1.0 - (double) distance / maxDistance);
+        totalAccuracy += accuracyPercentage;
 
         if (distance <= 5) {
             registerHit(HitType.GREAT);
             greatCount++;
             fxPlayer.playDefault();
             changeHealth(20);
+            return "GREAT";
         } else if (accuracyPercentage >= 50) {
             registerHit(HitType.GOOD);
             goodCount++;
             fxPlayer.playDefault();
             changeHealth(10);
+            return "GOOD";
         } else {
             registerHit(HitType.BAD);
             badCount++;
             fxPlayer.playDefault();
             changeHealth(-5);
+            return "BAD";
         }
-
-        totalAccuracy += accuracyPercentage;
     }
 
     public static void miss() {

@@ -127,10 +127,8 @@ public class TitleFrame extends JFrame {
                     settingsFrame.setIconImage(GameController.getGameIcon());
                     break;
                 case "Quit":
-                    if (!LevelSelectionFrame.hasLevelStarted) {
                         musicPlayer.stop();
                         GameController.endGame();
-                    }
                     break;
                 default:
                     break;

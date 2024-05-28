@@ -27,6 +27,7 @@ public class GameJPanel extends JPanel {
     private final int secondLineX;
     private final int horizontalHeight;
     private final String levelName;
+    private final GameFrame gameFrame;
 
     private Image backgroundImage;
     private Image noteImage1;
@@ -45,10 +46,6 @@ public class GameJPanel extends JPanel {
     private static int moveInterval;
     private JProgressBar progressBar;
     private JProgressBar healthBar;
-    private JLabel scoreLabel;
-    private JLabel streakLabel;
-    private JLabel accuracyLabel;
-    private static boolean isGameOver = false;
     private boolean gameOver = false;
 
     public static void modifyMoveParams(int x) {
@@ -78,12 +75,13 @@ public class GameJPanel extends JPanel {
         return Score.getHealth() == 0;
     }
 
-    public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level) {
+    public GameJPanel(int firstLineX, int secondLineX, int horizontalHeight, String level, GameFrame gameFrame) {
         this.firstLineX = firstLineX;
         this.secondLineX = secondLineX;
         this.horizontalHeight = horizontalHeight;
         this.levelName = level;
-        isGameOver = false;
+        this.gameFrame = gameFrame;
+        boolean isGameOver = false;
         gameOver = false;
         rings = new ArrayList<>();
 
@@ -179,11 +177,6 @@ public class GameJPanel extends JPanel {
     }
 
     public void updateMyUI() {
-        scoreLabel.setText("Score: " + Score.getTotalScore());
-        streakLabel.setText("Streak: " + Score.getStreakCount());
-        double averageAccuracy = Score.getAverageAccuracy();
-        String formattedAccuracy = String.format("%.2f", averageAccuracy);
-        accuracyLabel.setText("Accuracy: " + formattedAccuracy + "%");
         healthBar.setValue(Score.getHealth());
         updateHealthBarColor();
     }
@@ -223,9 +216,7 @@ public class GameJPanel extends JPanel {
     private void initializeUIComponents() {
         progressBar = new JProgressBar();
         healthBar = new JProgressBar(1, 0, 100);
-        scoreLabel = new JLabel("Score: 0");
-        streakLabel = new JLabel("Streak: 0");
-        accuracyLabel = new JLabel("Accuracy: 100%");
+        healthBar = new JProgressBar(1, 0, 100);
 
         healthBar.setUI(new BasicProgressBarUI() {
             protected Color getSelectionBackground() {
@@ -239,14 +230,10 @@ public class GameJPanel extends JPanel {
 
         setLayout(new BorderLayout());
         JPanel uiPanel = new JPanel();
-        uiPanel.setLayout(new GridLayout(5, 1));
-        uiPanel.add(scoreLabel);
-        uiPanel.add(streakLabel);
-        uiPanel.add(accuracyLabel);
+        uiPanel.setLayout(new GridLayout(2, 1));
         add(uiPanel, BorderLayout.EAST);
         add(progressBar, BorderLayout.SOUTH);
         add(healthBar, BorderLayout.WEST);
-
         updateHealthBarColor();
     }
 
@@ -296,6 +283,7 @@ public class GameJPanel extends JPanel {
             gameOverScreen.setIconImage(GameController.getGameIcon());
         }
 
+        gameFrame.updateMyUI();
         updateMyUI();
         updateRings();
     }

@@ -24,8 +24,8 @@ public class Main {
             throw new RuntimeException(e);
         }
        GameController gameController = new GameController(musicPath, fontName, gameIcon);
-       gameController.startGame();
-     //  GameFrame gameFrame = new GameFrame("oddLoop");
+   //    gameController.startGame();
+       GameFrame gameFrame = new GameFrame("Memory Merge");
      //   GameOverScreen gameOverScreen = new GameOverScreen("Memory Merge");
     }
 }

@@ -39,15 +39,17 @@ public class SettingsFrame extends JFrame {
         gbc.weightx = 1; // Make components stretch horizontally
 
         Font font = new Font(fontName, Font.BOLD, 30);
-        String defaultText = "Press the <ENTER> key to Confirm";
+        String defaultText = "Insert Key. Press the <ENTER> key to Confirm";
 
         // Catch Note Controls Settings
-        JLabel track1KeyLabel = createFancyLabel("Track 1 Key:", font);
+        FancyJLabel track1KeyLabel = createFancyLabel("Track 1 Key:", font);
+        setCustomColor(track1KeyLabel, Color.BLUE);
         track1KeyTextField = new JTextField(defaultText);
         addComponent(track1KeyLabel, gbc, 0, 4);
         addComponent(track1KeyTextField, gbc, 1, 4);
 
-        JLabel track2KeyLabel = createFancyLabel("Track 2 Key:", font);
+        FancyJLabel track2KeyLabel = createFancyLabel("Track 2 Key:", font);
+        setCustomColor(track2KeyLabel, Color.cyan);
         track2KeyTextField = new JTextField(defaultText);
         addComponent(track2KeyLabel, gbc, 0, 5);
         addComponent(track2KeyTextField, gbc, 1, 5);
@@ -55,25 +57,29 @@ public class SettingsFrame extends JFrame {
         adjustVertPos(gbc);
 
         // Volume Settings
-        JLabel musicVolumeLabel = createFancyLabel("Music vol", font);
+        FancyJLabel musicVolumeLabel = createFancyLabel("Music volume", font);
+        setCustomColor(musicVolumeLabel, Color.red);
         musicVolumeSlider = initializeVolumeSlider(MusicPlayer.getMusicVolume());
         addComponent(musicVolumeLabel, gbc, 0, 0);
         addComponent(musicVolumeSlider, gbc, 1, 0);
 
         // FX Volume Settings
-        JLabel fxVolumeLabel = createFancyLabel("FX vol", font);
+        FancyJLabel fxVolumeLabel = createFancyLabel("FX volume", font);
+        setCustomColor(fxVolumeLabel, Color.magenta);
         fxVolumeSlider = initializeVolumeSlider(MusicPlayer.getFxVolume());
         addComponent(fxVolumeLabel, gbc, 0, 1);
         addComponent(fxVolumeSlider, gbc, 1, 1);
 
         // Note Speed Settings
-        JLabel noteSpeedLabel = createFancyLabel("Note speed", font);
+        FancyJLabel noteSpeedLabel = createFancyLabel("Note speed", font);
+        setCustomColor(noteSpeedLabel, Color.GREEN);
         noteSpeedSlider = initializeSpeedSlider();
         addComponent(noteSpeedLabel, gbc, 0, 2);
         addComponent(noteSpeedSlider, gbc, 1, 2);
 
         // Difficulty Settings
-        JLabel difficultyLabel = createFancyLabel("Difficulty", font);
+        FancyJLabel difficultyLabel = createFancyLabel("Difficulty", font);
+        setCustomColor(difficultyLabel, Color.YELLOW);
         difficultySlider = initializeDifficultySlider();
         addComponent(difficultyLabel, gbc, 0, 3);
         addComponent(difficultySlider, gbc, 1, 3);
@@ -106,6 +112,12 @@ public class SettingsFrame extends JFrame {
         setVisible(true);
     }
 
+    private void setCustomColor(FancyJLabel fancyJLabel, Color color){
+        fancyJLabel.setShadowColor(color);
+        fancyJLabel.setShadowOffset(2);
+        fancyJLabel.setShadowOpacity(0.5F);
+    }
+
     private void adjustVertPos(GridBagConstraints gbc){
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.weighty = 1;
@@ -120,7 +132,7 @@ public class SettingsFrame extends JFrame {
     private FancyJLabel createFancyLabel(String text, Font font) {
         FancyJLabel label = new FancyJLabel(text, JLabel.LEFT);
         label.setFont(font);
-        label.setShadowOffset(2); // Set shadow offset to 2
+        label.setShadowOffset(2);
         return label;
     }
 
@@ -168,6 +180,7 @@ public class SettingsFrame extends JFrame {
     private void verifyAndSetKeyCode(String keyText, boolean is1Track) {
         if (keyText.length() != 1) {
             JOptionPane.showMessageDialog(this, "Invalid key! Please enter a single character key.", "Error", JOptionPane.ERROR_MESSAGE);
+            fxPlayer.play("resources/sounds/alert.wav");
             return;
         }
 
@@ -175,6 +188,7 @@ public class SettingsFrame extends JFrame {
         int keyCode = KeyEvent.getExtendedKeyCodeForChar(keyChar);
         if (keyCode == KeyEvent.CHAR_UNDEFINED) {
             JOptionPane.showMessageDialog(this, "Invalid key! Please enter a valid key character.", "Error", JOptionPane.ERROR_MESSAGE);
+            fxPlayer.play("resources/sounds/alert.wav");
             return;
         }
 

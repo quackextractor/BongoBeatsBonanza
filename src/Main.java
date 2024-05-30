@@ -1,7 +1,6 @@
 import controller.GameController;
 import service.ErrorLogger;
 import service.GameUtils;
-import view.GameJPanel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -239,12 +239,22 @@ public class GameJPanel extends JPanel {
             ring.draw(g);
         }
 
-        // Draw lines and other game elements
-        g.drawLine(firstLineX, 0, firstLineX, getHeight());
-        g.drawLine(secondLineX, 0, secondLineX, getHeight());
-        g.drawLine(0, horizontalHeight, getWidth(), horizontalHeight);
-
         int offset = noteSize / 2;
+
+        // First vertical line
+        g.drawLine(firstLineX, 0, firstLineX, horizontalHeight - offset);
+        g.drawLine(firstLineX, horizontalHeight + offset, firstLineX, 3*horizontalHeight);
+
+        // Second vertical line
+        g.drawLine(secondLineX, 0, secondLineX, horizontalHeight - offset);
+        g.drawLine(secondLineX, horizontalHeight + offset, secondLineX, 3*horizontalHeight);
+
+        // Horizontal line
+        g.drawLine(0, horizontalHeight, firstLineX-offset, horizontalHeight);
+        g.drawLine(getWidth(), horizontalHeight, secondLineX+offset, horizontalHeight);
+        g.drawLine(firstLineX+offset, horizontalHeight, secondLineX-offset, horizontalHeight);
+
+
         g.drawOval(firstLineX - offset, horizontalHeight - offset, noteSize, noteSize);
         g.drawOval(secondLineX - offset, horizontalHeight - offset, noteSize, noteSize);
 

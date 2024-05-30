@@ -68,14 +68,12 @@ public class MusicTrack {
         Note noteWithMinDistance = Collections.min(notesOnTrack, noteDistanceComparator);
         int minDistance = noteWithMinDistance.getDistance();
 
-        if (minDistance > maxHitDistance) {
-            Score.miss();
-            return;
-        }
-
-        // remove caught note
-        removeNoteFromTrack(noteWithMinDistance);
         String accuracy = Score.determineAccuracy(minDistance, maxHitDistance);
+
+        // Remove caught note from track
+        if (!accuracy.equals("MISS")){
+            removeNoteFromTrack(noteWithMinDistance);
+        }
 
         // Determine ring color based on accuracy
         Ring ring = getRing(accuracy);
@@ -83,8 +81,11 @@ public class MusicTrack {
 
     }
 
+    // Create and add a ring
     private Ring getRing(String accuracy) {
         Color ringColor;
+        Point notePosition = new Point(targetXPos, targetYPos);
+
         switch (accuracy) {
             case "GREAT":
                 ringColor = Color.CYAN;
@@ -97,11 +98,9 @@ public class MusicTrack {
                 break;
             default:
                 ringColor = Color.GRAY;
+                return new Ring(notePosition, noteSize/4, noteSize/2, ringColor, 5, 1);
         }
-
-        // Create and add a ring
-        Point notePosition = new Point(targetXPos, targetYPos);
-        return new Ring(notePosition, 10, 100, ringColor, 10, 2);
+        return new Ring(notePosition, noteSize/2, (int) (noteSize*1.5), ringColor, 10, 2);
     }
 
 

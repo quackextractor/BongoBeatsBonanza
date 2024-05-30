@@ -3,14 +3,12 @@ package view;
 import controller.GameController;
 import service.MusicPlayer;
 import service.MusicPlayerManager;
-import view.LevelSelectionFrame;
-import view.SettingsFrame;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 public class TitleFrame extends JFrame {
 
@@ -19,14 +17,14 @@ public class TitleFrame extends JFrame {
     private JLabel animationLabel;
     private ImageIcon[] animationFrames;
     private int currentFrameIndex;
-    private String fontName;
+    private final String fontName;
 
     public TitleFrame(String musicPath, String fontName) {
         LevelSelectionFrame.hasLevelStarted = false;
         this.fontName = fontName;
 
         setTitle("Bongo Beats Bonanza");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // Window size
         setSize(800, 800);
         // Center the window
@@ -43,9 +41,7 @@ public class TitleFrame extends JFrame {
         musicPlayer = new MusicPlayer(true, musicPath);
         musicPlayer.playDefault();
         MusicPlayerManager.addMusicPlayer(musicPlayer);
-        fxPlayer = new MusicPlayer(false, "");
-
-        int spacing = 10;  // Define the spacing from the left side of the screen
+        fxPlayer = new MusicPlayer(false, "resources/sounds/click.wav");
 
         setLayout(new BorderLayout());
         double logoScale = 2;
@@ -66,7 +62,7 @@ public class TitleFrame extends JFrame {
 
             // Wrap each button in a panel to apply padding
             JPanel buttonPanelWrapper = new JPanel(new BorderLayout());
-            buttonPanelWrapper.setBorder(new EmptyBorder(0, spacing, 0, 0));  // Add left padding
+            //    buttonPanelWrapper.setBorder(new EmptyBorder(0, 0, 0, 0));  // Add left padding
             buttonPanelWrapper.add(button, BorderLayout.CENTER);
 
             buttonPanel.add(buttonPanelWrapper);
@@ -75,18 +71,18 @@ public class TitleFrame extends JFrame {
         add(animationLabel, BorderLayout.PAGE_START);
         add(buttonPanel, BorderLayout.CENTER);
 
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosed(java.awt.event.WindowEvent windowEvent) {
-                if (!LevelSelectionFrame.hasLevelStarted) {
-                    musicPlayer.stop();
-                    GameController.endGame();
-                }
-            }
-        });
-
         setVisible(true);
     }
+
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        super.processWindowEvent(e);
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            musicPlayer.stop();
+            GameController.endGame();
+        }
+    }
+
 
     private void initializeAnimationFrames(int width, int height) {
         animationFrames = new ImageIcon[5];
@@ -118,18 +114,18 @@ public class TitleFrame extends JFrame {
             JButton source = (JButton) e.getSource();
             switch (source.getText()) {
                 case "Play":
-                    fxPlayer.play("resources/sounds/click.wav");
+                    fxPlayer.playDefault();
                     LevelSelectionFrame levelSelectionFrame = new LevelSelectionFrame();
                     levelSelectionFrame.setIconImage(GameController.getGameIcon());
                     break;
                 case "Settings":
-                    fxPlayer.play("resources/sounds/click.wav");
+                    fxPlayer.playDefault();
                     SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
                     settingsFrame.setIconImage(GameController.getGameIcon());
                     break;
                 case "Quit":
-                        musicPlayer.stop();
-                        GameController.endGame();
+                    musicPlayer.stop();
+                    GameController.endGame();
                     break;
                 default:
                     break;

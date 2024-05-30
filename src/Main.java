@@ -21,7 +21,7 @@ public class Main {
             ErrorLogger.logStackTrace(e);
             throw new RuntimeException(e);
         }
-       GameController gameController = new GameController(musicPath, fontName, gameIcon);
+       GameController.configGameController(musicPath, fontName, gameIcon);
        GameController.startGame();
     }
 }

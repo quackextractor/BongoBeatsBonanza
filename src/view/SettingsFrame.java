@@ -26,7 +26,7 @@ public class SettingsFrame extends JFrame {
         isOpen = true;
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 300);
+        setSize(600, 300);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

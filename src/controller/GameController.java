@@ -19,7 +19,7 @@ public class GameController {
     public static Image gameIcon;
     private static final MusicPlayer fxPlayer = new MusicPlayer(false,"");
 
-    public GameController(String musicPath, String fontName, Image icon) {
+    public static void configGameController(String musicPath, String fontName, Image icon) {
         GameController.gameIcon = icon;
         GameController.musicPath = musicPath;
         GameController.fontName = fontName;

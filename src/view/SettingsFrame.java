@@ -6,6 +6,8 @@ import service.Score;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -21,6 +23,7 @@ public class SettingsFrame extends JFrame {
     private JTextField track1KeyTextField;
     private JTextField track2KeyTextField;
     private MusicPlayer fxPlayer;
+    private Font font;
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         if (isOpen) {
@@ -38,7 +41,7 @@ public class SettingsFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10); // Add some padding
         gbc.weightx = 1; // Make components stretch horizontally
 
-        Font font = new Font(fontName, Font.BOLD, 30);
+        font = new Font(fontName, Font.BOLD, 30);
         String defaultText = "Insert Key. Press the <ENTER> key to Confirm";
 
         // Catch Note Controls Settings
@@ -112,13 +115,13 @@ public class SettingsFrame extends JFrame {
         setVisible(true);
     }
 
-    private void setCustomColor(FancyJLabel fancyJLabel, Color color){
+    private void setCustomColor(FancyJLabel fancyJLabel, Color color) {
         fancyJLabel.setShadowColor(color);
         fancyJLabel.setShadowOffset(2);
         fancyJLabel.setShadowOpacity(0.5F);
     }
 
-    private void adjustVertPos(GridBagConstraints gbc){
+    private void adjustVertPos(GridBagConstraints gbc) {
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.weighty = 1;
     }
@@ -194,10 +197,31 @@ public class SettingsFrame extends JFrame {
 
         if (is1Track) {
             GameJPanel.setTrack1Key(keyCode);
+            confirmFlash(track1KeyTextField);
         } else {
             GameJPanel.setTrack2Key(keyCode);
+            confirmFlash(track2KeyTextField);
         }
         fxPlayer.playDefault();
+    }
+
+    private static void confirmFlash(JTextField jTextField) {
+        String savedText = jTextField.getText();
+        jTextField.setText("CONFIRMED!");
+        jTextField.repaint();
+
+        // Use Swing Timer to change text back after a delay
+        Timer timer = new Timer(300, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jTextField.setText(savedText);
+                jTextField.repaint();
+            }
+        });
+
+        // Ensure the timer only runs once
+        timer.setRepeats(false);
+        timer.start();
     }
 
     private JSlider initializeDifficultySlider() {

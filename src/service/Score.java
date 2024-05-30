@@ -1,7 +1,5 @@
 package service;
 
-import view.GameJPanel;
-
 public class Score {
     private static int totalScore = 0;
     private static int streakCount = 0;
@@ -33,14 +31,6 @@ public class Score {
         }
     }
 
-    public static void setTotalScore(int totalScore) {
-        Score.totalScore = totalScore;
-    }
-
-    public static void setStreakCount(int streakCount) {
-        Score.streakCount = streakCount;
-    }
-
     public static boolean isComplete(){
         return MidiPlayer.totalNotes == totalNotes;
     }
@@ -65,7 +55,6 @@ public class Score {
 
         totalScore += hitType.getScoreValue();
         totalNotes++;
-        System.out.println(hitType + " hit! Score: " + totalScore);
     }
 
     // Compares distance with the max distance before miss to determine accuracy
@@ -135,7 +124,7 @@ public class Score {
      */
     public static void changeHealth(int amount) {
         if (amount < 0){
-            amount *= difficultyModifier;
+            amount *= (int) difficultyModifier;
         }
         health += amount;
 

@@ -9,10 +9,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MusicTrack {
 
-    private ConcurrentLinkedQueue<Note> notesOnTrack;
-    private NotePool notePool;
-    private int maxHitDistance;
-    private Comparator<Note> noteDistanceComparator = Comparator.comparingDouble(Note::getDistance);
+    private final ConcurrentLinkedQueue<Note> notesOnTrack;
+    private final NotePool notePool;
+    private final int maxHitDistance;
+    private final Comparator<Note> noteDistanceComparator = Comparator.comparingDouble(Note::getDistance);
 
     private final int targetXPos;
     private final int targetYPos;
@@ -58,11 +58,11 @@ public class MusicTrack {
         notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, noteSize));
     }
 
-    public String catchNote() {
+    public void catchNote() {
         // Checks if track is empty first to skip evaluation
         if (notesOnTrack.isEmpty()) {
             Score.miss();
-            return "MISS";
+            return;
         }
 
         Note noteWithMinDistance = Collections.min(notesOnTrack, noteDistanceComparator);
@@ -70,7 +70,7 @@ public class MusicTrack {
 
         if (minDistance > maxHitDistance) {
             Score.miss();
-            return "MISS";
+            return;
         }
 
         // remove caught note
@@ -78,6 +78,12 @@ public class MusicTrack {
         String accuracy = Score.determineAccuracy(minDistance, maxHitDistance);
 
         // Determine ring color based on accuracy
+        Ring ring = getRing(accuracy);
+        GameJPanel.addRing(ring);
+
+    }
+
+    private Ring getRing(String accuracy) {
         Color ringColor;
         switch (accuracy) {
             case "GREAT":
@@ -95,10 +101,7 @@ public class MusicTrack {
 
         // Create and add a ring
         Point notePosition = new Point(targetXPos, targetYPos);
-        Ring ring = new Ring(notePosition, 10, 100, ringColor, 10, 2);
-        GameJPanel.addRing(ring);
-
-        return accuracy;
+        return new Ring(notePosition, 10, 100, ringColor, 10, 2);
     }
 
 

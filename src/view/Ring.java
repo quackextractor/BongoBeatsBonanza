@@ -3,17 +3,15 @@ package view;
 import java.awt.*;
 
 public class Ring {
-    private Point center;
-    private int initialRadius;
-    private int maxRadius;
-    private Color color;
+    private final Point center;
+    private final int maxRadius;
+    private final Color color;
     private int currentRadius;
-    private int expansionRate;
+    private final int expansionRate;
     private int thickness;
 
     public Ring(Point center, int initialRadius, int maxRadius, Color color, int initialThickness, int expansionRate) {
         this.center = center;
-        this.initialRadius = initialRadius;
         this.maxRadius = maxRadius;
         this.color = color;
         this.currentRadius = initialRadius;

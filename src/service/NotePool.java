@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class NotePool {
-    private LinkedList<Note> noteLinkedList; // LinkedList for dynamic pool size
+    private final LinkedList<Note> noteLinkedList; // LinkedList for dynamic pool size
     private final int initialSize;
 
 

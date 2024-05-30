@@ -8,18 +8,6 @@ import java.awt.event.WindowEvent;
 
 public class GameFrame extends JFrame {
 
-    private final int windowSize = 800;
-    private final int screenWidth = windowSize;
-    private final int screenHeight = windowSize;
-    private final int lineSpacing = screenWidth / 4;
-    private final int lineWidth = screenWidth / 20;
-    private final int firstLineX = (screenWidth - lineSpacing) / 2 - lineWidth / 2;
-    private final int secondLineX = firstLineX + lineSpacing;
-    private final int horizontalHeight = screenHeight / 3;
-    private final GameJPanel gameJPanel;
-    private final FancyJLabel scoreLabel;
-    private final FancyJLabel streakLabel;
-    private final FancyJLabel accuracyLabel;
     private final FancyJLabel scoreValueLabel;
     private final FancyJLabel streakValueLabel;
     private final FancyJLabel accuracyValueLabel;
@@ -27,24 +15,30 @@ public class GameFrame extends JFrame {
     public GameFrame(String levelName) {
         setTitle(levelName);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(screenWidth, screenHeight+41);
+        int windowSize = 800;
+        setSize(windowSize, windowSize + 41);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        gameJPanel = new GameJPanel(firstLineX, secondLineX, horizontalHeight, levelName, this);
+        int lineSpacing = windowSize / 4;
+        int lineWidth = windowSize / 20;
+        int firstLineX = (windowSize - lineSpacing) / 2 - lineWidth / 2;
+        int secondLineX = firstLineX + lineSpacing;
+        int horizontalHeight = windowSize / 3;
+        GameJPanel gameJPanel = new GameJPanel(firstLineX, secondLineX, horizontalHeight, levelName, this);
 
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        gameJPanel.setBounds(0, 0, screenWidth, screenHeight);
+        layeredPane.setPreferredSize(new Dimension(windowSize, windowSize));
+        gameJPanel.setBounds(0, 0, windowSize, windowSize);
         layeredPane.add(gameJPanel, JLayeredPane.DEFAULT_LAYER);
 
         JPanel uiPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = setupGridBagConstraints();
 
         int width = 120;
-        scoreLabel = createFixedSizeLabel("Score:", width);
-        streakLabel = createFixedSizeLabel("Streak:", width);
-        accuracyLabel = createFixedSizeLabel("Accuracy:", width);
+        FancyJLabel scoreLabel = createFixedSizeLabel("Score:", width);
+        FancyJLabel streakLabel = createFixedSizeLabel("Streak:", width);
+        FancyJLabel accuracyLabel = createFixedSizeLabel("Accuracy:", width);
 
         scoreValueLabel = createValueLabel("0");
         streakValueLabel = createValueLabel("0");
@@ -58,7 +52,7 @@ public class GameFrame extends JFrame {
         int uiPanelWidth = 220;
         int uiPanelXOffset = -20;
         int uiPanelYOffset = 20;
-        uiPanel.setBounds(screenWidth - uiPanelWidth + uiPanelXOffset, uiPanelYOffset, uiPanelWidth, uiPanelHeight);
+        uiPanel.setBounds(windowSize - uiPanelWidth + uiPanelXOffset, uiPanelYOffset, uiPanelWidth, uiPanelHeight);
         uiPanel.setOpaque(false);
         layeredPane.add(uiPanel, JLayeredPane.PALETTE_LAYER);
 

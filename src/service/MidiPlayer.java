@@ -9,12 +9,11 @@ import java.util.*;
 
 public class MidiPlayer {
     private Sequencer sequencer;
-    private MusicTrack musicTrack1;
-    private MusicTrack musicTrack2;
-    private String midiFilePath;
-    private String musicFilePath;
-    private int delayMs;
-    private MusicPlayer songPlayer;
+    private final MusicTrack musicTrack1;
+    private final MusicTrack musicTrack2;
+    private final String midiFilePath;
+    private final int delayMs;
+    private final MusicPlayer songPlayer;
     private float bpm;
     public static int totalNotes;
     private volatile boolean stopRequested;
@@ -25,7 +24,7 @@ public class MidiPlayer {
         this.musicTrack2 = musicTrack2;
         String levelPath = "resources/levels/" + levelName;
         midiFilePath = levelPath + ".mid";
-        musicFilePath = levelPath + ".wav";
+        String musicFilePath = levelPath + ".wav";
         songPlayer = new MusicPlayer(true, musicFilePath);
         this.delayMs = delayMs;
         initializeSequencer();
@@ -60,13 +59,11 @@ public class MidiPlayer {
                     for (int i = 0; i < track.size(); i++) {
                         MidiEvent event = track.get(i);
                         MidiMessage message = event.getMessage();
-                        if (message instanceof ShortMessage) {
-                            ShortMessage shortMessage = (ShortMessage) message;
+                        if (message instanceof ShortMessage shortMessage) {
                             if (shortMessage.getCommand() == ShortMessage.NOTE_ON) {
                                 allNoteEvents.add(event);
                             }
-                        } else if (message instanceof MetaMessage) {
-                            MetaMessage metaMessage = (MetaMessage) message;
+                        } else if (message instanceof MetaMessage metaMessage) {
                             if (metaMessage.getType() == 0x51) {
                                 bpm = getBpmFromMetaMessage(metaMessage);
                                 System.out.println("BPM: " + bpm);
@@ -96,7 +93,7 @@ public class MidiPlayer {
                 try {
                     Thread.sleep(delayMs);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    ErrorLogger.logStackTrace(e);
                 }
 
                 if (GameJPanel.isGameOver()) {
@@ -111,7 +108,7 @@ public class MidiPlayer {
             }
 
         } catch (InvalidMidiDataException | IOException e) {
-            e.printStackTrace();
+            ErrorLogger.logStackTrace(e);
         }
     }
 
@@ -121,8 +118,7 @@ public class MidiPlayer {
         // Group events by pitch
         for (MidiEvent event : allNoteEvents) {
             MidiMessage message = event.getMessage();
-            if (message instanceof ShortMessage) {
-                ShortMessage shortMessage = (ShortMessage) message;
+            if (message instanceof ShortMessage shortMessage) {
                 if (shortMessage.getCommand() == ShortMessage.NOTE_ON) {
                     int pitch = shortMessage.getData1();
                     pitchToEventsMap.computeIfAbsent(pitch, k -> new ArrayList<>()).add(event);
@@ -165,12 +161,10 @@ public class MidiPlayer {
             long currentTick = event.getTick();
             long tickDifference = currentTick - lastTick;
 
-            // Log tick values and differences for debugging
-            System.out.println("Current Tick: " + currentTick + ", Last Tick: " + lastTick + ", Tick Difference: " + tickDifference);
-
             // Calculate the delay in milliseconds based on the tempo
             long delayInMs = tickToMs(tickDifference, bpm);
 
+            // This rarely ever happens, couldn't replicate issue
             if (delayInMs < 0) {
                 System.err.println("Warning: Negative delay detected. Setting delay to 0.");
                 delayInMs = 0;  // Ensure that delayInMs is non-negative
@@ -179,12 +173,11 @@ public class MidiPlayer {
             try {
                 Thread.sleep(delayInMs);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                ErrorLogger.logStackTrace(e);
             }
 
             MidiMessage message = event.getMessage();
-            if (message instanceof ShortMessage) {
-                ShortMessage shortMessage = (ShortMessage) message;
+            if (message instanceof ShortMessage shortMessage) {
                 if (shortMessage.getCommand() == ShortMessage.NOTE_ON) {
                     musicTrack.addNoteToTrack();
                 }

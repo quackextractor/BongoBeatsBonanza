@@ -1,9 +1,6 @@
 package service;
 
-import view.TitleFrame;
-
 import javax.sound.sampled.*;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,8 +8,8 @@ public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
     private String lastPlayed;
-    private boolean isMusic;
-    private String path;
+    private final boolean isMusic;
+    private final String path;
     private static float fxVolume = -20f;
     private static float musicVolume = -10f;
 
@@ -136,37 +133,5 @@ public class MusicPlayer {
             return clip.getMicrosecondLength();
         }
         else return 0;
-    }
-
-    public long getPausedTime() {
-        return pausedTime;
-    }
-
-    public void setPausedTime(long pausedTime) {
-        this.pausedTime = pausedTime;
-    }
-
-    public String getLastPlayed() {
-        return lastPlayed;
-    }
-
-    public void setLastPlayed(String lastPlayed) {
-        this.lastPlayed = lastPlayed;
-    }
-
-    public boolean isMusic() {
-        return isMusic;
-    }
-
-    public void setMusic(boolean music) {
-        isMusic = music;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 }

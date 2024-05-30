@@ -12,9 +12,8 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
-import java.awt.BasicStroke;
+import java.util.List;
 
 public class GameJPanel extends JPanel {
     private static final int TIMER_DELAY = 10;
@@ -22,8 +21,6 @@ public class GameJPanel extends JPanel {
     private static final int INITIAL_NOTE_POOL_SIZE = 10;
     private static List<Ring> rings;
 
-    private Timer repaintTimer;
-    private Timer progressBarTimer;
     private final int firstLineX;
     private final int secondLineX;
     private final int horizontalHeight;
@@ -33,21 +30,17 @@ public class GameJPanel extends JPanel {
     private Image backgroundImage;
     private Image noteImage1;
     private Image noteImage2;
-    private NotePool notePool1;
-    private NotePool notePool2;
     private MusicTrack musicTrack1;
     private MusicTrack musicTrack2;
     private NoteMovingThread noteMovingThread1;
     private NoteMovingThread noteMovingThread2;
     private MidiPlayer midiPlayer;
-    private int spawnDistance;
     private int noteSize;
-    private int maxHitDistance;
     private static int moveAmount;
     private static int moveInterval;
     private JProgressBar progressBar;
     private JProgressBar healthBar;
-    private boolean gameOver = false;
+    private boolean gameOver;
 
     public static void modifyMoveParams(int x) {
         switch (x) {
@@ -82,7 +75,6 @@ public class GameJPanel extends JPanel {
         this.horizontalHeight = horizontalHeight;
         this.levelName = level;
         this.gameFrame = gameFrame;
-        boolean isGameOver = false;
         gameOver = false;
         rings = new ArrayList<>();
 
@@ -110,11 +102,11 @@ public class GameJPanel extends JPanel {
     }
 
     private void initializeComponents() {
-        notePool1 = new NotePool(INITIAL_NOTE_POOL_SIZE);
-        notePool2 = new NotePool(INITIAL_NOTE_POOL_SIZE);
-        spawnDistance = 2 * horizontalHeight;
+        NotePool notePool1 = new NotePool(INITIAL_NOTE_POOL_SIZE);
+        NotePool notePool2 = new NotePool(INITIAL_NOTE_POOL_SIZE);
+        int spawnDistance = 2 * horizontalHeight;
         noteSize = 100;
-        maxHitDistance = noteSize;
+        int maxHitDistance = noteSize;
 
         if (moveAmount == 0) {
             moveAmount = 1;
@@ -157,12 +149,12 @@ public class GameJPanel extends JPanel {
     }
 
     private void startRepaintTimer() {
-        repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
+        Timer repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
         repaintTimer.start();
     }
 
     private void startProgressBarTimer() {
-        progressBarTimer = new Timer(PROGRESS_BAR_UPDATE_INTERVAL, e -> updateProgressBar());
+        Timer progressBarTimer = new Timer(PROGRESS_BAR_UPDATE_INTERVAL, e -> updateProgressBar());
         progressBarTimer.start();
     }
 

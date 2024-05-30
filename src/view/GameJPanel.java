@@ -3,21 +3,17 @@ package view;
 import controller.GameController;
 import service.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import javax.swing.plaf.metal.MetalProgressBarUI;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameJPanel extends JPanel {
-    private static final int TIMER_DELAY = 10;
-    private static final int PROGRESS_BAR_UPDATE_INTERVAL = 100;
+    public static final int TIMER_DELAY = 10;
+    public static final int PROGRESS_BAR_UPDATE_INTERVAL = 100;
     private static final int INITIAL_NOTE_POOL_SIZE = 10;
     private static List<Ring> rings;
 
@@ -27,11 +23,11 @@ public class GameJPanel extends JPanel {
     private final String levelName;
     private final GameFrame gameFrame;
 
-    private Image backgroundImage;
-    private Image noteImage1;
-    private Image noteImage2;
-    private MusicTrack musicTrack1;
-    private MusicTrack musicTrack2;
+    public Image backgroundImage;
+    public Image noteImage1;
+    public Image noteImage2;
+    public MusicTrack musicTrack1;
+    public MusicTrack musicTrack2;
     private NoteMovingThread noteMovingThread1;
     private NoteMovingThread noteMovingThread2;
     private MidiPlayer midiPlayer;
@@ -78,14 +74,14 @@ public class GameJPanel extends JPanel {
         gameOver = false;
         rings = new ArrayList<>();
 
-        preloadImages();
+        GameUtils.preloadImages(this);
         initializeComponents();
         initializeUIComponents();
         setFocusable(true);
         requestFocusInWindow();
         Score.reset();
         startGame();
-        startRepaintTimer();
+        GameUtils.startRepaintTimer(this);
 
         addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
@@ -95,10 +91,15 @@ public class GameJPanel extends JPanel {
         });
     }
 
-    private void preloadImages() {
-        backgroundImage = loadImage("resources/sprites/cat2.png");
-        noteImage1 = loadImage("resources/sprites/redNote.png");
-        noteImage2 = loadImage("resources/sprites/bluNote.png");
+    public void handleKeyPress(KeyEvent evt) {
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                musicTrack1.catchNote();
+                break;
+            case KeyEvent.VK_RIGHT:
+                musicTrack2.catchNote();
+                break;
+        }
     }
 
     private void initializeComponents() {
@@ -134,39 +135,9 @@ public class GameJPanel extends JPanel {
     private void startGame() {
         Thread midiThread = new Thread(() -> {
             midiPlayer.loadAndPlayMidi();
-            startProgressBarTimer();
+            GameUtils.startProgressBarTimer(this);
         });
         midiThread.start();
-    }
-
-    public static BufferedImage loadImage(String imagePath) {
-        try {
-            return ImageIO.read(new File(imagePath));
-        } catch (IOException e) {
-            ErrorLogger.logStackTrace(e);
-            return null;
-        }
-    }
-
-    private void startRepaintTimer() {
-        Timer repaintTimer = new Timer(TIMER_DELAY, e -> repaint());
-        repaintTimer.start();
-    }
-
-    private void startProgressBarTimer() {
-        Timer progressBarTimer = new Timer(PROGRESS_BAR_UPDATE_INTERVAL, e -> updateProgressBar());
-        progressBarTimer.start();
-    }
-
-    private void handleKeyPress(KeyEvent evt) {
-        switch (evt.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-                musicTrack1.catchNote();
-                break;
-            case KeyEvent.VK_RIGHT:
-                musicTrack2.catchNote();
-                break;
-        }
     }
 
     public void updateMyUI() {
@@ -235,7 +206,7 @@ public class GameJPanel extends JPanel {
         updateHealthBarColor();
     }
 
-    private void updateProgressBar() {
+    public void updateProgressBar() {
         if (midiPlayer != null) {
             long currentTime = midiPlayer.getMicroSecondPos();
             long totalTime = midiPlayer.getMicroSecondLength();

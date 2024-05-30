@@ -1,5 +1,6 @@
 import controller.GameController;
 import service.ErrorLogger;
+import service.GameUtils;
 import view.GameJPanel;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ public class Main {
         String musicPath = "resources/music/menu.wav";
         String fontName = "Arial";
         Image gameIcon;
-        gameIcon = GameJPanel.loadImage("resources/sprites/icon.png");
+        gameIcon = GameUtils.loadImage("resources/sprites/icon.png");
 
         // Applies System look to all Frames
         try {

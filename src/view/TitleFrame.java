@@ -22,6 +22,7 @@ public class TitleFrame extends JFrame {
     private String fontName;
 
     public TitleFrame(String musicPath, String fontName) {
+        LevelSelectionFrame.hasLevelStarted = false;
         this.fontName = fontName;
 
         setTitle("Bongo Beats Bonanza");

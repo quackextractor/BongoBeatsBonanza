@@ -37,6 +37,8 @@ public class GameJPanel extends JPanel {
     private JProgressBar progressBar;
     private JProgressBar healthBar;
     private boolean gameOver;
+    private static int track1KeyCode;
+    private static int track2KeyCode;
 
     public static void modifyMoveParams(int x) {
         switch (x) {
@@ -71,6 +73,7 @@ public class GameJPanel extends JPanel {
         this.horizontalHeight = horizontalHeight;
         this.levelName = level;
         this.gameFrame = gameFrame;
+
         gameOver = false;
         rings = new ArrayList<>();
 
@@ -92,13 +95,11 @@ public class GameJPanel extends JPanel {
     }
 
     public void handleKeyPress(KeyEvent evt) {
-        switch (evt.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
-                musicTrack1.catchNote();
-                break;
-            case KeyEvent.VK_RIGHT:
-                musicTrack2.catchNote();
-                break;
+        int keyCode = evt.getKeyCode();
+        if (keyCode == KeyEvent.VK_LEFT || keyCode == track1KeyCode) {
+            musicTrack1.catchNote();
+        } else if (keyCode == KeyEvent.VK_RIGHT || keyCode == track2KeyCode) {
+            musicTrack2.catchNote();
         }
     }
 
@@ -204,6 +205,13 @@ public class GameJPanel extends JPanel {
         add(healthBar, BorderLayout.WEST);
 
         updateHealthBarColor();
+    }
+
+    public static void setTrack2Key(int keyCode) {
+        track2KeyCode = keyCode;
+    }
+    public static void setTrack1Key(int keyCode) {
+        track1KeyCode = keyCode;
     }
 
     public void updateProgressBar() {

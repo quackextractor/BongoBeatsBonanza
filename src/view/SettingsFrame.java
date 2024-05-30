@@ -6,6 +6,7 @@ import service.Score;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
 public class SettingsFrame extends JFrame {
@@ -17,6 +18,9 @@ public class SettingsFrame extends JFrame {
     private static int noteSpeed = 2;
     private JSlider noteSpeedSlider;
     private float volumeValue = -10;
+    private JTextField track1KeyTextField;
+    private JTextField track2KeyTextField;
+    private MusicPlayer fxPlayer;
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         if (isOpen) {
@@ -26,7 +30,7 @@ public class SettingsFrame extends JFrame {
         isOpen = true;
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 300);
+        setSize(600, 600);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -35,6 +39,20 @@ public class SettingsFrame extends JFrame {
         gbc.weightx = 1; // Make components stretch horizontally
 
         Font font = new Font(fontName, Font.BOLD, 30);
+        String defaultText = "Press the <ENTER> key to Confirm";
+
+        // Catch Note Controls Settings
+        JLabel track1KeyLabel = createFancyLabel("Track 1 Key:", font);
+        track1KeyTextField = new JTextField(defaultText);
+        addComponent(track1KeyLabel, gbc, 0, 4);
+        addComponent(track1KeyTextField, gbc, 1, 4);
+
+        JLabel track2KeyLabel = createFancyLabel("Track 2 Key:", font);
+        track2KeyTextField = new JTextField(defaultText);
+        addComponent(track2KeyLabel, gbc, 0, 5);
+        addComponent(track2KeyTextField, gbc, 1, 5);
+
+        adjustVertPos(gbc);
 
         // Volume Settings
         JLabel musicVolumeLabel = createFancyLabel("Music vol", font);
@@ -60,18 +78,17 @@ public class SettingsFrame extends JFrame {
         addComponent(difficultyLabel, gbc, 0, 3);
         addComponent(difficultySlider, gbc, 1, 3);
 
-        // Adjust vertical positioning
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.weighty = 1;
+        adjustVertPos(gbc);
 
         // Configure settings
-        MusicPlayer fxPlayer = new MusicPlayer(false, "");
+        fxPlayer = new MusicPlayer(false, "resources/sounds/click.wav");
         MusicPlayerManager.addMusicPlayer(musicPlayer);
         MusicPlayerManager.addMusicPlayer(fxPlayer);
         configMusicVolume(musicPlayer, fxPlayer);
-        configFxVolume(fxPlayer);
-        configSpeed(fxPlayer);
-        configDifficulty(fxPlayer);
+        configFxVolume();
+        configSpeed();
+        configDifficulty();
+        configCatchNoteControls();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -87,6 +104,11 @@ public class SettingsFrame extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    private void adjustVertPos(GridBagConstraints gbc){
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 1;
     }
 
     private void addComponent(Component component, GridBagConstraints gbc, int x, int y) {
@@ -131,6 +153,39 @@ public class SettingsFrame extends JFrame {
         return slider;
     }
 
+    private void configCatchNoteControls() {
+        track1KeyTextField.addActionListener(e -> {
+            String keyText = track1KeyTextField.getText().toUpperCase();
+            verifyAndSetKeyCode(keyText, true);
+        });
+
+        track2KeyTextField.addActionListener(e -> {
+            String keyText = track2KeyTextField.getText().toUpperCase();
+            verifyAndSetKeyCode(keyText, false);
+        });
+    }
+
+    private void verifyAndSetKeyCode(String keyText, boolean is1Track) {
+        if (keyText.length() != 1) {
+            JOptionPane.showMessageDialog(this, "Invalid key! Please enter a single character key.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        char keyChar = keyText.charAt(0);
+        int keyCode = KeyEvent.getExtendedKeyCodeForChar(keyChar);
+        if (keyCode == KeyEvent.CHAR_UNDEFINED) {
+            JOptionPane.showMessageDialog(this, "Invalid key! Please enter a valid key character.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (is1Track) {
+            GameJPanel.setTrack1Key(keyCode);
+        } else {
+            GameJPanel.setTrack2Key(keyCode);
+        }
+        fxPlayer.playDefault();
+    }
+
     private JSlider initializeDifficultySlider() {
         JSlider slider = new JSlider(1, 3, difficulty);
         customizeSlider(slider);
@@ -166,31 +221,31 @@ public class SettingsFrame extends JFrame {
         });
     }
 
-    private void configFxVolume(MusicPlayer fxPlayer) {
+    private void configFxVolume() {
         fxVolumeSlider.addChangeListener(e -> {
             if (!fxVolumeSlider.getValueIsAdjusting()) {
                 volumeValue = fxVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, false);
-                fxPlayer.play("resources/sounds/click.wav");
+                fxPlayer.playDefault();
             }
         });
     }
 
-    private void configDifficulty(MusicPlayer fxPlayer) {
+    private void configDifficulty() {
         difficultySlider.addChangeListener(e -> {
             if (!difficultySlider.getValueIsAdjusting()) {
                 difficulty = difficultySlider.getValue();
-                fxPlayer.play("resources/sounds/click.wav");
-                Score.setDifficultyModifier(difficulty*0.5);
+                fxPlayer.playDefault();
+                Score.setDifficultyModifier(difficulty * 0.5);
             }
         });
     }
 
-    private void configSpeed(MusicPlayer fxPlayer) {
+    private void configSpeed() {
         noteSpeedSlider.addChangeListener(e -> {
             if (!noteSpeedSlider.getValueIsAdjusting()) {
                 noteSpeed = noteSpeedSlider.getValue();
-                fxPlayer.play("resources/sounds/click.wav");
+                fxPlayer.playDefault();
                 GameJPanel.modifyMoveParams(noteSpeed);
             }
         });

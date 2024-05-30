@@ -39,6 +39,7 @@ public class GameJPanel extends JPanel {
     private boolean gameOver;
     private static int track1KeyCode;
     private static int track2KeyCode;
+    private GameOverScreen gameOverScreen;
 
     public static void modifyMoveParams(int x) {
         switch (x) {
@@ -257,7 +258,11 @@ public class GameJPanel extends JPanel {
             noteMovingThread2.stopMoving();
             midiPlayer.stopMusic();
             LevelSelectionFrame.setIsOpen(false);
-            GameOverScreen gameOverScreen = new GameOverScreen(levelName);
+            if (Score.isComplete()) {
+                 gameOverScreen = new GameOverScreen(levelName, "Finish", Color.GREEN);
+            } else {
+                 gameOverScreen = new GameOverScreen(levelName, "Game Over", Color.RED);
+            }
             gameOverScreen.setIconImage(GameController.getGameIcon());
         }
 

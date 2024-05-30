@@ -18,8 +18,12 @@ public class GameOverScreen extends JFrame {
     private int badCount;
     private int missCount;
     private int highestStreak;
+    private final String title;
+    private final Color titleColor;
 
-    public GameOverScreen(String level) {
+    public GameOverScreen(String level, String title, Color titleColor) {
+        this.title = title;
+        this.titleColor = titleColor;
         initScores();
         setupFrame();
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -45,7 +49,7 @@ public class GameOverScreen extends JFrame {
     }
 
     private void setupFrame() {
-        setTitle("Game Over");
+        setTitle(title);
         setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -56,7 +60,7 @@ public class GameOverScreen extends JFrame {
         centerPanel.setBackground(Color.BLACK);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        centerPanel.add(createLabel("Game Over", Color.RED, 40));
+        centerPanel.add(createLabel(title, titleColor, 40));
         centerPanel.add(createLabel(getGrade(), Color.WHITE, 30));
         centerPanel.add(createLabel("Accuracy: " + String.format("%.2f", accuracy) + "%", Color.WHITE, 20));
         centerPanel.add(createLabel(highestStreak == MidiPlayer.getTotalNotes() ? "Highest Streak: Full Streak!" : "Highest Streak: " + highestStreak, Color.WHITE, 20));
@@ -109,8 +113,6 @@ public class GameOverScreen extends JFrame {
 
     private String getGrade() {
         double percentage = (double) achievedScore / maxScore * 100;
-      //  double percentage = (double) (MidiPlayer.totalNotes * 50) / maxScore * 100;
-      //  System.out.println(percentage);
         if (percentage >= 90) {
             return "S";
         } else if (percentage >= 70) {

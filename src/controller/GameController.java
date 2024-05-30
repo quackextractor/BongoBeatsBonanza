@@ -2,8 +2,10 @@ package controller;
 
 import service.MusicPlayer;
 import service.MusicPlayerManager;
+import service.SettingsManager;
 import view.GameFrame;
 import view.LevelSelectionFrame;
+import view.SettingsFrame;
 import view.TitleFrame;
 
 import javax.swing.*;
@@ -26,6 +28,8 @@ public class GameController {
     }
 
     public static void startGame() {
+        SettingsManager settingsManager = new SettingsManager();
+        SettingsFrame.loadSettings(settingsManager);
         SwingUtilities.invokeLater(() -> {
             TitleFrame titleFrame = new TitleFrame(musicPath, fontName);
             titleFrame.setIconImage(gameIcon);

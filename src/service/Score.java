@@ -126,11 +126,11 @@ public class Score {
      * @param amount The amount by which to change the health. Positive values increase health,
      *               negative values decrease health.
      */
-    public static void changeHealth(int amount) {
+    public static void changeHealth(double amount) {
         if (amount < 0){
-            amount *= (int) difficultyModifier;
+            amount *= difficultyModifier;
         }
-        health += amount;
+        health += (int) amount;
 
         // Ensure health does not exceed 100
         if (health > 100) {

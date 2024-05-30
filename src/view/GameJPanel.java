@@ -60,7 +60,7 @@ public class GameJPanel extends JPanel {
     }
 
     public static void setGameOver() {
-        Score.changeHealth(-100);
+        Score.changeHealth(-1000);
     }
 
     public static boolean isGameOver() {

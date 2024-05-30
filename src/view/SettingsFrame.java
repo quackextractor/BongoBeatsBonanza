@@ -26,7 +26,7 @@ public class SettingsFrame extends JFrame {
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         settingsManager = new SettingsManager();
-        loadSettings();
+        loadSettings(settingsManager);
 
         if (isOpen) {
             toFront();
@@ -306,9 +306,12 @@ public class SettingsFrame extends JFrame {
         });
     }
 
-    private void loadSettings() {
+    public static void loadSettings(SettingsManager settingsManager) {
         difficulty = settingsManager.getDifficulty();
-        noteSpeed = settingsManager.getNoteSpeed();
+        Score.setDifficultyModifier(difficulty * 0.5);
+        GameJPanel.modifyMoveParams(settingsManager.getNoteSpeed());
+        MusicPlayer.setMusicVolume(settingsManager.getMusicVolume());
+        MusicPlayer.setFxVolume(settingsManager.getFxVolume());
         GameJPanel.setTrack1Key(settingsManager.getTrack1Key());
         GameJPanel.setTrack2Key(settingsManager.getTrack2Key());
     }
@@ -317,4 +320,3 @@ public class SettingsFrame extends JFrame {
         settingsManager.saveSettings();
     }
 }
-

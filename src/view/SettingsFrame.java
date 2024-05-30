@@ -6,8 +6,6 @@ import service.Score;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
@@ -23,7 +21,6 @@ public class SettingsFrame extends JFrame {
     private JTextField track1KeyTextField;
     private JTextField track2KeyTextField;
     private MusicPlayer fxPlayer;
-    private Font font;
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         if (isOpen) {
@@ -41,7 +38,7 @@ public class SettingsFrame extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10); // Add some padding
         gbc.weightx = 1; // Make components stretch horizontally
 
-        font = new Font(fontName, Font.BOLD, 30);
+        Font font = new Font(fontName, Font.BOLD, 30);
         String defaultText = "Insert Key. Press the <ENTER> key to Confirm";
 
         // Catch Note Controls Settings
@@ -211,12 +208,9 @@ public class SettingsFrame extends JFrame {
         jTextField.repaint();
 
         // Use Swing Timer to change text back after a delay
-        Timer timer = new Timer(300, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jTextField.setText(savedText);
-                jTextField.repaint();
-            }
+        Timer timer = new Timer(300, e -> {
+            jTextField.setText(savedText);
+            jTextField.repaint();
         });
 
         // Ensure the timer only runs once

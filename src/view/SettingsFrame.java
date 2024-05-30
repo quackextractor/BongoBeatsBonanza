@@ -3,6 +3,7 @@ package view;
 import service.MusicPlayer;
 import service.MusicPlayerManager;
 import service.Score;
+import service.SettingsManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +22,12 @@ public class SettingsFrame extends JFrame {
     private JTextField track1KeyTextField;
     private JTextField track2KeyTextField;
     private MusicPlayer fxPlayer;
+    private final SettingsManager settingsManager;
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
+        settingsManager = new SettingsManager();
+        loadSettings();
+
         if (isOpen) {
             toFront();
             return;
@@ -39,18 +44,28 @@ public class SettingsFrame extends JFrame {
         gbc.weightx = 1; // Make components stretch horizontally
 
         Font font = new Font(fontName, Font.BOLD, 30);
-        String defaultText = "Insert Key. Press the <ENTER> key to Confirm";
+        String defaultText = "Insert an alternative key here. <ENTER> to Confirm";
+
+        String defaultText1 = KeyEvent.getKeyText(settingsManager.getTrack1Key());
+        String defaultText2 = KeyEvent.getKeyText(settingsManager.getTrack2Key());
+
+        if (defaultText1.equals("Unknown keyCode: 0x0")) {
+            defaultText1 = defaultText;
+        }
+        if (defaultText2.equals("Unknown keyCode: 0x0")) {
+            defaultText2 = defaultText;
+        }
 
         // Catch Note Controls Settings
         FancyJLabel track1KeyLabel = createFancyLabel("Track 1 Key:", font);
         setCustomColor(track1KeyLabel, Color.BLUE);
-        track1KeyTextField = new JTextField(defaultText);
+        track1KeyTextField = new JTextField(defaultText1);
         addComponent(track1KeyLabel, gbc, 0, 4);
         addComponent(track1KeyTextField, gbc, 1, 4);
 
         FancyJLabel track2KeyLabel = createFancyLabel("Track 2 Key:", font);
         setCustomColor(track2KeyLabel, Color.cyan);
-        track2KeyTextField = new JTextField(defaultText);
+        track2KeyTextField = new JTextField(defaultText2);
         addComponent(track2KeyLabel, gbc, 0, 5);
         addComponent(track2KeyTextField, gbc, 1, 5);
 
@@ -59,14 +74,14 @@ public class SettingsFrame extends JFrame {
         // Volume Settings
         FancyJLabel musicVolumeLabel = createFancyLabel("Music volume", font);
         setCustomColor(musicVolumeLabel, Color.red);
-        musicVolumeSlider = initializeVolumeSlider(MusicPlayer.getMusicVolume());
+        musicVolumeSlider = initializeVolumeSlider(settingsManager.getMusicVolume());
         addComponent(musicVolumeLabel, gbc, 0, 0);
         addComponent(musicVolumeSlider, gbc, 1, 0);
 
         // FX Volume Settings
         FancyJLabel fxVolumeLabel = createFancyLabel("FX volume", font);
         setCustomColor(fxVolumeLabel, Color.magenta);
-        fxVolumeSlider = initializeVolumeSlider(MusicPlayer.getFxVolume());
+        fxVolumeSlider = initializeVolumeSlider(settingsManager.getFxVolume());
         addComponent(fxVolumeLabel, gbc, 0, 1);
         addComponent(fxVolumeSlider, gbc, 1, 1);
 
@@ -100,12 +115,14 @@ public class SettingsFrame extends JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
+                saveSettings();
                 fxPlayer.play("resources/sounds/exit.wav");
             }
 
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
+                saveSettings();
             }
         });
 
@@ -194,9 +211,11 @@ public class SettingsFrame extends JFrame {
 
         if (is1Track) {
             GameJPanel.setTrack1Key(keyCode);
+            settingsManager.setTrack1Key(keyCode);
             confirmFlash(track1KeyTextField);
         } else {
             GameJPanel.setTrack2Key(keyCode);
+            settingsManager.setTrack2Key(keyCode);
             confirmFlash(track2KeyTextField);
         }
         fxPlayer.playDefault();
@@ -249,6 +268,7 @@ public class SettingsFrame extends JFrame {
                 musicPlayer.pause();
                 fxPlayer.playWithCustomVolume(volumeValue, "resources/sounds/click.wav");
                 musicPlayer.resume();
+                settingsManager.setMusicVolume((int) volumeValue);
             }
         });
     }
@@ -259,6 +279,7 @@ public class SettingsFrame extends JFrame {
                 volumeValue = fxVolumeSlider.getValue();
                 MusicPlayer.changeVolume(volumeValue, false);
                 fxPlayer.playDefault();
+                settingsManager.setFxVolume((int) volumeValue);
             }
         });
     }
@@ -269,6 +290,7 @@ public class SettingsFrame extends JFrame {
                 difficulty = difficultySlider.getValue();
                 fxPlayer.playDefault();
                 Score.setDifficultyModifier(difficulty * 0.5);
+                settingsManager.setDifficulty(difficulty);
             }
         });
     }
@@ -279,7 +301,20 @@ public class SettingsFrame extends JFrame {
                 noteSpeed = noteSpeedSlider.getValue();
                 fxPlayer.playDefault();
                 GameJPanel.modifyMoveParams(noteSpeed);
+                settingsManager.setNoteSpeed(noteSpeed);
             }
         });
     }
+
+    private void loadSettings() {
+        difficulty = settingsManager.getDifficulty();
+        noteSpeed = settingsManager.getNoteSpeed();
+        GameJPanel.setTrack1Key(settingsManager.getTrack1Key());
+        GameJPanel.setTrack2Key(settingsManager.getTrack2Key());
+    }
+
+    private void saveSettings() {
+        settingsManager.saveSettings();
+    }
 }
+

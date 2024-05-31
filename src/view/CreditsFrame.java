@@ -1,6 +1,7 @@
 package view;
 
 import service.ErrorLogger;
+import service.MusicPlayer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,12 +13,14 @@ import java.net.URI;
 public class CreditsFrame extends JFrame {
 
     private final JPanel creditsPanel;
+    private final MusicPlayer fxPlayer;
 
     public CreditsFrame() {
         setTitle("Credits");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
+        fxPlayer = new MusicPlayer(false, "resources/sounds/exit.wav");
 
         creditsPanel = new JPanel();
         creditsPanel.setLayout(new BoxLayout(creditsPanel, BoxLayout.Y_AXIS));
@@ -36,6 +39,13 @@ public class CreditsFrame extends JFrame {
         titlePanel.add(titleLabel, BorderLayout.CENTER);
 
         add(titlePanel, BorderLayout.NORTH);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                fxPlayer.playDefault();
+            }
+        });
 
         setVisible(true);
     }

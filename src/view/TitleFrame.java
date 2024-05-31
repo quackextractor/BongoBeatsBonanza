@@ -25,16 +25,15 @@ public class TitleFrame extends JFrame {
 
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        // Window size
         setSize(800, 800);
-        // Center the window
         setLocationRelativeTo(null);
 
         JButton play = new JButton("Play");
         JButton settings = new JButton("Settings");
+        JButton credits = new JButton("Credits");
         JButton quit = new JButton("Quit");
 
-        JButton[] buttons = {play, settings, quit};
+        JButton[] buttons = {play, settings, credits, quit};
 
         Font font = new Font(fontName, Font.BOLD, 80);
 
@@ -52,17 +51,15 @@ public class TitleFrame extends JFrame {
         startAnimation();
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3, 1));
+        buttonPanel.setLayout(new GridLayout(4, 1));
         for (JButton button : buttons) {
             button.setFont(font);
-            button.setOpaque(true);  // To make the button's background visible
-            button.setBackground(Color.LIGHT_GRAY);  // Set background color
-            button.setForeground(Color.BLACK);  // Set text color
+            button.setOpaque(true);
+            button.setBackground(Color.LIGHT_GRAY);
+            button.setForeground(Color.BLACK);
             button.addActionListener(new ButtonClickListener());
 
-            // Wrap each button in a panel to apply padding
             JPanel buttonPanelWrapper = new JPanel(new BorderLayout());
-            //    buttonPanelWrapper.setBorder(new EmptyBorder(0, 0, 0, 0));  // Add left padding
             buttonPanelWrapper.add(button, BorderLayout.CENTER);
 
             buttonPanel.add(buttonPanelWrapper);
@@ -82,7 +79,6 @@ public class TitleFrame extends JFrame {
             GameController.endGame();
         }
     }
-
 
     private void initializeAnimationFrames(int width, int height) {
         animationFrames = new ImageIcon[5];
@@ -108,6 +104,86 @@ public class TitleFrame extends JFrame {
         animationLabel.setIcon(animationFrames[currentFrameIndex]);
     }
 
+    private void addCredits(CreditsFrame creditsFrame){
+        creditsFrame.addTitle("Game Development");
+        creditsFrame.addCredit(
+                "Development and Coding: LostSoul",
+                "resources/credits/LostSoul.png",
+                200,
+                200,
+                "https://discord.gg/hA4BVNnDA5",
+                "Made this game for a school project and kind of got carried away in the process. No regrets though :)",
+                "Game is licensed under the MIT License."
+        );
+        creditsFrame.addTitle("Music");
+        creditsFrame.addCredit(
+                "Composing and Charting: Kitsune",
+                "resources/credits/kitsune.png",
+                200,
+                200,
+                "mailto:dhheadless@gmail.com",
+                "Composed and produced the Tutorial song (absolute banger imo) and did the charting for this game. Thank you for all your support!",
+                "License: Attribution 3.0"
+        );
+        creditsFrame.addCredit(
+                "Music Producer: YonKaGor",
+                "resources/credits/YonKaGor.png",
+                200,
+                200,
+                "https://youtu.be/lgzCxqQUU5g?si=_j6aPFfl8fR9G3GN",
+                "Created \"Memory Merge\", a song featured in the game. Thank you for making such nice and meaningful songs!",
+                "License: Creative Commons Attribution-NonCommercial"
+        );
+        creditsFrame.addTitle("Free Sounds");
+        int freeSoundSize = 150;
+        creditsFrame.addCredit(
+                "beat tune abysses.wav by betabeats.",
+                "resources/credits/betabeats.png",
+                freeSoundSize,
+                freeSoundSize,
+                "https://freesound.org/s/650965/",
+                "Very nice menu music.",
+                "License: Attribution NonCommercial 4.0"
+        );creditsFrame.addCredit(
+                "tambohit4.wav by NoiseCollector",
+                "resources/credits/NoiseCollector.png",
+                freeSoundSize,
+                freeSoundSize,
+                "https://freesound.org/s/125605/",
+                "Note hit sound in level",
+                "License: Attribution 3.0"
+        );
+        creditsFrame.addCredit(
+                "Click by complex_waveform",
+                "resources/credits/complex_waveform.png",
+                freeSoundSize,
+                freeSoundSize,
+                "https://freesound.org/s/213148/",
+                "Menu click sound",
+                "License: Attribution 4.0"
+        );
+        creditsFrame.addCredit(
+                "13024 reel fast forward by Robinhood76",
+                "resources/credits/Robinhood76.png",
+                freeSoundSize,
+                freeSoundSize,
+                "https://freesound.org/s/733146/",
+                "Note miss sound",
+                "License: Attribution NonCommercial 4.0"
+        );
+        creditsFrame.addCredit(
+                "freesound.org",
+                "resources/credits/freeSoundLogo.png",
+                288,
+                100,
+                "https://freesound.org/",
+                "Thank you for hosting a non-profit platform for media distribution!",
+                "Media that wasn't featured here falls under Creative Commons 0."
+        );
+        creditsFrame.addTitle("");
+        creditsFrame.addTitle("THANK YOU FOR PLAYING! <3");
+    }
+
     private class ButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -123,6 +199,11 @@ public class TitleFrame extends JFrame {
                     SettingsFrame settingsFrame = new SettingsFrame(fontName, musicPlayer);
                     settingsFrame.setIconImage(GameController.getGameIcon());
                     break;
+                case "Credits":
+                    fxPlayer.playDefault();
+                    CreditsFrame creditsFrame = new CreditsFrame();
+                    addCredits(creditsFrame);
+                break;
                 case "Quit":
                     musicPlayer.stop();
                     GameController.endGame();

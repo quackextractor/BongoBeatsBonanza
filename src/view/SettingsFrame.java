@@ -60,13 +60,13 @@ public class SettingsFrame extends JFrame {
         }
 
         // Catch Note Controls Settings
-        FancyJLabel track1KeyLabel = createFancyLabel("Track 1 Key:", font);
+        FancyJLabel track1KeyLabel = createFancyLabel("Left Bongo Key:", font);
         setCustomColor(track1KeyLabel, Color.BLUE);
         track1KeyTextField = new JTextField(defaultText1);
         addComponent(track1KeyLabel, gbc, 0, 4);
         addComponent(track1KeyTextField, gbc, 1, 4);
 
-        FancyJLabel track2KeyLabel = createFancyLabel("Track 2 Key:", font);
+        FancyJLabel track2KeyLabel = createFancyLabel("Right Bongo Key:", font);
         setCustomColor(track2KeyLabel, Color.cyan);
         track2KeyTextField = new JTextField(defaultText2);
         addComponent(track2KeyLabel, gbc, 0, 5);

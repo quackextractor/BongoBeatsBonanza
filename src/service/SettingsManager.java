@@ -7,7 +7,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
+/**
+ * Manages game settings such as music volume, sound effects volume, game difficulty, note speed,
+ * and key bindings for game controls.
+ */
 public class SettingsManager {
     private static final String SETTINGS_FILE = "settings.properties";
 
@@ -20,11 +23,17 @@ public class SettingsManager {
 
     private final Properties properties;
 
+    /**
+     * Creates a new instance of SettingsManager.
+     */
     public SettingsManager() {
         properties = new Properties();
         loadSettings();
     }
 
+    /**
+     * Loads settings from the properties file.
+     */
     public static void loadSettings(SettingsManager settingsManager) {
         int difficulty = settingsManager.getDifficulty();
         Score.setDifficultyModifier(difficulty * 0.5);
@@ -35,10 +44,16 @@ public class SettingsManager {
         GameJPanel.setTrack2Key(settingsManager.getTrack2Key());
     }
 
+    /**
+     * Saves settings to the properties file.
+     */
     public static void saveSettings(SettingsManager settingsManager) {
         settingsManager.saveSettings();
     }
 
+    /**
+     * Loads settings from the properties file.
+     */
     public void loadSettings() {
         try (FileInputStream input = new FileInputStream(SETTINGS_FILE)) {
             properties.load(input);
@@ -47,6 +62,9 @@ public class SettingsManager {
         }
     }
 
+    /**
+     * Saves settings to the properties file.
+     */
     public void saveSettings() {
         try (FileOutputStream output = new FileOutputStream(SETTINGS_FILE)) {
             properties.store(output, "Game Settings");

@@ -7,12 +7,15 @@ import java.awt.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * The {@code MusicTrack} class represents a track for notes in the game.
+ * It manages the spawning, movement, catching, and drawing of notes.
+ */
 public class MusicTrack {
 
     private final ConcurrentLinkedQueue<Note> notesOnTrack;
     private final NotePool notePool;
     private final int maxHitDistance;
-    private final Comparator<Note> noteDistanceComparator = Comparator.comparingDouble(Note::getDistance);
 
     private final int targetXPos;
     private final int targetYPos;
@@ -20,6 +23,17 @@ public class MusicTrack {
     private final int noteSize;
     private final Image noteImage;
 
+    /**
+     * Constructs a {@code MusicTrack} object with the specified parameters.
+     *
+     * @param notePool       the note pool to retrieve notes from
+     * @param maxHitDistance the maximum distance for a successful hit
+     * @param noteImage      the image representing the note
+     * @param noteSize       the size of the note
+     * @param targetXPos     the x-coordinate of the target position
+     * @param targetYPos     the y-coordinate of the target position
+     * @param spawnDistance  the distance from where notes spawn
+     */
     public MusicTrack(NotePool notePool, int maxHitDistance, Image noteImage, int noteSize, int targetXPos, int targetYPos, int spawnDistance) {
         this.notePool = notePool;
         this.maxHitDistance = maxHitDistance;
@@ -32,6 +46,11 @@ public class MusicTrack {
         this.noteSize = noteSize;
     }
 
+    /**
+     * Removes a note from the track.
+     *
+     * @param note the note to remove
+     */
     public void removeNoteFromTrack(Note note) {
         if (notesOnTrack.contains(note)) {
             notesOnTrack.remove(note);
@@ -39,6 +58,11 @@ public class MusicTrack {
         }
     }
 
+    /**
+     * Moves all notes on the track by the specified amount.
+     *
+     * @param amount the amount to move the notes by
+     */
     public void moveNotes(int amount) {
         Iterator<Note> iterator = notesOnTrack.iterator();
         while (iterator.hasNext()) {
@@ -46,7 +70,6 @@ public class MusicTrack {
             if (note != null) {
                 note.move(amount);
                 if (note.getYPos() <= note.getDeadZone()) {
-                    // Remove the note from the track if it reaches the dead zone
                     iterator.remove();
                     Score.miss();
                 }
@@ -54,34 +77,35 @@ public class MusicTrack {
         }
     }
 
+    /**
+     * Adds a note to the track.
+     */
     public void addNoteToTrack() {
         notesOnTrack.add(notePool.getNote(spawnDistance, noteImage, targetXPos, targetYPos, noteSize));
     }
 
+    /**
+     * Handles catching a note on the track.
+     */
     public void catchNote() {
-        // Checks if track is empty first to skip evaluation
         if (notesOnTrack.isEmpty()) {
             Score.miss();
             return;
         }
 
-        Note noteWithMinDistance = Collections.min(notesOnTrack, noteDistanceComparator);
+        Note noteWithMinDistance = Collections.min(notesOnTrack, Comparator.comparingDouble(Note::getDistance));
         int minDistance = noteWithMinDistance.getDistance();
 
         String accuracy = Score.determineAccuracy(minDistance, maxHitDistance);
 
-        // Remove caught note from track
         if (!accuracy.equals("MISS")){
             removeNoteFromTrack(noteWithMinDistance);
         }
 
-        // Determine ring color based on accuracy
         Ring ring = getRing(accuracy);
         GameJPanel.addRing(ring);
-
     }
 
-    // Create and add a ring
     private Ring getRing(String accuracy) {
         Color ringColor;
         Point notePosition = new Point(targetXPos, targetYPos);
@@ -103,7 +127,11 @@ public class MusicTrack {
         return new Ring(notePosition, noteSize/2, (int) (noteSize*1.5), ringColor, 10, 2);
     }
 
-
+    /**
+     * Draws all notes on the track.
+     *
+     * @param g the graphics context to draw on
+     */
     public void drawNotes(Graphics g) {
         for (Note note : notesOnTrack) {
             int noteX = note.getXPos();
@@ -112,7 +140,6 @@ public class MusicTrack {
             int offset = noteSize / 2;
             Image noteImage = note.getNoteImage();
 
-            // Draw the note image at the specified position with size
             g.drawImage(noteImage, noteX - offset, noteY - offset, noteSize, noteSize, null);
         }
     }

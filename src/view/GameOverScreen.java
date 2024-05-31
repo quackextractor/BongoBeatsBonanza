@@ -9,6 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Manages the game over screen, displaying game results and providing options for retrying, quitting to menu, or quitting to desktop.
+ */
 public class GameOverScreen extends JFrame {
     private int maxScore;
     private int achievedScore;
@@ -21,6 +24,13 @@ public class GameOverScreen extends JFrame {
     private final String title;
     private final Color titleColor;
 
+    /**
+     * Creates a new GameOverScreen frame.
+     *
+     * @param level      The level being played
+     * @param title      The title of the screen
+     * @param titleColor The color of the title text for GameOver/Fin differentiation
+     */
     public GameOverScreen(String level, String title, Color titleColor) {
         this.title = title;
         this.titleColor = titleColor;
@@ -36,6 +46,9 @@ public class GameOverScreen extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Initializes the scores based on game performance.
+     */
     private void initScores() {
         MusicPlayerManager.stopAllMusicPlayers();
         this.maxScore = MidiPlayer.getTotalNotes() * 80;
@@ -48,6 +61,9 @@ public class GameOverScreen extends JFrame {
         this.highestStreak = Score.getHighestStreak();
     }
 
+    /**
+     * Sets up the frame properties.
+     */
     private void setupFrame() {
         setTitle(title);
         setSize(800, 800);
@@ -55,6 +71,11 @@ public class GameOverScreen extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Creates the center panel displaying game results.
+     *
+     * @return The center panel
+     */
     private JPanel createCenterPanel() {
         JPanel centerPanel = new JPanel(new GridLayout(8, 1));
         centerPanel.setBackground(Color.BLACK);
@@ -72,6 +93,14 @@ public class GameOverScreen extends JFrame {
         return centerPanel;
     }
 
+    /**
+     * Creates a label with specified text, color, and font size.
+     *
+     * @param text     The text of the label
+     * @param color    The color of the text
+     * @param fontSize The font size of the text
+     * @return The created label
+     */
     private JLabel createLabel(String text, Color color, int fontSize) {
         FancyJLabel label = new FancyJLabel(text);
         label.setForeground(color);
@@ -80,6 +109,11 @@ public class GameOverScreen extends JFrame {
         return label;
     }
 
+    /**
+     * Creates the image panel displaying an image.
+     *
+     * @return The image panel
+     */
     private JPanel createImagePanel() {
         ImageIcon imageIcon = new ImageIcon("resources/sprites/cat0.png");
         JLabel imageLabel = new JLabel(imageIcon);
@@ -88,6 +122,12 @@ public class GameOverScreen extends JFrame {
         return imagePanel;
     }
 
+    /**
+     * Creates the bottom panel with buttons for retry, quit to menu, and quit to desktop.
+     *
+     * @param level The level being played
+     * @return The bottom panel
+     */
     private JPanel createBottomPanel(String level) {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 20));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
@@ -103,6 +143,13 @@ public class GameOverScreen extends JFrame {
         return bottomPanel;
     }
 
+    /**
+     * Creates a button with specified text and action listener.
+     *
+     * @param text           The text of the button
+     * @param actionListener The action listener for the button
+     * @return The created button
+     */
     private JButton createButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(200, 60));
@@ -111,6 +158,11 @@ public class GameOverScreen extends JFrame {
         return button;
     }
 
+    /**
+     * Determines the grade based on the achieved score.
+     *
+     * @return The grade (S, A, B, C, D, or F)
+     */
     private String getGrade() {
         double percentage = (double) achievedScore / maxScore * 100;
         if (percentage >= 90) {

@@ -3,22 +3,36 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code MusicPlayerManager} class manages a list of {@link MusicPlayer} instances.
+ * It provides methods to add, remove, and stop all music players.
+ */
 public class MusicPlayerManager {
     private static final List<MusicPlayer> musicPlayers = new ArrayList<>();
 
-    // Method for adding a MusicPlayer to the manager
+    /**
+     * Adds a {@link MusicPlayer} to the manager.
+     *
+     * @param musicPlayer the music player to add
+     */
     public static void addMusicPlayer(MusicPlayer musicPlayer) {
         musicPlayers.add(musicPlayer);
     }
 
-    // Method for stopping all MusicPlayers
+    /**
+     * Stops all music players managed by the manager.
+     */
     public static void stopAllMusicPlayers() {
         for (MusicPlayer player : musicPlayers) {
             player.stop();
         }
     }
 
-    // Method for removing a MusicPlayer from the manager
+    /**
+     * Removes a {@link MusicPlayer} from the manager.
+     *
+     * @param musicPlayer the music player to remove
+     */
     public static void removeMusicPlayer(MusicPlayer musicPlayer) {
         musicPlayers.remove(musicPlayer);
     }

@@ -4,6 +4,10 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The {@code MusicPlayer} class provides methods to play, pause, resume, and stop music or sound effects.
+ * It also allows setting custom volumes for music and sound effects.
+ */
 public class MusicPlayer {
     private Clip clip;
     private long pausedTime;
@@ -13,15 +17,31 @@ public class MusicPlayer {
     private static float fxVolume = -20f;
     private static float musicVolume = -10f;
 
+    /**
+     * Constructs a {@code MusicPlayer} object.
+     *
+     * @param isMusic indicates whether the player is for music or sound effects
+     * @param path    the default path for music/sound effects
+     */
     public MusicPlayer(boolean isMusic, String path) {
         this.isMusic = isMusic;
         this.path = path;
     }
 
+    /**
+     * Gets the current music volume.
+     *
+     * @return the current music volume
+     */
     public static float getMusicVolume() {
         return musicVolume;
     }
 
+    /**
+     * Sets the music volume.
+     *
+     * @param musicVolume the volume to set
+     */
     public static void setMusicVolume(float musicVolume) {
         MusicPlayer.musicVolume = musicVolume;
     }
@@ -78,6 +98,12 @@ public class MusicPlayer {
         }
     }
 
+    /**
+     * Plays music with a custom volume.
+     *
+     * @param volume    the custom volume
+     * @param musicPath the path of the music to play
+     */
     public void playWithCustomVolume(float volume, String musicPath) {
         float musicVolumeOriginal = getMusicVolume();
         float fxVolumeOriginal = getFxVolume();
@@ -122,12 +148,23 @@ public class MusicPlayer {
             fxVolume = value;
     }
 
+    /**
+     * Gets the current position of the clip in microseconds.
+     *
+     * @return the current position of the clip in microseconds
+     */
     public long getMicroSecondPos(){
         if (clip != null){
             return clip.getMicrosecondPosition();
         }
         else return 0;
     }
+
+    /**
+     * Gets the length of the clip in microseconds.
+     *
+     * @return the length of the clip in microseconds
+     */
     public long getMicroSecondLength(){
         if (clip != null){
             return clip.getMicrosecondLength();

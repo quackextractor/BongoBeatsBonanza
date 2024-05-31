@@ -103,13 +103,16 @@ public class MidiPlayer {
                 System.out.println("Added note speed delay: " + delayMs + " ms");
                 int totalPauseDuration = (int) (delayMs + pauseDurationMs);
                 System.out.println("Total duration: " + totalPauseDuration + " ms");
+                totalPauseDuration -= 300;
+                System.out.println("After adding bonus: " + totalPauseDuration + " ms");
+                totalPauseDuration -= 600;
+                System.out.println("After adding second bonus: " + totalPauseDuration + " ms");
 
                 // Process events and divide them into two tracks
                 processMidiEvents(allNoteEvents);
-
                 // Wait for the specified delay before playing the music file
                 try {
-                    Thread.sleep(delayMs);
+                    Thread.sleep(totalPauseDuration);
                 } catch (InterruptedException e) {
                     ErrorLogger.logStackTrace(e);
                 }

@@ -7,6 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The MidiPlayer class handles the loading and playing of MIDI files for the game tracks.
+ * It synchronizes the playback of MIDI events with the visual elements on the game panel.
+ */
 public class MidiPlayer {
     private Sequencer sequencer;
     private final MusicTrack musicTrack1;
@@ -18,6 +22,14 @@ public class MidiPlayer {
     public static int totalNotes;
     private volatile boolean stopRequested;
 
+    /**
+     * Constructs a MidiPlayer object with the specified parameters.
+     *
+     * @param musicTrack1 The first music track to synchronize with MIDI events.
+     * @param musicTrack2 The second music track to synchronize with MIDI events.
+     * @param levelName   The name of the level associated with the MIDI file.
+     * @param delayMs     The delay in milliseconds before starting the MIDI playback.
+     */
     public MidiPlayer(MusicTrack musicTrack1, MusicTrack musicTrack2, String levelName, int delayMs) {
         totalNotes = 0;
         this.musicTrack1 = musicTrack1;
@@ -31,6 +43,9 @@ public class MidiPlayer {
         stopRequested = false;  // Initialize the stop flag
     }
 
+    /**
+     * Initializes the MIDI sequencer.
+     */
     private void initializeSequencer() {
         try {
             sequencer = MidiSystem.getSequencer();
@@ -40,6 +55,9 @@ public class MidiPlayer {
         }
     }
 
+    /**
+     * Loads and plays the MIDI file.
+     */
     public void loadAndPlayMidi() {
         if (GameJPanel.isGameOver()) {
             return;
@@ -112,6 +130,12 @@ public class MidiPlayer {
         }
     }
 
+
+    /**
+     * Processes MIDI events by grouping them based on pitch and distributing them to corresponding music tracks.
+     *
+     * @param allNoteEvents The list of MIDI events to process.
+     */
     private void processMidiEvents(List<MidiEvent> allNoteEvents) {
         Map<Integer, List<MidiEvent>> pitchToEventsMap = new HashMap<>();
 
@@ -147,6 +171,13 @@ public class MidiPlayer {
         new Thread(() -> processEventsForMusicTrack(eventsForTrack2, musicTrack2)).start();
     }
 
+
+    /**
+     * Processes MIDI events for the specified music track.
+     *
+     * @param events     The MIDI events to process.
+     * @param musicTrack The music track to process events for.
+     */
     private void processEventsForMusicTrack(List<MidiEvent> events, MusicTrack musicTrack) {
         long lastTick = 0;
 
@@ -187,6 +218,13 @@ public class MidiPlayer {
         }
     }
 
+    /**
+     * Converts ticks to milliseconds based on the given tempo.
+     *
+     * @param ticks      The number of ticks.
+     * @param tempoInBPM The tempo in beats per minute.
+     * @return The equivalent milliseconds.
+     */
     private long tickToMs(long ticks, float tempoInBPM) {
         float ticksPerBeat = sequencer.getSequence().getResolution();
         float msPerBeat = 60000 / tempoInBPM;
@@ -194,14 +232,24 @@ public class MidiPlayer {
         return (long) (ticks * msPerTick);
     }
 
+    /**
+     * Retrieves the BPM (beats per minute) from the given meta message.
+     *
+     * @param metaMessage The meta message containing tempo information.
+     * @return The BPM value.
+     */
     private float getBpmFromMetaMessage(MetaMessage metaMessage) {
         byte[] data = metaMessage.getData();
         int tempo = ((data[0] & 0xff) << 16) | ((data[1] & 0xff) << 8) | (data[2] & 0xff);
         return 60000000f / tempo;
     }
 
+    /**
+     * Stops the MIDI and music playback.
+     */
     public void stopMusic() {
-        stopRequested = true;  // Signal the threads to stop
+        // Signal the threads to stop
+        stopRequested = true;
         sequencer.stop();
         songPlayer.stop();
     }

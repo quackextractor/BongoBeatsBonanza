@@ -10,11 +10,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URI;
 
+/**
+ * A frame displaying credits for the application.
+ */
 public class CreditsFrame extends JFrame {
 
     private final JPanel creditsPanel;
     private final MusicPlayer fxPlayer;
 
+    /**
+     * Constructs a new CreditsFrame.
+     */
     public CreditsFrame() {
         setTitle("Credits");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -50,6 +56,17 @@ public class CreditsFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Adds a credit entry to the credits panel.
+     *
+     * @param text        the text of the credit entry.
+     * @param imagePath   the path to the image associated with the credit entry.
+     * @param imageWidth  the width of the image.
+     * @param imageHeight the height of the image.
+     * @param hyperlink   the hyperlink associated with the credit entry.
+     * @param body        the body text of the credit entry.
+     * @param license     the license information for the credit entry.
+     */
     public void addCredit(String text, String imagePath, int imageWidth, int imageHeight, String hyperlink, String body, String license) {
         CreditEntry creditEntry = new CreditEntry(text, imagePath, imageWidth, imageHeight, hyperlink, body, license);
         creditsPanel.add(creditEntry);
@@ -57,6 +74,11 @@ public class CreditsFrame extends JFrame {
         creditsPanel.repaint();
     }
 
+    /**
+     * Adds a title entry to the credits panel.
+     *
+     * @param title the title text.
+     */
     public void addTitle(String title) {
         TitleEntry titleEntry = new TitleEntry(title);
         creditsPanel.add(titleEntry);
@@ -64,6 +86,9 @@ public class CreditsFrame extends JFrame {
         creditsPanel.repaint();
     }
 
+    /**
+     * Represents a credit entry in the credits panel.
+     */
     private static class CreditEntry extends JPanel {
         public CreditEntry(String text, String imagePath, int imageWidth, int imageHeight, String hyperlink, String body, String license) {
             setLayout(new BorderLayout());
@@ -95,7 +120,9 @@ public class CreditsFrame extends JFrame {
         }
     }
 
-
+    /**
+     * Represents a title entry in the credits panel.
+     */
     private static class TitleEntry extends JPanel {
         public TitleEntry(String title) {
             setLayout(new BorderLayout());
@@ -108,6 +135,13 @@ public class CreditsFrame extends JFrame {
         }
     }
 
+    /**
+     * Generates a JLabel with hyperlink functionality.
+     *
+     * @param text      the text of the label.
+     * @param hyperlink the hyperlink associated with the label.
+     * @return the generated JLabel.
+     */
     private static JLabel getjLabel(String text, String hyperlink) {
         JLabel textLabel = new JLabel("<html><a href='" + hyperlink + "'>" + text + "</a></html>");
         textLabel.setFont(new Font("Arial", Font.PLAIN, 24));

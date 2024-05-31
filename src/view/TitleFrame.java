@@ -10,6 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
+/**
+ * Represents the title frame of the game, providing options to play, access settings, view credits, or quit the game.
+ * Displays an animated logo and handles button clicks to navigate to different frames.
+ */
 public class TitleFrame extends JFrame {
 
     private final MusicPlayer musicPlayer;
@@ -19,6 +23,12 @@ public class TitleFrame extends JFrame {
     private int currentFrameIndex;
     private final String fontName;
 
+    /**
+     * Constructs a TitleFrame object with the specified music path and font name.
+     *
+     * @param musicPath The path to the background music.
+     * @param fontName  The name of the font to be used.
+     */
     public TitleFrame(String musicPath, String fontName) {
         LevelSelectionFrame.hasLevelStarted = false;
         this.fontName = fontName;
@@ -80,6 +90,12 @@ public class TitleFrame extends JFrame {
         }
     }
 
+    /**
+     * Initializes the animation frames with the specified width and height.
+     *
+     * @param width  The width of the animation frames.
+     * @param height The height of the animation frames.
+     */
     private void initializeAnimationFrames(int width, int height) {
         animationFrames = new ImageIcon[5];
         for (int i = 0; i < 5; i++) {
@@ -89,21 +105,35 @@ public class TitleFrame extends JFrame {
         }
     }
 
+    /**
+     * Creates the animation label.
+     */
     private void createAnimationLabel() {
         animationLabel = new JLabel(animationFrames[0]);
         animationLabel.setHorizontalAlignment(JLabel.CENTER);
     }
 
+    /**
+     * Starts the animation.
+     */
     private void startAnimation() {
         Timer animationTimer = new Timer(300, e -> animate());
         animationTimer.start();
     }
 
+    /**
+     * Animates the logo by updating the animation frames.
+     */
     private void animate() {
         currentFrameIndex = (currentFrameIndex + 1) % animationFrames.length;
         animationLabel.setIcon(animationFrames[currentFrameIndex]);
     }
 
+    /**
+     * Adds credits to the specified credits frame.
+     *
+     * @param creditsFrame The credits frame to add credits to.
+     */
     private void addCredits(CreditsFrame creditsFrame){
         creditsFrame.addTitle("Game Development");
         creditsFrame.addCredit(
@@ -184,6 +214,10 @@ public class TitleFrame extends JFrame {
         creditsFrame.addTitle("THANK YOU FOR PLAYING! <3");
     }
 
+
+    /**
+     * Handles button click events.
+     */
     private class ButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

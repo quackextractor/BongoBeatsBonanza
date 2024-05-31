@@ -4,6 +4,7 @@ import view.GameJPanel;
 
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -57,6 +58,7 @@ public class SettingsManager {
     public void loadSettings() {
         try (FileInputStream input = new FileInputStream(SETTINGS_FILE)) {
             properties.load(input);
+        } catch (FileNotFoundException ignored) {
         } catch (IOException e) {
             ErrorLogger.logStackTrace(e);
         }

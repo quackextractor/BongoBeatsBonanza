@@ -27,6 +27,12 @@ public class SettingsFrame extends JFrame {
     private MusicPlayer fxPlayer;
     private final SettingsManager settingsManager;
 
+    /**
+     * Constructs a SettingsFrame object with specified parameters.
+     *
+     * @param fontName The name of the font to be used for labels.
+     * @param musicPlayer The music player instance used in the game.
+     */
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         settingsManager = new SettingsManager();
         SettingsManager.loadSettings(settingsManager);
@@ -132,12 +138,27 @@ public class SettingsFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Adds a component to the frame using specified grid bag constraints.
+     *
+     * @param component The component to be added.
+     * @param gbc The grid bag constraints.
+     * @param x The column position.
+     * @param y The row position.
+     */
     private void addComponent(Component component, GridBagConstraints gbc, int x, int y) {
         gbc.gridx = x;
         gbc.gridy = y;
         add(component, gbc);
     }
 
+    /**
+     * Creates a fancy label with specified text and font.
+     *
+     * @param text The text of the label.
+     * @param font The font of the label.
+     * @return The created fancy label.
+     */
     private FancyJLabel createFancyLabel(String text, Font font) {
         FancyJLabel label = new FancyJLabel(text, JLabel.LEFT);
         label.setFont(font);
@@ -145,6 +166,12 @@ public class SettingsFrame extends JFrame {
         return label;
     }
 
+    /**
+     * Initializes the music volume slider with the given initial value.
+     *
+     * @param initialValue The initial value of the music volume slider.
+     * @return The initialized music volume slider.
+     */
     private JSlider initializeVolumeSlider(float initialValue) {
         JSlider slider = new JSlider(-30, 6, (int) initialValue);
         customizeSlider(slider);
@@ -158,6 +185,11 @@ public class SettingsFrame extends JFrame {
         return slider;
     }
 
+    /**
+     * Initializes the note speed slider.
+     *
+     * @return The initialized note speed slider.
+     */
     private JSlider initializeSpeedSlider() {
         JSlider slider = new JSlider(1, 3, noteSpeed);
         customizeSlider(slider);
@@ -174,6 +206,9 @@ public class SettingsFrame extends JFrame {
         return slider;
     }
 
+    /**
+     * Configures settings related to catch note controls.
+     */
     private void configCatchNoteControls() {
         track1KeyTextField.addActionListener(e -> {
             String keyText = track1KeyTextField.getText().toUpperCase();
@@ -186,6 +221,12 @@ public class SettingsFrame extends JFrame {
         });
     }
 
+    /**
+     * Verifies and sets the key code based on the provided key text.
+     *
+     * @param keyText The text representing the key.
+     * @param is1Track Indicates whether it's the first or second track key.
+     */
     private void verifyAndSetKeyCode(String keyText, boolean is1Track) {
         if (keyText.length() != 1) {
             JOptionPane.showMessageDialog(this, "Invalid key! Please enter a single character key.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -213,6 +254,11 @@ public class SettingsFrame extends JFrame {
         fxPlayer.playDefault();
     }
 
+    /**
+     * Displays a confirmation message and flashes the text field when a key is successfully set.
+     *
+     * @param jTextField The text field to be flashed.
+     */
     private static void confirmFlash(JTextField jTextField) {
         String savedText = jTextField.getText();
         jTextField.setText("CONFIRMED!");
@@ -229,6 +275,11 @@ public class SettingsFrame extends JFrame {
         timer.start();
     }
 
+    /**
+     * Initializes the difficulty slider.
+     *
+     * @return The initialized difficulty slider.
+     */
     private JSlider initializeDifficultySlider() {
         JSlider slider = new JSlider(1, 3, difficulty);
         customizeSlider(slider);
@@ -246,12 +297,23 @@ public class SettingsFrame extends JFrame {
         return slider;
     }
 
+    /**
+     * Customizes the appearance of a slider.
+     *
+     * @param slider The slider to be customized.
+     */
     private void customizeSlider(JSlider slider) {
         slider.setPaintLabels(true);
         slider.setPaintTicks(true);
         slider.setMajorTickSpacing(1);
     }
 
+    /**
+     * Configures music volume settings.
+     *
+     * @param musicPlayer The music player instance.
+     * @param fxPlayer The sound effects player instance.
+     */
     private void configMusicVolume(MusicPlayer musicPlayer, MusicPlayer fxPlayer) {
         musicVolumeSlider.addChangeListener(e -> {
             if (!musicVolumeSlider.getValueIsAdjusting()) {
@@ -265,6 +327,9 @@ public class SettingsFrame extends JFrame {
         });
     }
 
+    /**
+     * Configures sound effects volume settings.
+     */
     private void configFxVolume() {
         fxVolumeSlider.addChangeListener(e -> {
             if (!fxVolumeSlider.getValueIsAdjusting()) {
@@ -276,6 +341,9 @@ public class SettingsFrame extends JFrame {
         });
     }
 
+    /**
+     * Configures difficulty settings.
+     */
     private void configDifficulty() {
         difficultySlider.addChangeListener(e -> {
             if (!difficultySlider.getValueIsAdjusting()) {
@@ -287,6 +355,9 @@ public class SettingsFrame extends JFrame {
         });
     }
 
+    /**
+     * Configures note speed settings.
+     */
     private void configSpeed() {
         noteSpeedSlider.addChangeListener(e -> {
             if (!noteSpeedSlider.getValueIsAdjusting()) {

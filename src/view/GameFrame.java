@@ -6,12 +6,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 
+/**
+ * The main frame for the game interface.
+ */
 public class GameFrame extends JFrame {
 
     private final FancyJLabel scoreValueLabel;
     private final FancyJLabel streakValueLabel;
     private final FancyJLabel accuracyValueLabel;
 
+    /**
+     * Constructs a GameFrame with the specified level name.
+     *
+     * @param levelName The name of the level.
+     */
     public GameFrame(String levelName) {
         setTitle(levelName);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -96,6 +104,12 @@ public class GameFrame extends JFrame {
         return label;
     }
 
+    /**
+     * Processes window events, specifically handles the WINDOW_CLOSING event.
+     * Closing the GameFrame causes the level to end instantly.
+     *
+     * @param e The window event.
+     */
     @Override
     protected void processWindowEvent(WindowEvent e) {
         super.processWindowEvent(e);
@@ -104,6 +118,9 @@ public class GameFrame extends JFrame {
         }
     }
 
+    /**
+     * Updates the user interface with the latest score, streak, and accuracy values.
+     */
     public void updateMyUI() {
         SwingUtilities.invokeLater(() -> {
             scoreValueLabel.setText(String.format("%05d", Score.getTotalScore()));

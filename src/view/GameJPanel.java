@@ -169,7 +169,7 @@ public class GameJPanel extends JPanel {
      * @return Calculated time.
      */
     public static int calculateTime(int distance, int distancePerMove, int moveDelay) {
-        return (distance / distancePerMove) * moveDelay;
+        return Math.max((distance / distancePerMove) * moveDelay, 0);
     }
 
     /**

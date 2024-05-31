@@ -24,7 +24,8 @@ public class CreditsFrame extends JFrame {
     public CreditsFrame() {
         setTitle("Credits");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(800, 600);
+        setResizable(false);
+        setSize(800, 800);
         setLocationRelativeTo(null);
         fxPlayer = new MusicPlayer(false, "resources/sounds/exit.wav");
 

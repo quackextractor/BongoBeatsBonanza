@@ -38,6 +38,7 @@ public class LevelSelectionFrame extends JFrame {
             requestFocus();
             return;
         }
+        setResizable(false);
         hasLevelStarted = false;
         isOpen = true;
         fxPlayer = new MusicPlayer(false, "");

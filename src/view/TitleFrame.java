@@ -32,6 +32,7 @@ public class TitleFrame extends JFrame {
     public TitleFrame(String musicPath, String fontName) {
         LevelSelectionFrame.hasLevelStarted = false;
         this.fontName = fontName;
+        setResizable(false);
 
         setTitle("Bongo Beats Bonanza");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

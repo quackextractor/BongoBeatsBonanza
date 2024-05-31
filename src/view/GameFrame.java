@@ -24,6 +24,7 @@ public class GameFrame extends JFrame {
         setTitle(levelName);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         int windowSize = 800;
+        setResizable(false);
         setSize(windowSize, windowSize + 41);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

@@ -52,33 +52,37 @@ BONGO BEATS BONANZA
 │           title4.png
 │           title5.png
 │
-└───src
-    │   Main.java
-    │
-    ├───controller
-    │       GameController.java
-    │
-    ├───service
-    │       AudioVerification.java
-    │       ErrorLogger.java
-    │       GameUtils.java
-    │       MidiPlayer.java
-    │       MusicPlayer.java
-    │       MusicPlayerManager.java
-    │       MusicTrack.java
-    │       Note.java
-    │       NoteMovingThread.java
-    │       NotePool.java
-    │       Score.java
-    │       SettingsManager.java
-    │
-    └───view
-            CreditsFrame.java
-            FancyJLabel.java
-            GameFrame.java
-            GameJPanel.java
-            GameOverScreen.java
-            LevelSelectionFrame.java
-            Ring.java
-            SettingsFrame.java
-            TitleFrame.java
+├───src
+│   │   Main.java
+│   │
+│   ├───controller
+│   │       GameController.java
+│   │
+│   ├───service
+│   │       AudioVerification.java
+│   │       ErrorLogger.java
+│   │       GameUtils.java
+│   │       MidiPlayer.java
+│   │       MusicPlayer.java
+│   │       MusicPlayerManager.java
+│   │       MusicTrack.java
+│   │       Note.java
+│   │       NoteMovingThread.java
+│   │       NotePool.java
+│   │       Score.java
+│   │       SettingsManager.java
+│   │
+│   └───view
+│           CreditsFrame.java
+│           FancyJLabel.java
+│           GameFrame.java
+│           GameJPanel.java
+│           GameOverScreen.java
+│           LevelSelectionFrame.java
+│           Ring.java
+│           SettingsFrame.java
+│           TitleFrame.java
+│
+└───test
+     │
+     └───service

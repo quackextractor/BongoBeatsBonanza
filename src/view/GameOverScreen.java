@@ -78,6 +78,7 @@ public class GameOverScreen extends JFrame {
      */
     private JPanel createCenterPanel() {
         JPanel centerPanel = new JPanel(new GridLayout(8, 1));
+        setResizable(false);
         centerPanel.setBackground(Color.BLACK);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 

@@ -44,6 +44,7 @@ public class SettingsFrame extends JFrame {
         isOpen = true;
         setTitle("Settings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
         setSize(600, 600);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());

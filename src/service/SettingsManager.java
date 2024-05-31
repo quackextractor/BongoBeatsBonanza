@@ -1,5 +1,7 @@
 package service;
 
+import view.GameJPanel;
+
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,6 +23,20 @@ public class SettingsManager {
     public SettingsManager() {
         properties = new Properties();
         loadSettings();
+    }
+
+    public static void loadSettings(SettingsManager settingsManager) {
+        int difficulty = settingsManager.getDifficulty();
+        Score.setDifficultyModifier(difficulty * 0.5);
+        GameJPanel.modifyMoveParams(settingsManager.getNoteSpeed());
+        MusicPlayer.setMusicVolume(settingsManager.getMusicVolume());
+        MusicPlayer.setFxVolume(settingsManager.getFxVolume());
+        GameJPanel.setTrack1Key(settingsManager.getTrack1Key());
+        GameJPanel.setTrack2Key(settingsManager.getTrack2Key());
+    }
+
+    public static void saveSettings(SettingsManager settingsManager) {
+        settingsManager.saveSettings();
     }
 
     public void loadSettings() {

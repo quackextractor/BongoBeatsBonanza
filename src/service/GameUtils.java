@@ -1,9 +1,11 @@
 package service;
 
+import view.FancyJLabel;
 import view.GameJPanel;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +27,17 @@ public class GameUtils {
             ErrorLogger.logStackTrace(e);
             return null;
         }
+    }
+
+    public static void setCustomColor(FancyJLabel fancyJLabel, Color color) {
+        fancyJLabel.setShadowColor(color);
+        fancyJLabel.setShadowOffset(2);
+        fancyJLabel.setShadowOpacity(0.5F);
+    }
+
+    public static void adjustVertPos(GridBagConstraints gbc) {
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.weighty = 1;
     }
 
     public static void startRepaintTimer(GameJPanel panel) {

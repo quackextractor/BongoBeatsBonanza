@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Hashtable;
 
+import static service.GameUtils.adjustVertPos;
+import static service.GameUtils.setCustomColor;
+
 public class SettingsFrame extends JFrame {
     private static boolean isOpen = false;
     private JSlider musicVolumeSlider;
@@ -26,7 +29,7 @@ public class SettingsFrame extends JFrame {
 
     public SettingsFrame(String fontName, MusicPlayer musicPlayer) {
         settingsManager = new SettingsManager();
-        loadSettings(settingsManager);
+        SettingsManager.loadSettings(settingsManager);
 
         if (isOpen) {
             toFront();
@@ -115,29 +118,18 @@ public class SettingsFrame extends JFrame {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
-                saveSettings();
+                SettingsManager.saveSettings(settingsManager);
                 fxPlayer.play("resources/sounds/exit.wav");
             }
 
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 isOpen = false;
-                saveSettings();
+                SettingsManager.saveSettings(settingsManager);
             }
         });
 
         setVisible(true);
-    }
-
-    private void setCustomColor(FancyJLabel fancyJLabel, Color color) {
-        fancyJLabel.setShadowColor(color);
-        fancyJLabel.setShadowOffset(2);
-        fancyJLabel.setShadowOpacity(0.5F);
-    }
-
-    private void adjustVertPos(GridBagConstraints gbc) {
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.weighty = 1;
     }
 
     private void addComponent(Component component, GridBagConstraints gbc, int x, int y) {
@@ -304,19 +296,5 @@ public class SettingsFrame extends JFrame {
                 settingsManager.setNoteSpeed(noteSpeed);
             }
         });
-    }
-
-    public static void loadSettings(SettingsManager settingsManager) {
-        difficulty = settingsManager.getDifficulty();
-        Score.setDifficultyModifier(difficulty * 0.5);
-        GameJPanel.modifyMoveParams(settingsManager.getNoteSpeed());
-        MusicPlayer.setMusicVolume(settingsManager.getMusicVolume());
-        MusicPlayer.setFxVolume(settingsManager.getFxVolume());
-        GameJPanel.setTrack1Key(settingsManager.getTrack1Key());
-        GameJPanel.setTrack2Key(settingsManager.getTrack2Key());
-    }
-
-    private void saveSettings() {
-        settingsManager.saveSettings();
     }
 }

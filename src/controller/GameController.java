@@ -5,14 +5,13 @@ import service.MusicPlayerManager;
 import service.SettingsManager;
 import view.GameFrame;
 import view.LevelSelectionFrame;
-import view.SettingsFrame;
 import view.TitleFrame;
 
 import javax.swing.*;
-
 import java.awt.*;
 
-import static service.AudioVerification.*;
+import static service.AudioVerification.isMidiValid;
+import static service.AudioVerification.isWavValid;
 
 public class GameController {
 
@@ -29,7 +28,7 @@ public class GameController {
 
     public static void startGame() {
         SettingsManager settingsManager = new SettingsManager();
-        SettingsFrame.loadSettings(settingsManager);
+        SettingsManager.loadSettings(settingsManager);
         SwingUtilities.invokeLater(() -> {
             TitleFrame titleFrame = new TitleFrame(musicPath, fontName);
             titleFrame.setIconImage(gameIcon);

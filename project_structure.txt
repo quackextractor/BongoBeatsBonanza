@@ -1,7 +1,6 @@
 BONGO BEATS BONANZA
 │   .gitignore
-│   Bongo Beats Bonanza.iml
-│   Bongo Beats Bonanza.jar
+│   BongoBeatsBonanza_Slezak.jar
 │   error_log.txt
 │   project_structure.txt
 │   settings.properties

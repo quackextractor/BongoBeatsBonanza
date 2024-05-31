@@ -103,16 +103,19 @@ public class Score {
             registerHit(HitType.GREAT);
             fxPlayer.playDefault();
             changeHealth(20);
+            greatCount++;
             return "GREAT";
         } else if (accuracyPercentage >= 50) {
             registerHit(HitType.GOOD);
             fxPlayer.playDefault();
             changeHealth(10);
+            goodCount++;
             return "GOOD";
         } else {
             registerHit(HitType.BAD);
             fxPlayer.playDefault();
             changeHealth(-5);
+            badCount++;
             return "BAD";
         }
     }
@@ -125,6 +128,7 @@ public class Score {
         musicPlayer.playDefault();
         registerHit(HitType.MISS);
         changeHealth(-10);
+        missCount++;
     }
 
     /**

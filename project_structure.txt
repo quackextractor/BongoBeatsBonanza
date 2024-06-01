@@ -86,5 +86,6 @@ BONGO BEATS BONANZA
 └───test
      │
      └───service
-
             AudioVerificationTest.java
+            MusicPlayerTest.java
+            MusicTrackTest.java

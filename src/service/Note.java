@@ -46,7 +46,7 @@ public class Note {
      *
      * @param amount the amount to move the note by
      */
-    public void move(int amount){
+    public void move(int amount) {
         distance -= amount;
         yPos -= amount;
     }
@@ -105,5 +105,8 @@ public class Note {
      */
     public int getDeadZone() {
         return deadZone;
+    }
+    public void setYPos(int yPos) {
+        this.yPos = yPos;
     }
 }

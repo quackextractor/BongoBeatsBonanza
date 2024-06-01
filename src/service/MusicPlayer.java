@@ -45,6 +45,9 @@ public class MusicPlayer {
     public static void setMusicVolume(float musicVolume) {
         MusicPlayer.musicVolume = musicVolume;
     }
+    public boolean isPlaying(){
+        return clip != null && clip.isRunning();
+    }
 
     // Method for playing music from file
     private void playClip(String filePath) {

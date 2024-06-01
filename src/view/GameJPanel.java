@@ -42,6 +42,7 @@ public class GameJPanel extends JPanel {
     private boolean gameOver;
     private static int track1KeyCode;
     private static int track2KeyCode;
+    private boolean isComplete;
 
     /**
      * Modifies movement parameters for notes.
@@ -100,6 +101,7 @@ public class GameJPanel extends JPanel {
         this.gameFrame = gameFrame;
 
         gameOver = false;
+        isComplete = false;
         rings = new ArrayList<>();
 
         GameUtils.preloadImages(this);
@@ -163,9 +165,9 @@ public class GameJPanel extends JPanel {
      * Calculates time based on distance and movement parameters.
      * Used to get the correct delay for the {@link MidiPlayer}.
      *
-     * @param distance         The distance.
-     * @param distancePerMove  The distance per move.
-     * @param moveDelay        The move delay.
+     * @param distance        The distance.
+     * @param distancePerMove The distance per move.
+     * @param moveDelay       The move delay.
      * @return Calculated time.
      */
     public static int calculateTime(int distance, int distancePerMove, int moveDelay) {
@@ -274,6 +276,7 @@ public class GameJPanel extends JPanel {
     public static void setTrack2Key(int keyCode) {
         track2KeyCode = keyCode;
     }
+
     /**
      * Sets the key code for track 1.
      *
@@ -293,6 +296,9 @@ public class GameJPanel extends JPanel {
             if (totalTime > 0) {
                 int progress = (int) ((double) currentTime / totalTime * 100);
                 progressBar.setValue(progress);
+                if (progress == 100) {
+                    isComplete = true;
+                }
             }
             repaint();
         }
@@ -343,14 +349,14 @@ public class GameJPanel extends JPanel {
         musicTrack2.drawNotes(g);
 
         // Check for game over conditions
-        if ((Score.getHealth() <= 0 || Score.isComplete()) && !gameOver) {
+        if ((Score.getHealth() <= 0 || isComplete) && !gameOver) {
             gameOver = true;
             noteMovingThread1.stopMoving();
             noteMovingThread2.stopMoving();
             midiPlayer.stopMusic();
             LevelSelectionFrame.setIsOpen(false);
             GameOverScreen gameOverScreen;
-            if (Score.isComplete()) {
+            if (isComplete) {
                 gameOverScreen = new GameOverScreen(levelName, "Finish", Color.GREEN);
             } else {
                 gameOverScreen = new GameOverScreen(levelName, "Game Over", Color.RED);

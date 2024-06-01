@@ -39,15 +39,6 @@ public class Score {
     }
 
     /**
-     * Checks if the song is complete.
-     *
-     * @return {@code true} if the song is complete, {@code false} otherwise
-     */
-    public static boolean isComplete() {
-        return MidiPlayer.totalNotes == totalNotes;
-    }
-
-    /**
      * Increases the streak count.
      */
     public static void increaseStreak() {

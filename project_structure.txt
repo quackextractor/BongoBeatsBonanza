@@ -1,13 +1,129 @@
 BONGO BEATS BONANZA
 │   .gitignore
+│   BongoBeatsBonanza.iml
 │   BongoBeatsBonanza_Slezak.jar
-│   error_log.txt
 │   DOCUMENTATION.pdf
 │   project_structure.txt
-│   settings.properties
+│   README.md
 │
-├───resources
-│   ├───credits
+├── .idea
+│   │   .gitignore
+│   │   encodings.xml
+│   │   misc.xml
+│   │   modules.xml
+│   │   vcs.xml
+│   │   workspace.xml
+│   │
+│   ├── artifacts
+│   │       BongoBeatsBonanza_jar.xml
+│   │
+│   └── shelf
+│       │   Uncommitted_changes_before_Update_at_6_1_2024_10_54_PM__Changes_.xml
+│       │
+│       └── Uncommitted_changes_before_Update_at_6_1_2024_10_54_PM_[Changes]
+│               BongoBeatsBonanza_Slezak.jar
+│               DOCUMENTATION.pdf
+│               shelved.patch
+│
+├── JavaDocs
+│   │   allclasses-index.html
+│   │   allpackages-index.html
+│   │   constant-values.html
+│   │   copy.svg
+│   │   element-list
+│   │   help-doc.html
+│   │   index.html
+│   │   jquery-ui.overrides.css
+│   │   Main.html
+│   │   member-search-index.js
+│   │   module-search-index.js
+│   │   overview-summary.html
+│   │   overview-tree.html
+│   │   package-search-index.js
+│   │   package-summary.html
+│   │   package-tree.html
+│   │   script.js
+│   │   search-page.js
+│   │   search.html
+│   │   search.js
+│   │   serialized-form.html
+│   │   stylesheet.css
+│   │   tag-search-index.js
+│   │   type-search-index.js
+│   │
+│   ├── controller
+│   │       GameController.html
+│   │       package-summary.html
+│   │       package-tree.html
+│   │
+│   ├── index-files
+│   │       index-1.html
+│   │       index-10.html
+│   │       index-11.html
+│   │       index-12.html
+│   │       index-13.html
+│   │       index-14.html
+│   │       index-15.html
+│   │       index-16.html
+│   │       index-17.html
+│   │       index-18.html
+│   │       index-2.html
+│   │       index-3.html
+│   │       index-4.html
+│   │       index-5.html
+│   │       index-6.html
+│   │       index-7.html
+│   │       index-8.html
+│   │       index-9.html
+│   │
+│   ├── legal
+│   │       ADDITIONAL_LICENSE_INFO
+│   │       ASSEMBLY_EXCEPTION
+│   │       jquery.md
+│   │       jqueryUI.md
+│   │       LICENSE
+│   │
+│   ├── resources
+│   │       glass.png
+│   │       x.png
+│   │
+│   ├── script-dir
+│   │       jquery-3.6.0.min.js
+│   │       jquery-ui.min.css
+│   │       jquery-ui.min.js
+│   │
+│   ├── service
+│   │       AudioVerification.html
+│   │       ErrorLogger.html
+│   │       GameUtils.html
+│   │       MidiPlayer.html
+│   │       MusicPlayer.html
+│   │       MusicPlayerManager.html
+│   │       MusicTrack.html
+│   │       Note.html
+│   │       NoteMovingThread.html
+│   │       NotePool.html
+│   │       package-summary.html
+│   │       package-tree.html
+│   │       Score.HitType.html
+│   │       Score.html
+│   │       SettingsManager.html
+│   │
+│   └── view
+│           CreditsFrame.html
+│           FancyJLabel.html
+│           GameFrame.html
+│           GameJPanel.html
+│           GameOverScreen.html
+│           LevelSelectionFrame.html
+│           package-summary.html
+│           package-tree.html
+│           Ring.html
+│           SettingsFrame.html
+│           TitleFrame.html
+│
+├── resources
+│   ├── credits
 │   │       betabeats.png
 │   │       complex_waveform.png
 │   │       freeSoundLogo.png
@@ -17,7 +133,7 @@ BONGO BEATS BONANZA
 │   │       Robinhood76.png
 │   │       YonKaGor.png
 │   │
-│   ├───levels
+│   ├── levels
 │   │       Memory Merge.mid
 │   │       Memory Merge.wav
 │   │       test.mid
@@ -25,13 +141,13 @@ BONGO BEATS BONANZA
 │   │       Tutorial.mid
 │   │       Tutorial.wav
 │   │
-│   ├───META-INF
+│   ├── META-INF
 │   │       MANIFEST.MF
 │   │
-│   ├───music
+│   ├── music
 │   │       menu.wav
 │   │
-│   ├───sounds
+│   ├── sounds
 │   │       alert.wav
 │   │       boowomp.wav
 │   │       click.wav
@@ -40,9 +156,8 @@ BONGO BEATS BONANZA
 │   │       start.wav
 │   │       tamboHit.wav
 │   │
-│   └───sprites
+│   └── sprites
 │           bluNote.png
-│           cat1.png
 │           cat2.png
 │           icon.png
 │           redNote.png
@@ -53,13 +168,13 @@ BONGO BEATS BONANZA
 │           title4.png
 │           title5.png
 │
-├───src
+├── src
 │   │   Main.java
 │   │
-│   ├───controller
+│   ├── controller
 │   │       GameController.java
 │   │
-│   ├───service
+│   ├── service
 │   │       AudioVerification.java
 │   │       ErrorLogger.java
 │   │       GameUtils.java
@@ -73,7 +188,7 @@ BONGO BEATS BONANZA
 │   │       Score.java
 │   │       SettingsManager.java
 │   │
-│   └───view
+│   └── view
 │           CreditsFrame.java
 │           FancyJLabel.java
 │           GameFrame.java
@@ -84,9 +199,8 @@ BONGO BEATS BONANZA
 │           SettingsFrame.java
 │           TitleFrame.java
 │
-└───test
-     │
-     └───service
+└── test
+    └── service
             AudioVerificationTest.java
             MusicPlayerTest.java
             MusicTrackTest.java

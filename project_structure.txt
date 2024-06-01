@@ -2,6 +2,7 @@ BONGO BEATS BONANZA
 │   .gitignore
 │   BongoBeatsBonanza_Slezak.jar
 │   error_log.txt
+│   DOCUMENTATION.pdf
 │   project_structure.txt
 │   settings.properties
 │

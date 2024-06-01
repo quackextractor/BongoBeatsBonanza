@@ -19,81 +19,46 @@ class MusicTrackTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize the NotePool and MusicTrack
         NotePool notePool = new NotePool(10);
-        // Image for note
         noteImage = new Canvas().createImage(10, 10);
         musicTrack = new MusicTrack(notePool, 100, noteImage, 20, 300, 400, 500);
-
-        // Initialize the static fields in GameJPanel
         initializeGameJPanel();
     }
 
     @Test
-    void catchNote_noNotes() {
-        // Ensure there are no notes on the track initially
+    void catchNoteNoNotes() {
         assertTrue(Objects.requireNonNull(getNotesOnTrack()).isEmpty());
-
-        // Record initial miss count
         int initialMissCount = Score.getMissCount();
-
         musicTrack.catchNote();
-
-        // Check if a miss was recorded
         assertEquals(initialMissCount + 1, Score.getMissCount());
     }
 
     @Test
-    void catchNote_noteHit() {
-        // Create and add a note to the track
+    void catchNoteNoteHit() {
         Note note = new Note(500, noteImage, 300, 400, 20);
         note.setYPos(50);
         addNoteToTrack(note);
-
-        // Set the distance to a value within maxHitDistance
         setNoteDistance(note, 50);
-
-        // Record initial score counts
         int initialMissCount = Score.getMissCount();
-
         musicTrack.catchNote();
-
-        // Verify the note was removed from the track
         assertFalse(Objects.requireNonNull(getNotesOnTrack()).contains(note));
-
-        // Verify no additional miss was recorded
         assertEquals(initialMissCount, Score.getMissCount());
-
-        // Verify a ring was added to GameJPanel
         assertFalse(Objects.requireNonNull(getRings()).isEmpty());
     }
 
     @Test
-    void catchNote_noteMissed() {
-        // Create and add a note to the track
+    void catchNoteNoteMissed() {
         Note note = new Note(500, noteImage, 300, 400, 20);
         note.setYPos(50);
         addNoteToTrack(note);
-
-        // Set the distance to a value beyond maxHitDistance
         setNoteDistance(note, 150);
-
-        // Record initial miss count
         int initialMissCount = Score.getMissCount();
-
         musicTrack.catchNote();
-
-        // Verify the note was not removed from the track
         assertTrue(Objects.requireNonNull(getNotesOnTrack()).contains(note));
-
-        // Verify miss
         assertEquals(initialMissCount + 1, Score.getMissCount());
-
-        // Verify ring was added to GameJPanel
         assertFalse(Objects.requireNonNull(getRings()).isEmpty());
     }
 
-    // Utility methods
     @SuppressWarnings("unchecked")
     private ConcurrentLinkedQueue<Note> getNotesOnTrack() {
         try {
@@ -138,7 +103,7 @@ class MusicTrackTest {
         try {
             var field = GameJPanel.class.getDeclaredField("rings");
             field.setAccessible(true);
-            field.set(null, new java.util.ArrayList<Ring>()); // Initialize as an empty list
+            field.set(null, new java.util.ArrayList<Ring>());
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Failed to initialize GameJPanel rings field.");
         }
